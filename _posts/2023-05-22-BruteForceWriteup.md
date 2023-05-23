@@ -5,9 +5,9 @@
 
 The goal of this write-up is to document a brute force attack performed against the login system of DVWA(Dam Vulernable Web Application). The objective of this attack was to gain unauthorized admin access by brute forcing password against the 'admin' account. This was conducted as a group-study project for Groot Security. \
 The writ-up discusses the following content:
-1. *** Vulnerabiltiy Explanation ***
-2. *** Proof of Concept - Making use of Hydra and Burpsuite ***
-3. *** Mitigating Brute Force Attacks ***
+1. **Vulnerabiltiy Explanation**
+2. **Proof of Concept - Making use of Hydra and Burpsuite**
+3. **Mitigating Brute Force Attacks**
 
 | Information | Explanation                                                                      |
 |-------------|----------------------------------------------------------------------------------|
@@ -32,5 +32,11 @@ In order to use Hydra, we figure out that the login is using a http-get-form. We
 brute force attack.
 ```bash
 hydra -l admin -P /usr/share/wordlists/rockyou.txt 127.0.0.1 http-get-form "/vulnerabilities/brute/:username=^USER^&password=^PASS^&Login=Login:F=Username and/or password incorrect."
-```` 
+``` 
+We can see that Hyrda was able to give multiple passwords for the account admin.
 ![이미지](/assets/Brtueforce.png)
+
+Using one of its credentials, `password` we are able to sucessfully login to the `protected Admin Area`
+![이미지](/assets/sucess.png)
+
+## Mitigating Brute Force Attacks
