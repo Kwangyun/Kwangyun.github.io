@@ -16,3 +16,7 @@ The writ-up discuess the following content:
 | CVSS        | 8.1                                                                              |
 | Path        | http://127.0.0.1/vulnerabilities/brute/?username=admin&password=1234&Login=Login |
 
+## Vulnerabiltiy Explanation
+A brute force attack is systematically trying out all possible combinations of password or username into a system until  valid credentials are found.
+The purpose of a brute force attack is to gain unauthorized access into a system. This could not only lead to loss of sensetive data but also privilege escalation
+from the attacker. 
