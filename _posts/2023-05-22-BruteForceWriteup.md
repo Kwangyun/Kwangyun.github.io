@@ -4,7 +4,8 @@
 ## Outline
 
 The goal of this write-up is to document a brute force attack performed against the login system of DVWA(Dam Vulernable Web Application). The objective of this attack was to gain unauthorized admin access by brute forcing password against the 'admin' account. This was conducted as a group-study project for Groot Security. \
-The writ-up discusses the following content:
+The writeup discusses the following content:
+
 1. **Vulnerabiltiy Explanation**
 2. **Proof of Concept - Making use of Hydra and Burpsuite**
 3. **Mitigating Brute Force Attacks**
@@ -40,3 +41,8 @@ Using one of its credentials, `password` we are able to sucessfully login to the
 ![이미지](/assets/sucess.png)
 
 ## Mitigating Brute Force Attacks
+The brute force attack was mainly possible due to lack of secure coding. 
+There are various ways to mitigate brute force attacks.
+1. MFA (Multi Factored Authentication)
+2. Account Lockout
+3. Captcha 
