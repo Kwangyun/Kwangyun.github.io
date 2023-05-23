@@ -45,4 +45,6 @@ The brute force attack was mainly possible due to lack of secure coding.
 There are various ways to mitigate brute force attacks.
 1. MFA (Multi Factored Authentication)
 2. Account Lockout
+![이미지](/assets/lockout.png)
+The php source code shows that if the user attemps more than 3 wrong passwords, the account is lockedout.
 3. Captcha 
