@@ -19,4 +19,11 @@ The writ-up discuess the following content:
 ## Vulnerabiltiy Explanation
 A brute force attack is systematically trying out all possible combinations of password or username into a system until  valid credentials are found.
 The purpose of a brute force attack is to gain unauthorized access into a system. This could not only lead to loss of sensetive data but also privilege escalation
-from the attacker. 
+for the attacker. If the breached credentials has admin level access, this could signify an entire take over of a system.
+
+The DVWA /vulnerabilities/brute URL is vulnerable to user authentication brute force attack, as it does not have security measures in place.
+
+We were able to sucessfully attain the password for the 'admin' account and gain access to the 'Protected Admin Area' using Hydra as our main tool for brute forcing.
+
+## Proof of Concept
+
