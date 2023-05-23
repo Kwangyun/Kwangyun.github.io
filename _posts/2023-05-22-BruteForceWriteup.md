@@ -1,5 +1,5 @@
-# 제목 
-Brute forcing DVWA login page
+# Brute forcing DVWA login page
+
 
 ## Outline
 
@@ -28,7 +28,8 @@ We were able to sucessfully attain the password for the 'admin' account and gain
 ## Proof of Concept
 For POC, we will make use of the Hydra tool for brute forcing the following login page.
 ![이미지](/assets/loginpage.png)
-In order to use Hydra, we figure out that the login is using a http-get-form. We will then use the following code
+In order to use Hydra, we figure out that the login is using a http-get-form. We also know that the user is 'admin'. We will make use of the famous rockyou.txt password list for our
+brute force attack.
 ```bash
 hydra -l admin -P /usr/share/wordlists/rockyou.txt 127.0.0.1 http-get-form "/vulnerabilities/brute/:username=^USER^&password=^PASS^&Login=Login:F=Username and/or password incorrect."
 ```` 
