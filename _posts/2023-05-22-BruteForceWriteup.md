@@ -5,9 +5,9 @@ Brute forcing DVWA login page
 
 The goal of this write-up is to document a brute force attack performed against the login system of DVWA(Dam Vulernable Web Application). The objective of this attack was to gain unauthorized admin access by brute forcing password against the 'admin' account. This was conducted as a group-study project for Groot Security. \
 The writ-up discusses the following content:
-1. ***Vulnerabiltiy Explanation***
-2. ***Proof of Concept - Making use of Hydra and Burpsuite ***
-3. ***Mitigating Brute Force Attacks ***
+1. *** Vulnerabiltiy Explanation ***
+2. *** Proof of Concept - Making use of Hydra and Burpsuite ***
+3. *** Mitigating Brute Force Attacks ***
 
 | Information | Explanation                                                                      |
 |-------------|----------------------------------------------------------------------------------|
@@ -23,7 +23,10 @@ for the attacker. If the breached credentials has admin level access, this could
 
 The DVWA /vulnerabilities/brute URL is vulnerable to user authentication brute force attack, as it does not have security measures in place.
 
-We were able to sucessfully attain the password for the 'admin' account and gain access to the 'Protected Admin Area' using Hydra as our main tool for brute forcing.
+We were able to sucessfully attain the password for the 'admin' account and gain access to the 'Protected Admin Area' 
 
 ## Proof of Concept
-
+For POC, we will make use of the Hydra tool for brute forcing. We are Faced with the login page.
+![이미지](/assets/loginpage.png)
+In order to use Hydra, we figure out that the login is using a http-get-form. We will then use the following code 
+![이미지](/assets/Brtueforce.png)
