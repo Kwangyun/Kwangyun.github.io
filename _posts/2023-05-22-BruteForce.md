@@ -40,11 +40,25 @@ We can see that Hyrda was able to give multiple passwords for the account admin.
 Using one of its credentials, `password` we are able to sucessfully login to the `protected Admin Area`
 ![이미지](/assets/logedin.png)
 
+Now we will try using burpsuite to conduct the same brute force attack.
+![이미지](/assets/burp.png)
+
+First we intercept the login request using burpsuite. We then send the request to intruder to select the password field. We pick sniper mode and choose a password wordlist
+from the following directory
+```bash
+/usr/share/wordlist/seclists/Passwords/Common-Credentials/500-worst-password.txt
+```
+![이미지](/assets/payload.png)
+
+Upon conducting the brute force attack, we find that `password` has a length that is different from the other passwords. Looking at the response we see that we were sucessfully
+able to login  into the `protected area admin` 
+![이미지](/assets/result.png)
+
 ## Mitigating Brute Force Attacks
 The brute force attack was mainly possible due to lack of secure coding. 
 There are various ways to mitigate brute force attacks.
 1. MFA (Multi Factored Authentication)
 2. Account Lockout
 ![이미지](/assets/lockout.png)
-The php source code shows that if the user attemps more than 3 wrong passwords, the account is lockedout.
+The php source code shows that if the user attemps more than 3 wrong passwords, the account is lockedout which prevents from brute forcing.
 3. Captcha 
