@@ -58,7 +58,12 @@ able to login  into the `protected area admin`
 The brute force attack was mainly possible due to lack of secure coding. 
 There are various ways to mitigate brute force attacks.
 1. MFA (Multi Factored Authentication)
+Multi Factored Authentication is an authentication method that requires the user to provide two or more verfication method. 
+This includes methods such as password + fingerprint or password + pin code from the user. The most common MFA used is 2FA (2 Factored Authentication)
+While this may increase security, this may also reduce user usabiltiy if MFA is required everytime upon login.
 2. Account Lockout
+Another method is account lockouts after specific time frame. The below image shows the php code for the `impossible level` DVWA .
 ![이미지](/assets/lockout.png)
-The php source code shows that if the user attemps more than 3 wrong passwords, the account is lockedout which prevents from brute forcing.
+It shows that if the user attemps more than 3 wrong passwords, the account is lockedout which prevents brute forcing.
+While this may be an efficient method, this could lead to intentional account lockouts from attackers which may hinder user usability and accessibility.
 3. Captcha 
