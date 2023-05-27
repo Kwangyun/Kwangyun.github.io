@@ -106,8 +106,8 @@ analytics:
 author:
   name             : "1day1pwn?"
   avatar           : # path of avatar image, e.g. "/assets/images/bio-photo.jpg"
-  bio              : "Humble"
-  location         : "Somewhere"
+  bio              : "Hi, I am 4th year passionate student in the area of cyber security, graduating in June 2023 🐢.🌱 I’m currently learning Offensive Security/Penetration Testing and would like to break into the field of cyber security"
+  location         : "California, San Diego"
   email            :
   links:
     - label: "Email"
@@ -123,7 +123,7 @@ author:
       icon: "fab fa-fw fa-facebook-square"
       # url: "https://facebook.com/"
     - label: "GitHub"
-      icon: "fab fa-fw fa-github"
+      icon: "https://github.com/kwangyun"
       # url: "https://github.com/"
     - label: "Instagram"
       icon: "fab fa-fw fa-instagram"
@@ -290,3 +290,4 @@ defaults:
       comments: # true
       share: true
       related: true
+
