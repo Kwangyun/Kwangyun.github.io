@@ -1,7 +1,4 @@
----
-layout: post
-title: "Brute Force is easy"
----
+
 # Brute Forcing DVWA Login Page
 
 
