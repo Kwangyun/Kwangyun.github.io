@@ -3,7 +3,7 @@
 
 ## Outline
 
-The goal of this write-up is to document a brute force attack performed against the login system of DVWA(Dam Vulernable Web Application). The objective of this attack was to gain unauthorized admin access through brute forcing password against the `admin` account. This was conducted as a group-study project for Groot Security. \
+The goal of this write-up is to document a brute force attack performed against the login system of DVWA (Damn Vulnerable Web Application). The objective of this attack was to gain unauthorized admin access through brute-forcing passwords against the `admin` account. This was conducted as a individual study project hosted by [Grootboan Security](https://security.grootboan.com/). \
 The writeup discusses the following content:
 
 1. **Vulnerabiltiy Explanation**
@@ -19,13 +19,11 @@ The writeup discusses the following content:
 | Path        | http://127.0.0.1/vulnerabilities/brute/?username=admin&password=1234&Login=Login |
 
 ## Vulnerabiltiy Explanation
-A brute force attack is systematically trying out all possible combinations of password or username into a system until a valid credentials is found.
-The purpose of a brute force attack is to gain unauthorized access into a system. This could not only lead to loss of sensetive data, but also a possible privilege escalation
-for the attacker. If the breached credentials has admin level access, this could signify an entire take over of a system.
+A brute force attack systematically tries out all possible combinations of passwords or usernames on a system until valid credentials are found. The purpose of a brute force attack is to gain unauthorized access to a system. This not only risks the loss of sensitive data but also opens the possibility of privilege escalation for the attacker. If the compromised credentials have admin-level access, it could result in a complete takeover of the system.
 
-The DVWA /vulnerabilities/brute URL is vulnerable to user authentication brute force attack, as it does not have security measures in place.
+The DVWA /vulnerabilities/brute URL is vulnerable to user authentication brute force attacks, as it lacks adequate security measures.
 
-We were able to sucessfully attain the password for the 'admin' account and gain access to the 'Protected Admin Area' 
+We were able to successfully obtain the password for the `admin` account and gain access to the `Protected Admin Area` \ 
 
 ## Proof of Concept
 For POC, we will make use of the Hydra tool for brute forcing the following login page.
@@ -56,7 +54,7 @@ able to login  into the `protected area admin`
 ![이미지](/assets/result.png)
 ## Developing a python script to automate brute forcing
 To automate the attack and practice programing in python, we have created simple python script that automates the attack.
-The python script can be found in the following link. \ [Brute Force script](https://socradar.io/mfa-bypass-techniques-how-does-it-work/) \
+The python script can be found in the following link. \ [Brute Force script](https://github.com/Kwangyun/Web-Automation-Tools) \
 We can see that upon running the code, we were able to sucessfully brute force `password` for user `admin`
 ![](/assets/Test.gif)
 
