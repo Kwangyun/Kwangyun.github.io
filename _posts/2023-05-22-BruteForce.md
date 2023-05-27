@@ -33,10 +33,8 @@ brute force attack.
 ```bash
  hydra -l admin -P /usr/share/wordlists/rockyou.txt 127.0.0.1 http-get-form '/vulnerabilities/brute/:username=^USER^&password=^PASS^&Login=Login:H=Cookie\:PHPSESSID=9sosvqo963thpd5jqf9mum3f41; security=low:F=Username and/or password incorrect'
 ``` 
-We can see that Hyrda was able to give multiple passwords for the account admin.
-![이미지](/assets/sucess.png)
 
-Using one of its credentials, `password` we are able to sucessfully login to the `protected Admin Area`
+Using the credential, `password` we are able to sucessfully login to the `protected Admin Area`
 ![이미지](/assets/logedin.png)
 
 Now we will try using burpsuite to conduct the same brute force attack.
@@ -54,7 +52,8 @@ able to login  into the `protected area admin`
 ![이미지](/assets/result.png)
 ## Developing a python script to automate brute forcing
 To automate the attack and practice programing in python, we have created simple python script that automates the attack.
-The python script can be found in the following link. \ [Brute Force script](https://github.com/Kwangyun/Web-Automation-Tools) \
+The python script can be found in the following link.\ 
+[Brute Force script](https://github.com/Kwangyun/Web-Automation-Tools) \
 We can see that upon running the code, we were able to sucessfully brute force `password` for user `admin`
 ![](/assets/Test.gif)
 
@@ -77,7 +76,7 @@ Moreover another downside of this strict lockout policy is that it could lead to
 3. **Captcha**\
 Captcha is a program or system intended to distinguish human from machine input. This can be useful from distinguishing a brute force attack (machine). The below image is an example of captcha, demonstrating the need for human interaction. \
 ![이미지](/assets/captcha.png)
-
+## Conclusion
 In conclusion, although it may be tedious for an user to go through all these security measures, it is important to combine the mentioned methods to mitigate brute force attack as much as possible.
 
 References: \
