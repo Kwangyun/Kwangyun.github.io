@@ -8,7 +8,8 @@ The writeup discusses the following content:
 
 1. **Vulnerabiltiy Explanation**
 2. **Proof of Concept - Making use of Hydra and Burpsuite**
-3. **Mitigating Brute Force Attacks**
+3. **Developing a Simple Python Tool**
+4. **Mitigating Brute Force Attacks**
 
 | Information | Explanation                                                                      |
 |-------------|----------------------------------------------------------------------------------|
@@ -53,6 +54,10 @@ from the following directory
 Upon conducting the brute force attack, we find that `password` has a length that is different from the other passwords. Looking at the response we see that we were sucessfully
 able to login  into the `protected area admin` 
 ![이미지](/assets/result.png)
+## Developing a python script to automate brute forcing
+To automate the attack and practice programing in python, we have created simple python script that automates the attack.
+The python script can be found in the following link. [Brute Force script](https://socradar.io/mfa-bypass-techniques-how-does-it-work/)
+![](/assets/Test.gif)
 
 ## Mitigating Brute Force Attacks, its benefits and downside
 The brute force attack was mainly possible due to lack of secure coding. 
