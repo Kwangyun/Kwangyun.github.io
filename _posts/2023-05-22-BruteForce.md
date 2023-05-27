@@ -3,7 +3,7 @@
 
 ## Outline
 
-The goal of this write-up is to document a brute force attack performed against the login system of DVWA(Dam Vulernable Web Application). The objective of this attack was to gain unauthorized admin access by brute forcing password against the 'admin' account. This was conducted as a group-study project for Groot Security. \
+The goal of this write-up is to document a brute force attack performed against the login system of DVWA(Dam Vulernable Web Application). The objective of this attack was to gain unauthorized admin access through brute forcing password against the `admin` account. This was conducted as a group-study project for Groot Security. \
 The writeup discusses the following content:
 
 1. **Vulnerabiltiy Explanation**
@@ -67,3 +67,5 @@ Another method is account lockouts after specific time frame. The below image sh
 It shows that if the user attemps more than 3 wrong passwords, the account is lockedout which prevents brute forcing.
 While this may be an efficient method, this could lead to intentional account lockouts from attackers which may hinder user usability and accessibility.
 3. Captcha 
+Captcha is a program or system intended to distinguish human from machine input. This can be useful from distinguishing a brute force attack (machine). The below image is an example of captcha, demonstrating the need for human interaction.
+![이미지](/assets/cptcha.png)
