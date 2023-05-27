@@ -77,5 +77,5 @@ Captcha is a program or system intended to distinguish human from machine input.
 In conclusion, although it may be tedious for an user to go through all these security measures, it is important to combine the mentioned methods to mitigate brute force attack as much as possible.
 
 References: \
-[Grootboan Security](https://security.grootboan.com/follow-along/undefined/0-dvwa/reference-writeup)
+[Grootboan Security](https://security.grootboan.com/follow-along/undefined/0-dvwa/reference-writeup)\
 [MFA BYPASS](https://socradar.io/mfa-bypass-techniques-how-does-it-work/)
