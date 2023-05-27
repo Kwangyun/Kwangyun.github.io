@@ -71,11 +71,11 @@ It shows that if the user attemps more than 3 wrong passwords, the account is lo
 Account Lockouts methods could be vulnerable to password-spray attacks also known as low-and-slow methods where the attacker attempts a common password over a long span of time after each attempt.
 Moreover another downside of this strict lockout policy is that it could lead to intentional account lockouts from attackers which may hinder user usability and accessibility.
 3. Captcha\
-Captcha is a program or system intended to distinguish human from machine input. This can be useful from distinguishing a brute force attack (machine). The below image is an example of captcha, demonstrating the need for human interaction.
+Captcha is a program or system intended to distinguish human from machine input. This can be useful from distinguishing a brute force attack (machine). The below image is an example of captcha, demonstrating the need for human interaction. \
 ![이미지](/assets/captcha.png)
 
 In conclusion, although it may be tedious for an user to go through all these security measures, it is important to combine the mentioned methods to mitigate brute force attack as much as possible.
 
 References: \
-[Link text Here](https://security.grootboan.com/follow-along/undefined/0-dvwa/reference-writeup)
-[Link text Here](https://socradar.io/mfa-bypass-techniques-how-does-it-work/)
+[Grootboan Security](https://security.grootboan.com/follow-along/undefined/0-dvwa/reference-writeup)
+[MFA BYPASS](https://socradar.io/mfa-bypass-techniques-how-does-it-work/)
