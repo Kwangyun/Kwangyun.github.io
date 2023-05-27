@@ -1,7 +1,3 @@
----
-layout: post
-title: First Post
----
 
 # Brute Forcing DVWA Login Page
 
