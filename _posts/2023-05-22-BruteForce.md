@@ -27,11 +27,11 @@ We were able to successfully obtain the password for the `admin` account and gai
 
 ## Proof of Concept
 For POC, we will make use of the Hydra tool for brute forcing the following login page.
-![이미지](/assets/loginpage.png)
+![](/assets/hydra.gif)
 In order to use Hydra, we figure out that the login is using a http-get-form. We also know that the user is `admin`. We will make use of the famous rockyou.txt password list for our
 brute force attack.
 ```bash
-hydra -l admin -P /usr/share/wordlists/rockyou.txt 127.0.0.1 http-get-form "/vulnerabilities/brute/:username=^USER^&password=^PASS^&Login=Login:F=Username and/or password incorrect."
+ hydra -l admin -P /usr/share/wordlists/rockyou.txt 127.0.0.1 http-get-form '/vulnerabilities/brute/:username=^USER^&password=^PASS^&Login=Login:H=Cookie\:PHPSESSID=9sosvqo963thpd5jqf9mum3f41; security=low:F=Username and/or password incorrect'
 ``` 
 We can see that Hyrda was able to give multiple passwords for the account admin.
 ![이미지](/assets/sucess.png)
@@ -62,7 +62,7 @@ We can see that upon running the code, we were able to sucessfully brute force `
 The brute force attack was mainly possible due to lack of secure coding. 
 There are various ways to mitigate brute force attacks.
 0. **Strong passwords without password reuse**\
-Creating a strong password with multiple combination of special character and a minimum length of 15 could prevent brute force dictionary attacks. Moreover not reusing the same password makes attacks unsucessful from leaked credentials.
+Creating a strong password with multiple combination of special character and a minimum length of at least 15 characters could prevent brute force dictionary attacks. Moreover not reusing the same password makes attacks unsucessful from leaked credentials.
 1. **MFA (Multi Factored Authentication)**\
 Multi Factored Authentication is an authentication method that requires the user to provide two or more verfication method. 
 This includes methods such as password + fingerprint(biometric) or password + pin code from the user. The most common MFA used is 2FA (2 Factored Authentication)
