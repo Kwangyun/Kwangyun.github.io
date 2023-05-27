@@ -57,7 +57,8 @@ able to login  into the `protected area admin`
 ## Mitigating Brute Force Attacks, its benefits and downside
 The brute force attack was mainly possible due to lack of secure coding. 
 There are various ways to mitigate brute force attacks.
-0. Strong passwords 
+0. Strong passwords without password reuse
+Creating a strong password with multiple combination of special character and a minimum length of 15 could prevent brute force dictionary attacks. Moreover not reusing the same password makes attacks unsucessful from leaked credentials.
 1. MFA (Multi Factored Authentication)
 Multi Factored Authentication is an authentication method that requires the user to provide two or more verfication method. 
 This includes methods such as password + fingerprint(biometric) or password + pin code from the user. The most common MFA used is 2FA (2 Factored Authentication)
@@ -73,7 +74,8 @@ Moreover another downside of this strict lockout policy is that it could lead to
 Captcha is a program or system intended to distinguish human from machine input. This can be useful from distinguishing a brute force attack (machine). The below image is an example of captcha, demonstrating the need for human interaction.
 ![이미지](/assets/cptcha.png)
 
-In conclusion, it is important to combine the mentioned methods to mitigate brute force attack as much as possible.
+In conclusion, although it may be tedious for an user to go through all these security measures, it is important to combine the mentioned methods to mitigate brute force attack as much as possible.
+
 References:
 https://security.grootboan.com/follow-along/undefined/0-dvwa/reference-writeup
 https://socradar.io/mfa-bypass-techniques-how-does-it-work/
