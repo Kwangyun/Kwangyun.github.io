@@ -36,7 +36,7 @@ brute force attack.
 ``` 
 
 Using the credential, `password` we are able to sucessfully login to the `protected Admin Area`
-![이미지](/assets/logedin.png)
+![](/assets/success.gif)
 
 Now we will try using burpsuite to conduct the same brute force attack.
 ![이미지](/assets/burp.png)
@@ -50,7 +50,7 @@ from the following directory
 
 Upon conducting the brute force attack, we find that `password` has a length that is different from the other passwords. Looking at the response we see that we were sucessfully
 able to login  into the `protected area admin` 
-![](/assets/success.gif)
+![](/assets/burpresult.gif)
 ## Developing a python script to automate brute forcing
 To automate the attack and practice programing in python, we have created simple python script that automates the attack.
 The python script can be found in the following link.\ 
