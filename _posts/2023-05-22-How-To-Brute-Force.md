@@ -64,20 +64,20 @@ There are various ways to mitigate brute force attacks. \
 0. **Strong passwords without password reuse**\
 Creating a strong password with multiple combinations of special characters and a minimum length of at least 15 characters can help prevent brute force and dictionary attacks. Additionally, avoiding password reuse across different accounts or platforms makes it more difficult for attackers to succeed using leaked credentials.\
 1. **MFA (Multi Factored Authentication)**\
-Multi-Factor Authentication is an authentication method that requires the user to provide two or more verification methods. This includes methods such as password + fingerprint (biometric) or password + PIN code. The most common form of Multi-Factor Authentication is 2FA (Two-Factor Authentication). \
+Multi-Factor Authentication is an authentication method that requires the user to provide two or more verification methods. This includes methods such as password + fingerprint (biometric) or password + PIN code. The most common form of Multi-Factor Authentication is 2FA (Two-Factor Authentication). 
 
-Although MFA provides maximum security, different types of MFA methods could be bypassed through social engineering techniques such as phishing attacks, response manipulation, pass-the-cookie attacks, and more. Additionally, implementing heavy MFA may also reduce user usability if MFA is required every time during login. Moreover, heavy MFA may also reduce user usabiltiy if MFA is required everytime upon login. \
+Although MFA provides maximum security, different types of MFA methods could be bypassed through social engineering techniques such as phishing attacks, response manipulation, pass-the-cookie attacks, and more. Additionally, implementing heavy MFA may also reduce user usability if MFA is required every time during login. Moreover, heavy MFA may also reduce user usabiltiy if MFA is required everytime upon login. 
 2. **Account Lockout**\
 Another method is account lockouts after specific time frame. The below image shows the php code for the `impossible level` DVWA .
 ![이미지](/assets/lockout.png)
-It is common for systems to implement an account lockout policy where, if a user attempts more than three wrong passwords, the account gets locked out. This mechanism helps prevent brute force attacks. However, account lockout methods can be vulnerable to password-spray attacks, also known as low-and-slow methods, where the attacker attempts a common password over a long span of time after each attempt. \
+It is common for systems to implement an account lockout policy where, if a user attempts more than three wrong passwords, the account gets locked out. This mechanism helps prevent brute force attacks. However, account lockout methods can be vulnerable to password-spray attacks, also known as low-and-slow methods, where the attacker attempts a common password over a long span of time after each attempt. 
 
-Furthermore, a strict lockout policy has another downside: it can lead to intentional account lockouts by attackers. This intentional lockout can hinder user usability and accessibility.\
+Furthermore, a strict lockout policy has another downside: it can lead to intentional account lockouts by attackers. This intentional lockout can hinder user usability and accessibility.
 3. **Captcha**\
-Captcha is a program or system intended to distinguish human from machine input. This can be useful from distinguishing a brute force attack (machine). The below image is an example of captcha, demonstrating the need for human interaction. \
+Captcha is a program or system intended to distinguish human from machine input. This can be useful from distinguishing a brute force attack (machine). The below image is an example of captcha, demonstrating the need for human interaction. 
 ![이미지](/assets/captcha.png)
 ## Conclusion
-In conclusion, while implementing various security measures can be demanding for users, it is imperative to understand the significance of combining these methods to fortify our defenses against brute force attacks. By embracing a multi-layered approach to authentication, including strong passwords, multi-factor authentication, and account lockout policies, we demonstrate a proactive stance in safeguarding our sensitive information. \
+In conclusion, while implementing various security measures can be demanding for users, it is imperative to understand the significance of combining these methods to fortify our defenses against brute force attacks. By embracing a multi-layered approach to authentication, including strong passwords, multi-factor authentication, and account lockout policies, we demonstrate a proactive stance in safeguarding our sensitive information. 
 
 References: \
 [Grootboan Security](https://security.grootboan.com/follow-along/undefined/0-dvwa/reference-writeup)\
