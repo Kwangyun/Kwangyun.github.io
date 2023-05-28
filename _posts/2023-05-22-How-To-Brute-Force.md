@@ -8,7 +8,7 @@
 - [**Developing a Tool**](#section-3)
 - [**Mitigating Brute Force Attacks**](#section-4)
 
-## Outline (#section-0)
+## Outline {#section-0}
 The goal of this write-up is to document the brute force attack performed against the login system of DVWA (Damn Vulnerable Web Application). The objective of this attack was to gain unauthorized admin access through brute-forcing passwords against the `admin` account. This was conducted as a individual study project hosted by [Grootboan Security](https://security.grootboan.com/). Theis report mocks a penetration testing report and a debriefing situation to a client with follow up questions. The presentation of this report can be found [here](https://www.youtube.com/watch?v=0M4EVeeYDCs)\
 The writeup discusses the following content:
 
