@@ -53,7 +53,7 @@ able to login  into the `protected area admin`
 ![](/assets/burpresult.gif)
 ## Developing a python script to automate brute forcing
 To automate the attack and practice programing in python, we have created simple python script that automates the attack.
-The python script can be found in the following link.\ 
+The python script can be found in the following link.
 [Brute Force script](https://github.com/Kwangyun/Web-Automation-Tools) \
 We can see that upon running the code, we were able to sucessfully brute force `password` for user `admin`
 ![](/assets/Test.gif)
