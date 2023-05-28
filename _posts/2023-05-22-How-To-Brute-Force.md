@@ -51,7 +51,7 @@ from the following directory
 Upon conducting the brute force attack, we find that `password` has a length that is different from the other passwords. Looking at the response we see that we were sucessfully
 able to login  into the `protected area admin` 
 ![](/assets/burpresult.gif)
-## Developing a python script to automate brute forcing
+## Developing Python Script
 To automate the attack and practice programing in python, we have created simple python script that automates the attack.
 The python script can be found in the following link.
 [Brute Force script](https://github.com/Kwangyun/Web-Automation-Tools) \
