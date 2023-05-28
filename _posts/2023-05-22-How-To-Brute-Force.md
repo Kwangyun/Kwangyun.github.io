@@ -24,7 +24,7 @@ A brute force attack systematically tries out all possible combinations of passw
 
 The DVWA /vulnerabilities/brute URL is vulnerable to user authentication brute force attacks, as it lacks adequate security measures.
 
-We were able to successfully obtain the password for the `admin` account and gain access to the `Protected Admin Area` \ 
+We were able to successfully obtain the password for the `admin` account and gain access to the `Protected Admin Area` 
 
 ## Proof of Concept
 For POC, we will make use of the Hydra tool for brute forcing the following login page.
@@ -50,7 +50,7 @@ from the following directory
 
 Upon conducting the brute force attack, we find that `password` has a length that is different from the other passwords. Looking at the response we see that we were sucessfully
 able to login  into the `protected area admin` 
-![이미지](/assets/result.png)
+![](/assets/success.gif)
 ## Developing a python script to automate brute forcing
 To automate the attack and practice programing in python, we have created simple python script that automates the attack.
 The python script can be found in the following link.\ 
