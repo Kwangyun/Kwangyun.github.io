@@ -6,11 +6,13 @@
 
 The goal of this write-up is to document a brute force attack performed against the login system of DVWA (Damn Vulnerable Web Application). The objective of this attack was to gain unauthorized admin access through brute-forcing passwords against the `admin` account. This was conducted as a individual study project hosted by [Grootboan Security](https://security.grootboan.com/). \
 The writeup discusses the following content:
+## Table of Contents
 
-1. **Vulnerabiltiy Explanation**
-2. **Proof of Concept - Making use of Hydra and Burpsuite**
-3. **Developing a Simple Python Tool**
-4. **Mitigating Brute Force Attacks**
+- [**Vulnerabiltiy Explanation**](#section-1)
+- [ **Proof of Concept - Making use of Hydra and Burpsuite**](#section-2)
+- [**Developing  Python Tool**](#section-3)
+- [**Mitigating Brute Force Attacks**](#section-4)
+
 
 | Information | Explanation                                                                      |
 |-------------|----------------------------------------------------------------------------------|
@@ -19,14 +21,14 @@ The writeup discusses the following content:
 | CVSS        | 8.1                                                                              |
 | Path        | http://127.0.0.1/vulnerabilities/brute/?username=admin&password=1234&Login=Login |
 
-## Vulnerabiltiy Explanation
+## Vulnerabiltiy Explanation {#section-1}
 A brute force attack systematically tries out all possible combinations of passwords or usernames on a system until valid credentials are found. The purpose of a brute force attack is to gain unauthorized access to a system. This not only risks the loss of sensitive data but also opens the possibility of privilege escalation for the attacker. If the compromised credentials have admin-level access, it could result in a complete takeover of the system.
 
 The DVWA /vulnerabilities/brute URL is vulnerable to user authentication brute force attacks, as it lacks adequate security measures.
 
 We were able to successfully obtain the password for the `admin` account and gain access to the `Protected Admin Area` 
 
-## Proof of Concept
+## Proof of Concept {#section-2}
 For POC, we will make use of the Hydra tool for brute forcing the following login page.
 ![](/assets/hydra.gif)
 In order to use Hydra, we figure out that the login is using a http-get-form. We also know that the user is `admin`. We will make use of the famous rockyou.txt password list for our
@@ -73,9 +75,11 @@ Another method is account lockouts after specific time frame. The below image sh
 It is common for systems to implement an account lockout policy where, if a user attempts more than three wrong passwords, the account gets locked out. This mechanism helps prevent brute force attacks. However, account lockout methods can be vulnerable to password-spray attacks, also known as low-and-slow methods, where the attacker attempts a common password over a long span of time after each attempt. 
 
 Furthermore, a strict lockout policy has another downside: it can lead to intentional account lockouts by attackers. This intentional lockout can hinder user usability and accessibility\
+
 **Captcha**\
 Captcha is a program or system intended to distinguish human from machine input. This can be useful from distinguishing a brute force attack (machine). The below image is an example of captcha, demonstrating the need for human interaction. 
 ![이미지](/assets/captcha.png)
+
 ## Conclusion
 In conclusion, while implementing various security measures can be demanding for users, it is imperative to understand the significance of combining these methods to fortify our defenses against brute force attacks. By embracing a multi-layered approach to authentication, including strong passwords, multi-factor authentication, and account lockout policies, we demonstrate a proactive stance in safeguarding our sensitive information. 
 
