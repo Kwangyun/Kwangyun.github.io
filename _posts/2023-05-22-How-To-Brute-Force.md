@@ -19,6 +19,19 @@ The goal of this write-up is to document the brute force attack performed agains
 | CVSS        | 8.1                                                                              |
 | Path        | http://127.0.0.1/vulnerabilities/brute/?username=admin&password=1234&Login=Login |
 
+The base CVSS was calculated upon the following metrics.  
+
+| Base Metrics               | Explanations                                                                                             |
+|----------------------------|----------------------------------------------------------------------------------------------------------|
+| Attack Vector (AV)         | Network(N) The vulnerability can be exploited remotely over a network connection.                        |
+| Attack Complexity (AC)     | Low (L) The vulnerability is straightforward and requires minimal or no special knowledge.               |
+| Privilege Required (PR)    | Low (L) The attack requires some privilege. The user has to login to DVWA webpage to conduct the exploit |
+| User Intercation (UI)      | None (N) The vulnerability can be exploited without any user interaction.                                |
+| Scope (S)                  | Unchanged(S:U) An exploit can only affect the specific system                                            |
+| Confidentiality Impact (C) | Medium (M) The vulnerability has medium impact on  the confidentiality of information.                   |
+| Integrity Impact (I)       | High (H) The vulnerability has a signigicant impact on the integrity of the information                  |
+| Availability Impact (A)    | High (H) The vulnerability has a significant impact on the availability of the system or resource.       |
+
 ## Vulnerabiltiy Explanation {#section-1}
 A brute force attack systematically tries out all possible combinations of passwords or usernames on a system until valid credentials are found. The purpose of a brute force attack is to gain unauthorized access to a system. This not only risks the loss of sensitive data but also opens the possibility of privilege escalation for the attacker. If the compromised credentials have admin-level access, it could result in a complete takeover of the system. 
 
