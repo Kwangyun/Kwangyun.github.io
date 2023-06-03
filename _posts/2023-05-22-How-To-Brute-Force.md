@@ -9,7 +9,7 @@
 - [**Mitigating Brute Force Attacks**](#section-4)
 
 ## Outline {#section-0}
-The goal of this write-up is to document the brute force attack performed against the login system of DVWA (Damn Vulnerable Web Application). The objective of this attack was to gain unauthorized admin access through brute-forcing passwords against the `admin` account. This was conducted as an individual study project hosted by [Grootboan Security](https://security.grootboan.com/). Theis report mocks a penetration testing report and a debriefing situation to a client with follow up questions. The presentation of this report can be found [here](https://www.youtube.com/watch?v=0M4EVeeYDCs)\
+The goal of this write-up is to document the brute force attack performed against the login system of DVWA (Damn Vulnerable Web Application). The objective of this attack was to gain unauthorized admin access through brute-forcing passwords against the `admin` account. This was conducted as an individual study project hosted by [Grootboan Security](https://security.grootboan.com/). Theis report mocks a penetration testing report and a debriefing situation to a client with follow up questions. The presentation of this report can be found [here](https://www.youtube.com/watch?v=0M4EVeeYDCs)
 
 
 | Information | Explanation                                                                      |
@@ -51,7 +51,7 @@ First, the testing team intercepted the HTTP login request. Then, the request wa
 Upon conducting the brute force attack, the testing team found that `password` has a length that is different from the other passwords. Looking at the response we see that we were sucessfully able to login  into the `protected area admin` 
 ![](/assets/burpresult.gif)
 ## Developing Python Tool {#section-3}
-To automate the attack and practice programing in python, we have created simple python script that automates the attack.
+To automate the attack and practice programing in python, we have created  python script that automates the attack.
 The python script can be found in the following link.
 [Kwang Brute Force Tool](https://github.com/Kwangyun/Web-Automation-Tools) \
 We can see that upon running the code, we were able to sucessfully brute force `password` for user `admin`
