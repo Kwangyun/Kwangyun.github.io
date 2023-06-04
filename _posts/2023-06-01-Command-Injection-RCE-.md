@@ -85,11 +85,6 @@ python CInjectionRCE.py -u http://127.0.0.1/vulnerabilities/exec/ -p 1234 -i 192
 User Input Validation involves verifying whether a user's input satisfies the conditions established by the developer. There are two primary approaches to input validation: the Blacklist-based approach and the Whitelist-based approach.  
 #### Blacklist-based approach
 The Blacklist-based approach entails checking whether the user input contains any characters present in a predefined blacklist. However, this method is susceptible to human error, as exemplified by the `Security-High-Level` module, and is therefore not recommended. The following are some functions corresponding to each language that are vulnerable to command injection. 
-| PHP    | include(),shell_exec(),exec(),system() |
-|--------|----------------------------------------|
-| C,C++  | exec(),system(),ShellExecute()         |
-| Python | exec(),os.popen(),os.system()          |
-| Perl   | sys.open(),open(),system()             |
 #### Whitelist-based approch
 In contrast, the Whitelist-based approach checks input values against a predefined list of permitted values. In this approach, the application ensures that the input matches safe and expected values. For example, in this application, the developers could have verified that the user input is an alphanumeric string in the form of an IP address, consisting of four octets, without any additional syntax or whitespace.
 
