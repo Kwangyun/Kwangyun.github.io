@@ -51,7 +51,7 @@ Furthermore, despite the website utilizing cookies for session management, it la
 
 In the  `Security-Medium-Level` module the tester figured out that the website was using a `Referer` to check the origin of the request. That is, if the request was not made from the origin, the tester would not be able to make any changes to the account. This can be seen in burpe suite, where there is a new `Referer` section in the header. 
 ![ ](/assets/CSRF/medium.png)
-Moreover, analzying the source code, it can be seen that the php code checks if the `referer` contains the servername. `  if( stripos( $_SERVER[ 'HTTP_REFERER' ] ,$_SERVER[ 'SERVER_NAME' ]) !== false )`  
+Moreover, analzying the source code, it can be seen that the php code checks if the `Referer` contains the servername. `if( stripos( $_SERVER[ 'HTTP_REFERER' ] ,$_SERVER[ 'SERVER_NAME' ]) !== false )`  
 ![ ](/assets/CSRF/source.png)
 However, this prevention method was bypassable, as the tester could simply add the sever name to the malicious url to bypass this defense method.
 
