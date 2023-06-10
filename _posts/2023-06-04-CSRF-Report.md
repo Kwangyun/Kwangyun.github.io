@@ -50,7 +50,7 @@ python3 -m http.server 145
 
 
 #### Creating a Phishing Email
-The tester also crafted a simple phising email that impersonated a prosecutor with the help of ChatGPT. The tester made sure that the email consisted of a sense of urgency, time pressure, threats of legal action and a sense of authority in the email. In crafting the email, the tester first modified the sender's name to Prosecution Service. This could be done by logging into gmail, navigating to `Accounts and Imports` and changing the `Send Mail as`. Next upon crafting the email, the tester utilized the gmail link function to hide the orginal hosted webpage to a simplge clickable `Link`.
+The tester also crafted a simple phising email that impersonated a prosecutor with the help of ChatGPT. The tester made sure that the email consisted of a sense of urgency, time pressure, threats of legal action and a sense of authority in the email. In crafting the email, the tester first modified the sender's name to Prosecution Service. This could be done by logging into gmail, navigating to `Accounts and Imports` and changing the `Send Mail as`. Next upon crafting the email, the tester utilized the gmail link function to hide the orginal hosted webpage to a simple clickable `Link`.
 ![](/assets/CSRF/phish.png) 
 
 The simulation can be seen below.
