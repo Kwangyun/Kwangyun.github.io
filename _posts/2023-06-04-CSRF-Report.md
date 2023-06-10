@@ -59,7 +59,7 @@ The simulation can be seen below.
 
 However, there is a lot of room for improvement in this simulated attack. For instance, the email could have been enhanced by hiding the sending email address or by using a seemingly more realistic email address by purchasing a domain. Additionally, further study is needed to make the link URL less suspicious.
 
- ## Analyzing Source Code {#section-3}
+## Analyzing Source Code {#section-3}
 
 In the `Security-Low-Level` module, the testers figured out that the website had significant vulnerabilities when the `change password` request was intercepted. These vulnerabilities included the usage of the `GET` method, reliance on cookie-based sessions, and most importantly, the absence of any CSRF token implementation. Specifically, the use of the `GET` method exposes the transmitted data in the URL, which allowed the tester to view sensitive information and manipulate it.
 ![](/assets/CSRF/easy.png)
