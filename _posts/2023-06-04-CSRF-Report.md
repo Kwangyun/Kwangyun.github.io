@@ -88,7 +88,7 @@ CSRF tokens in PHP can be written as follow.  `$_SESSION[‘token’] = bin2hex(
 </form>
 ```
 
-2. Ask password again when conducting important tasks. This prevents any CSRF attack to be successful as the the attacker would not know the password. This is seen in the  `Security-Impossible-Level` module.
+2. Ask password again when conducting important tasks. This prevents any CSRF attack to be successful because the the attacker would not know the password. This is seen in the  `Security-Impossible-Level` module.
 ![ ](/assets/CSRF/impossible.png)
 
 3. Same Site Cookie.    
