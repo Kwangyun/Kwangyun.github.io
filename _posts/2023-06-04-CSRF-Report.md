@@ -37,7 +37,7 @@ The base CVSS was calculated upon the following metrics.
 
 
 ## Proof of Concept {#section-2}
-For proof of concept (POC), the tester has simulated a phishing attack to conduct a CSRF attack. In the email, the tester has impersonated a prosecutor to entice the victim to click on the link.  Upon clicking on the link, the authenticated DVWA victim user is redirected to a malicious website that looks like a real prosecution service hompage. Here the victim's password is changed unintentionally to without notice. The victim user `admin` whos original password was `admin` cannot login with this password anymore because it has been unintentionally changed by simply visiting the website. 
+For proof of concept (POC), the tester has simulated a phishing attack to conduct a CSRF attack. In the email, the tester has impersonated a prosecutor to entice the victim to click on the link.  Upon clicking on the link, the authenticated DVWA victim user is redirected to a malicious website that looks like a real prosecution service hompage. Here the victim's password is changed unintentionally without notice. After vising the site, the victim user `admin` cannot login with the same password anymore because it has been unintentionally changed. 
 
 #### Hosting a Malicious Website
 Firstly, the tester crafted an HTML that could conduct the CSRF attack. The base HTML was mainly made through the use of an iframe to embed a real website, in this case, the Korean Prosecution Service webpage. Moreover, the tester used the img source HTML tag to perform the malicious action of changing the password. Finally, the tester hosted a Python server to host this website.
