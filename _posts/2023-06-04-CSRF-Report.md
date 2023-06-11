@@ -43,7 +43,7 @@ Law Enforcement Impersonatation is a serious crime. This POC was conducted in a 
 For proof of concept (POC), the tester has simulated a phishing attack to conduct a CSRF attack. In the email, the tester has impersonated an authoritive figure to entice the victim on clicking a link.  Upon clicking the link, the authenticated DVWA victim user is redirected to a malicious website that has copied (iframed) another website. Here the victim's password is changed unintentionally without notice. After vising the site, the victim user `admin` cannot login with the same password anymore because it has been unintentionally changed. 
 
 #### Hosting a Malicious Website
-Firstly, the tester crafted an HTML that could conduct the CSRF attack. The base HTML was mainly made through the use of an iframe to embed a real website, in this case, the Korean Prosecution Service webpage. Moreover, the tester used the `<img src="">` HTML tag to perform the malicious action of changing the password.![](/assets/CSRF/code.png)
+Firstly, the tester crafted an HTML that could conduct the CSRF attack. The base HTML was mainly made through the use of an iframe to embed a real website, in this case, a Prosecution Service webpage. Moreover, the tester used the `<img src="">` HTML tag to perform the malicious action of changing the password.![](/assets/CSRF/code.png)
 Finally, the tester hosted a Python server to host the malicious website.
 ```{bash}
 python3 -m http.server 145 
