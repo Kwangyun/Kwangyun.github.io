@@ -37,7 +37,10 @@ The base CVSS was calculated upon the following metrics.
 
 
 ## Proof of Concept {#section-2}
-For proof of concept (POC), the tester has simulated a phishing attack to conduct a CSRF attack. In the email, the tester has impersonated a prosecutor to entice the victim to click on the link.  Upon clicking on the link, the authenticated DVWA victim user is redirected to a malicious website that looks like a real prosecution service hompage. Here the victim's password is changed unintentionally without notice. After vising the site, the victim user `admin` cannot login with the same password anymore because it has been unintentionally changed. 
+**DISCLAIMER**
+Law Enforcement Impersonatation is a serious crime. This POC was conducted in a virtual environment and was self tested. Even in real red teaming engagement, law enforcement impersonation is at most times not allowed.  The malicious email only targets DVWA website for POC.
+
+For proof of concept (POC), the tester has simulated a phishing attack to conduct a CSRF attack. In the email, the tester has impersonated an authoritive figure to entice the victim on clicking a link.  Upon clicking the link, the authenticated DVWA victim user is redirected to a malicious website that has copied (iframed) another website. Here the victim's password is changed unintentionally without notice. After vising the site, the victim user `admin` cannot login with the same password anymore because it has been unintentionally changed. 
 
 #### Hosting a Malicious Website
 Firstly, the tester crafted an HTML that could conduct the CSRF attack. The base HTML was mainly made through the use of an iframe to embed a real website, in this case, the Korean Prosecution Service webpage. Moreover, the tester used the `<img src="">` HTML tag to perform the malicious action of changing the password.![](/assets/CSRF/code.png)
@@ -50,16 +53,13 @@ python3 -m http.server 145
 
 
 #### Creating a Phishing Email
-The tester also crafted a simple phising email that impersonated a prosecutor with the help of ChatGPT. The tester made sure that the email consisted of a sense of urgency, time pressure, threats of legal action and a sense of authority in the email. In crafting the email, the tester first modified the sender's name to Prosecution Service. This could be done by logging into gmail, navigating to `Accounts and Imports` and changing the `Send Mail as`. Next upon crafting the email, the tester utilized the gmail link function to hide the orginal hosted webpage to a simple clickable `Link`.
+The tester also crafted a simple phising email that impersonated an authoritive figure with the help of ChatGPT. The tester made sure that the email consisted of a sense of urgency, time pressure, threats of legal action and a sense of authority in the email. In crafting the email, the tester first modified the sender's name as an authority figure. This could be done by logging into gmail, navigating to `Accounts and Imports` and changing the `Send Mail as`. Next upon crafting the email, the tester utilized the gmail link function to hide the orginal hosted webpage to a simple clickable `Link`.
 ![](/assets/CSRF/phish.png) 
 
-The simulation can be seen below.
-
-<img src="/assets/CSRF/CSRF.gif" width="1500" height="1500"/>
 
 However, there is a lot of room for improvement in this simulated attack. For instance, the email could have been enhanced by hiding the sending email address or by using a seemingly more realistic email address by purchasing a domain. Additionally, further study is needed to make the link URL less suspicious.
 
-## Analyzing Source Code {#section-3}
+## Source Code Analysis {#section-3}
 
 In the `Security-Low-Level` module, the testers figured out that the website had significant vulnerabilities when the `change password` request was intercepted. These vulnerabilities included the usage of the `GET` method, reliance on cookie-based sessions, and most importantly, the absence of any CSRF token implementation. Specifically, the use of the `GET` method exposes the transmitted data in the URL, which allowed the tester to view sensitive information and manipulate it.
 ![](/assets/CSRF/easy.png)
@@ -103,7 +103,7 @@ This prevents any CSRF attack to be successful because the the attacker would no
 ![ ](/assets/CSRF/impossible.png)
 
 #### Same Site Cookie.      
-SameSite is a security feature implemented in web browsers, which regulates the inclusion of a website's cookies in requests that originate from other websites. Since authenticated session cookies are typically required for sensitive actions, enforcing proper SameSite restrictions can hinder attackers from initiating such actions across different sites. This policy has already been adopted by famous       
+SameSite is a security feature implemented in web browsers, which regulates the inclusion of a website's cookies in requests that originate from other websites. Since authenticated session cookies are typically required for sensitive actions, enforcing proper SameSite restrictions can hinder attackers from initiating such actions across different sites. This policy has already been adopted by famous web portals like google in 2021.      
 
 
 ### Common flaws in CSRF token validation
