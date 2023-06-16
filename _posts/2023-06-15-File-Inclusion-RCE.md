@@ -35,12 +35,13 @@ The base CVSS was calculated upon the following metrics.
 | Integrity Impact (I)       | High (H) The vulnerability has a signigicant impact on the integrity of the information                  |
 | Availability Impact (A)    | High (H) The vulnerability has a significant impact on the availability of the system or resource.       |
 
-![](/assets/life/suggestive.png) 
+![](/assets/lfi/suggestive.png) 
 ## Proof of Concept {#section-2}
 **DISCLAIMER**
 1) suggestive. of file inclusion vulnerability (Pic)
 2) php, test ../../../etc/passwd  (TEST)
-3) 
+3) identified web tech as php, we canm plat./poison log file in an attemp to include native code execution on the target machine.
+. ../../../../../../../../../var/www/html/index.php Confirm we have log poisioning 
 
 
 
