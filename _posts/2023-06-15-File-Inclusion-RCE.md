@@ -131,10 +131,10 @@ Rule ID: 100001
 Rule Name: Directory Traversal Protection
 Rule Action: Block
 Rule Pattern: /../
+```
 
-
-
+In conclusion, LFI attacks mitigations require implementing a combination of security measures. Restricting file permissions is essential to limit access to sensitive files and directories, preventing unauthorized access. In addition, a robust a whitelist approach ensures that only trusted and intended files are included by the application, reducing the risk of including malicious files. Implementing a Web Application Firewall (WAF) adds an additional layer of defense by detecting and blocking suspicious requests, including those attempting LFI attacks. 
 
 ### Reference: 
-[PortSwigger](https://portswigger.net/web-security/csrf)\
 [GrootBoan](https://security.grootboan.com/) 
+[Offensive Security](https://www.offsec.com/metasploit-unleashed/file-inclusion-vulnerabilities/) 
