@@ -4,7 +4,7 @@
 - [**Outline**](#section-0)
 - [**Vulnerabiltiy Explanation**](#section-1)
 - [ **Proof of Concept - Establishing a  Reverse Shell**](#section-2)
-- [ **Analyzing Source Code -**](#section-3)
+- [ **Source Code Analysis -**](#section-3)
 - [**Mitigating LFI Attacks**](#section-4)
 
 ## Outline {#section-0}
