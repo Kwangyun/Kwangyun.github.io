@@ -53,7 +53,7 @@ GET /<?php system($_GET['cmd']);  ?>
 ![](/assets/lfi/result2.png)  
 
 When the web application processes the log file, it treats the contents as plain text by default. This means that the injected PHP code `(<?php system($_GET['cmd']); ?>)` in the log file will be interpreted as executable code. The `system()` function is executed, which allowed the tester to run arbitrary shell commands with the parameter `cmd`. This can be verified by examining the access.log file. By accessing `/var/log/apache2/access.log` using path traversal techniques and inspecting the last log entry, it is observed that the `GET` request is visible while the injected PHP code remains invisible.
-![](/assets/lfi/verified.png)
+                                          ![](/assets/lfi/verified.png)\
 This confirms the successful injection, as the PHP executable code is interpreted as code and not treated as literal text.
 
 ### Establishing a Reverse Shell {#section-2}
