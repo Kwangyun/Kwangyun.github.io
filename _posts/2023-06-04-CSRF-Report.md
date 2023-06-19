@@ -4,7 +4,7 @@
 - [**Outline**](#section-0)
 - [**Vulnerabiltiy Explanation**](#section-1)
 - [ **Proof of Concept - Simulating a Phishing Attack**](#section-2)
-- [ **Analyzing Source Code -**](#section-3)
+- [ **Source Code Analysis -**](#section-3)
 - [**Mitigating CSRF Attacks**](#section-4)
 
 ## Outline {#section-0}
@@ -56,6 +56,8 @@ python3 -m http.server 145
 The tester also crafted a simple phising email that impersonated an authoritive figure with the help of ChatGPT. The tester made sure that the email consisted of a sense of urgency, time pressure, threats of legal action and a sense of authority in the email. In crafting the email, the tester first modified the sender's name as an authority figure. This could be done by logging into gmail, navigating to `Accounts and Imports` and changing the `Send Mail as`. Next upon crafting the email, the tester utilized the gmail link function to hide the orginal hosted webpage to a simple clickable `Link`.
 ![](/assets/CSRF/phish.png) 
 
+#### Demonstration  
+![](/assets/CSRF/CSRF.gif)
 
 However, there is a lot of room for improvement in this simulated attack. For instance, the email could have been enhanced by hiding the sending email address or by using a seemingly more realistic email address by purchasing a domain. Additionally, further study is needed to make the link URL less suspicious.
 
