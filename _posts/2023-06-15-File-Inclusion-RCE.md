@@ -40,7 +40,11 @@ The base CVSS was calculated upon the following metrics.
 ## Proof of Concept {#section-2}
 For the Proof of Concept (POC), the tester observed that the URL parameter `page=file1.php` was indicative of a LFI vulnerability. To confirm this, the tester removed the `file1.php` and appended `../../../../../etc/passwd`. This action revealed the content of the `/etc/passwd` file in the web, demonstrating that the `/etc/passwd` file was indeed included and the web application was vulnerable to path traversal attacks.    
 ![](/assets/lfi/show.png)  
-In addition, to confirm that there was an Apache log file to poison, the tester checked `/var/log/apache2/access.log` and confirmed its existence. With the web technology identified as PHP, the tester proceeded to poison the Apache2 log file.
+In addition, to confirm that there was an Apache log file to poison, the tester checked 
+```bash
+/var/log/apache2/access.log
+```
+and confirmed its existence. With the web technology identified as PHP, the tester proceeded to poison the Apache2 log file.
 
 The tester first initiated a net cat session to connect to the web host.
 ```bash
