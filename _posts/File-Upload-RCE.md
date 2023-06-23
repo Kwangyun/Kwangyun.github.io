@@ -67,9 +67,9 @@ The tester was sucessfully able to upload the reverse shell script.
 ![](/assets/upload/success.png)  
 
 ### Security-High-Level
- 
+ In the `Security-High-Level module`,
 
-## Mitigating LFI Attacks {#section-4}  
+## Mitigating File Uplaod Vulnerabiltiy  {#section-4}  
 ### Restrict File Permissions
 
 ### Whitelist Approach:
