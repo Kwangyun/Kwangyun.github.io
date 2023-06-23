@@ -46,7 +46,7 @@ The tester appended the URL to initiate the script.
 ```
 
  The tester gained an interactive reverse shell as demonstrated below.
-![](/assets/uploads/REV.gif)
+![](/assets/upload/REV.gif)
 
 
 
@@ -60,8 +60,9 @@ The above source code  accepts the file from user, saves it in a temporary folde
 ![](/assets/upload/medium.png)  
 In the `Security-Medium-Level module`, there are minimal security measures to validate user upload. First, the code checks the content type of the uploaded file. That is, only files with content type `image/jpeg` and `image/png` are allowed. In addition, if the size of the file is greater than [100 kB], upload is restrcited.
 
-The problem arised when the value of this header is implicitly trusted by the server. There were no further validation to check whether the contents of the file actually matched the supposed MIME type. Thus this defense mechanism was bypassed using Burp Suite. Burp Suite is an integrated platform/graphical tool for performing security testing of web applications. The tester intercepted the upload request using Burp Suite, and modified the content type from  `application/x-php`to `image/jpeg`
+The problem arised when the value of this header is implicitly trusted by the server. There were no further validation to check whether the contents of the file actually matched the supposed MIME type. Thus, this defense mechanism was bypassed using Burp Suite. Burp Suite is an integrated platform/graphical tool for performing security testing of web applications. First, the tester intercepted the upload request using Burp Suite.
 ![](/assets/upload/content.png)  
+The tester modified the content type from  `application/x-php`to `image/jpeg`
 ![](/assets/upload/type.png)  
 The tester was sucessfully able to upload the reverse shell script.
 ![](/assets/upload/success.png)  
