@@ -109,8 +109,8 @@ author:
   bio              : "Hi, I am a mathematics-cs new grad student as of 2023 June🌱"    
                      
   location         : "California"
-  email            :
-  links:
+  email            : 
+  links: "GitHub"
     - label: "Email"
       icon: "fas fa-fw fa-envelope-square"
       # url: "mailto:your.name@email.com"
