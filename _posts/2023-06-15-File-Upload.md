@@ -73,7 +73,7 @@ The tester successfully uploaded the reverse shell script.
 ### Security-High-Level
 ![](/assets/upload/high.png)  
 
- In the `Security-High-Level module`, the code ensures that the file extension matches a certain format. However, the tester bypassed this defense mechanism by making use of Burp Suite alongside local File Inclusion Vulnerability (LFI) and Path Traversal attacks.
+ In the `Security-High-Level module`, the code ensures that the file extension matches a certain format. However, the tester bypassed this defense mechanism by extension chaining attack alongside local File Inclusion Vulnerability (LFI) and Path Traversal attacks.
 First, the code retrieves the original name of the uploaded file.
  ```bash
   `$uploaded_name = $_FILES['uploaded']['name'];`
@@ -94,10 +94,30 @@ The tester gained a reverse shell again.
 
 This attack is possible because LFI does not check the file extension. Instead, it directly executes the code present inside the file.
 ## Mitigating File Uplaod Vulnerabiltiy  {#section-4}  
+### White List Approach Checking for more than double extension 
+Explicitly specify and allow only certain file types or extensions that are considered safe for upload. The following PHP code creates an array with allowed extension types and strives to prevent mulitple extension attacks.
+```php
+$allowed_extensions = array('jpg', 'jpeg', 'png');
+//checks for double extension
+function hasDoubleExtension($filename) {
+    //splits the filename into an array of parts using the dot (.) as the delimiter
+    $parts = explode('.', $filename);
+    //if there is a double extension
+    if (count($parts) > 2) {
+        $lastPart = end($parts);
+        
+        $allowedExtensions = array_map('strtolower', $allowed_extensions);
+        //checks if the lowercase version of the last part of the filename (e.g., "jpg") exists in the $allowedExtensions array. 
+        return in_array(strtolower($lastPart), $allowedExtensions);
+    }
+    return false;
+}
+```
 ### Generate unique and unpredictable file names
 Generate a unique and secure file name for the uploaded files by combining the file's original name, a random string. In PHP `uniqid())` prvodies a unique id ensuring that each uploaded file has a distinct and unpredictable name. This making it difficult for attackers to guess or manipulate.
 ### Use Secure File Storage:
 Store uploaded files outside of the web root directory, or in a separate directory with restricted access permissions. This prevents direct execution of uploaded files.
+
 ### Reference: 
-[GrootBoan](https://security.grootboan.com/) and
+[GrootBoan](https://security.grootboan.com/) ,[MakeUs](https://www.makeuseof.com/how-to-secure-file-upload-modules/?newsletter_popup=1) and
 [Portswigger](https://portswigger.net/web-security/file-upload) 
