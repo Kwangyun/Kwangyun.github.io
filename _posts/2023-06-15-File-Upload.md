@@ -88,7 +88,7 @@ To execute the JPEG file, the tester made use of the Local File Inclusion (LFI) 
 http://127.0.0.1/vulnerabilities/fi/?page=file:///../../../..//var/www/html/hackable/uploads/php-reverse-shell.jpeg
 ```
 The tester gained a reverse shell again.
-![](/assets/upload/REV1.png)  
+![](/assets/upload/REV1.gif)  
 
 This attack is possible because LFI does not check the file extension. Instead it directly executes the code present inside the file.
 ## Mitigating File Uplaod Vulnerabiltiy  {#section-4}  
