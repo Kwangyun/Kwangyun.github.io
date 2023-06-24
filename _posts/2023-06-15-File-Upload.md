@@ -82,12 +82,12 @@ First, the code retrieves the original name of the uploaded file.
  ```bash
   `$uploaded_name = $_FILES['uploaded']['name'];`
  ```
-Next, it extracts the file extension from the name and checks if the file extension is either `jpg,` `jpeg`, or `png`. The `strtolower()` function converts the extension to lowercase for case-insensitive comparison.
+Next, it extracts the file extension from the name and checks if the file ends with  `jpg,` `jpeg`, or `png`. This is where the most critical problem arises. Although this may seem like a white-list approach, parsing the filename according to the dot (.) character, can be bypassed by simplying adding a `.jpeg` extension to any file type.
 ```bash
 $uploaded_ext = substr($uploaded_name, strrpos($uploaded_name, '.') + 1);
 (strtolower($uploaded_ext) == "jpg" || strtolower($uploaded_ext) == "jpeg" || strtolower($uploaded_ext) == "png")
 ```
-The tester intercepted the upload request and added `.jpeg` to the file extension and changed the content type to `image/jpeg`. Next the tester also added a `GIF89`. Adding the `GIF89a` as the content type when uploading a non-image file is a common technique used to bypass file upload restrictions. This technique takes advantage  filtering mechanisms that may only check the file extension or content type to determine if a file is an image. Since gif is an extension of the image file, this method was succeessful.
+As such, the tester intercepted the upload request and added `.jpeg` to the file extension and changed the content type to `image/jpeg`. Next the tester also added a `GIF89`. Adding the `GIF89a` as the content type when uploading a non-image file is a common technique used to bypass file upload restrictions. This technique takes advantage  filtering mechanisms that may only check the file extension or content type to determine if a file is an image. Since gif is an extension of the image file, this method was succeessful.
 ![](/assets/upload/high1.png)  
 To execute the JPEG file, the tester made use of the Local File Inclusion (LFI) vulnerability to visit the URL
 ```bash
