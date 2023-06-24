@@ -14,7 +14,7 @@ The goal of this write-up is to document and demonstrate File Upload vulnerabili
 
 A file upload vulnerability is a security flaw that allows an attacker to upload and execute malicious files on a target system. This occurs when users are allowed to upload files to its filesystem without sufficiently validating name, type, contents, or size. Failing to properly enforce restrictions on these could lead to server-side codes to be executed such as a web shell or remote code executions, granting attackers full control over the server. If file sizes are not properly checked, it could lead to Denial of Service (DOS), flooding limited memory space.
 
-The base CVSS was calculated upon the following metrics.  
+The base CVSS was calculated upon the following metrics.   
 | Information | Explanation                         |
 |-------------|-------------------------------------|
 | Name        | File Upload Vulnerability           |
@@ -98,9 +98,10 @@ The tester gained a reverse shell again.
 
 This attack is possible because LFI does not check the file extension. Instead, it directly executes the code present inside the file.
 ## Mitigating File Uplaod Vulnerabiltiy  {#section-4}  
-
-
-
+### Generate unique and unpredictable file names
+Generate a unique and secure file name for the uploaded files by combining the file's original name, a random string. In PHP `uniqid())` prvodies a unique id ensuring that each uploaded file has a distinct and unpredictable name. This making it difficult for attackers to guess or manipulate.
+### Use Secure File Storage:
+Store uploaded files outside of the web root directory, or in a separate directory with restricted access permissions. This prevents direct execution of uploaded files.
 ### Reference: 
 [GrootBoan](https://security.grootboan.com/) and
-[Offensive Security](https://www.offsec.com/metasploit-unleashed/file-inclusion-vulnerabilities/) 
+[Portswigger](https://portswigger.net/web-security/file-upload) 
