@@ -73,17 +73,17 @@ The tester successfully uploaded the reverse shell script.
 ### Security-High-Level
 ![](/assets/upload/high.png)  
 
- In the `Security-High-Level module`, the code ensures that the file extension matches a certain format. However, the tester bypassed this defense mechanism by making use of Burp Suite.
+ In the `Security-High-Level module`, the code ensures that the file extension matches a certain format. However, the tester bypassed this defense mechanism by making use of Burp Suite alongside local File Inclusion Vulnerability (LFI) and Path Traversal attacks.
 First, the code retrieves the original name of the uploaded file.
  ```bash
   `$uploaded_name = $_FILES['uploaded']['name'];`
  ```
-Next, it extracts the file extension from the name and checks if the file extension is either `jpg,` `jpeg`, or `png`. The strtolower() function converts the extension to lowercase for case-insensitive comparison.
+Next, it extracts the file extension from the name and checks if the file extension is either `jpg,` `jpeg`, or `png`. The `strtolower()` function converts the extension to lowercase for case-insensitive comparison.
 ```bash
 $uploaded_ext = substr($uploaded_name, strrpos($uploaded_name, '.') + 1);
 (strtolower($uploaded_ext) == "jpg" || strtolower($uploaded_ext) == "jpeg" || strtolower($uploaded_ext) == "png")
 ```
-The tester intercepted upload request and added `.jpeg`to the file extension and changed the content type to `image/jpeg` to pass the above checks. Next the tester also added a `GIF89` to bypass get image size function. The `GIF89a`  as the content type when uploading a non-image file is a common technique used to bypass file upload restrictions. This technique takes advantage  filtering mechanisms that may only check the file extension or content type to determine if a file is an image. Since gif is an extension of the image file, this method tricked the server.
+The tester intercepted the upload request and added `.jpeg` to the file extension and changed the content type to `image/jpeg`. Next the tester also added a `GIF89`. Adding the `GIF89a` as the content type when uploading a non-image file is a common technique used to bypass file upload restrictions. This technique takes advantage  filtering mechanisms that may only check the file extension or content type to determine if a file is an image. Since gif is an extension of the image file, this method was succeessful.
 ![](/assets/upload/high1.png)  
 To execute the JPEG file, the tester made use of the Local File Inclusion (LFI) vulnerability to visit the URL
 ```bash
@@ -92,7 +92,7 @@ http://127.0.0.1/vulnerabilities/fi/?page=file:///../../../..//var/www/html/hack
 The tester gained a reverse shell again.
 ![](/assets/upload/REV1.gif)  
 
-This attack is possible because LFI does not check the file extension. Instead it directly executes the code present inside the file.
+This attack is possible because LFI does not check the file extension. Instead, it directly executes the code present inside the file.
 ## Mitigating File Uplaod Vulnerabiltiy  {#section-4}  
 
 
