@@ -27,7 +27,7 @@ The base CVSS was calculated upon the following metrics.
 | Attack Vector (AV)         | Network(N) The vulnerability can be exploited remotely over a network connection.                        |
 | Attack Complexity (AC)     | Low (L) The vulnerability is straightforward and requires minimal or no special knowledge.               |
 | Privilege Required (PR)    | Low (L) The attack requires some privilege. The user has to login to DVWA webpage to conduct the exploit |
-| User Intercation (UI)      | Required (R) The vulnerability needs user interaction.                                                    |
+| User Intercation (UI)      | Required (R) The vulnerability needs user interaction.                                                   |
 | Scope (S)                  | Unchanged(S:U) An exploit can only affect the specific system                                            |
 | Confidentiality Impact (C) | Medium (M) The vulnerability has medium impact on  the confidentiality of information.                   |
 | Integrity Impact (I)       | High (H) The vulnerability has a signigicant impact on the integrity of the information                  |
