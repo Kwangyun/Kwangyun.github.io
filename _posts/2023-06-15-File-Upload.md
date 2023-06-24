@@ -35,10 +35,14 @@ The base CVSS was calculated upon the following metrics.
 
 
 ## Proof of Concept {#section-2}
-For the Proof of Concept (POC), the tester uploaded a `php-reverse-shell.php` created by [Ivan-sincek](https://github.com/ivan-sincek/php-reverse-shell/blob/master/src/reverse/php_reverse_shell.php) to the file upload section. By visiting the uploads directory, the tester confirmed a successful  reverse shell. Below are the steps taken.
-First, the tester modified the IP and Port of the `php-reverse-shell.php` to the testers IP and Port.
+For the Proof of Concept (POC), the tester uploaded a `php-reverse-shell.php` created by [Ivan-sincek](https://github.com/ivan-sincek/php-reverse-shell/blob/master/src/reverse/php_reverse_shell.php) to the file upload section.  
+Below are the steps taken.
+
+First, the tester modified the IP and Port of the `php-reverse-shell.php` script to the testers IP and Port.
+
 ![](/assets/upload/change.png)  
-The script was uploaded successfully.
+
+The tester then proceeded to upload the script and successfully uploaded the script.
 ![](/assets/upload/success.png)  
 
 Next, the tester created a  net cat listener to catch the reverse shell.
