@@ -104,9 +104,9 @@ analytics:
 
 # Site Author
 author:
-  name             : "1day1knowledge"
+  name             : "Kwang Blog"
   avatar           : # path of avatar image, e.g. "/assets/images/bio-photo.jpg"
-  bio              : "Hi, I am a mathematics-cs new grad student as of 2023 June🌱"    
+  bio              : ""    
                      
   location         : "California"
   email            :
