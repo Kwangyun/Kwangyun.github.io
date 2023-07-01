@@ -28,8 +28,10 @@ SQL injection is a security vulnerability that allows attackers to manipulate SQ
 
 ## Proof of Concept {#section-2}
 
-First, the tester manually detected a SQL injection vulnerability by submitting the single quote character `'` 
-![](/assets/sql/ERROR.png)  
+First, the tester manually detected a SQL injection vulnerability by submitting the single quote character `'`   \
+
+![](/assets/sql/ERROR.png)  \
+
 The tester found an error, which signified a very likely SQL injection vulnerability.
 To conduct a more sophisticated `UNION` based attack, the tester proceeded to test out the number of columns that were returned from the original query.
 The `UNION` keyword lets the tester execute one or more additional `SELECT` queries and append the results to the original query. This is useful as the tester could include
@@ -194,7 +196,7 @@ FLUSH PRIVILEGES;
 By excluding the `EXECUTE` privilege, the system restrict the user from executing stored procedures . Moreover, by removing the `INTO OUTFILE`, the system prevents users from writing query results directly to an output file on the server's file system. This would have prevented the Remote Code Execution demonstrated in the start of the report.
 
 ### Password Hashing: 
-Use strong cryptographic hash functions like SHA-256 or using asymmetric encryption algorithms like RSA to hash passwords. This provide an additional layer of security for storing passwords. MD5 is outdated.
+Use strong cryptographic hash functions with salt. Modern hashing algorithms such as Argon2id, bcrypt, and PBKDF2 automatically incorporate salt. A salt is a unique and randomly generated string that is added to each password during the hashing process. Since the salt is unique for every user, an attacker must crack hashes one at a time using the corresponding salt, rather than calculating a hash once and comparing it against every stored hash. This provides an additional layer of security for storing passwords. MD5 is considered outdated.
 
 ## Conclusion
 In conclusion, SQL injection is a critical vulnerability that poses significant risks to the security and integrity of database. It enables attackers to manipulate SQL queries and potentially gain unauthorized access, disclose sensitive information, or even execute arbitrary code. Preventing SQL injection is of prime importance to protect the confidentiality, integrity, and availability of data for users.
