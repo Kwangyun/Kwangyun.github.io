@@ -102,7 +102,7 @@ $_SESSION[‘token’] = bin2hex(random_bytes(24));
 
 #### Ask password again when conducting important tasks.   
 This prevents any CSRF attack to be successful because the the attacker would not know the password. This is seen in the  `Security-Impossible-Level` module.  
-![ ](/assets/CSRF/impossible.png)
+![ ](/assets/CSRF/impossible.png)  
 
 #### Same Site Cookie.      
 SameSite is a security feature implemented in web browsers, which regulates the inclusion of a website's cookies in requests that originate from other websites. Since authenticated session cookies are typically required for sensitive actions, enforcing proper SameSite restrictions can hinder attackers from initiating such actions across different sites. This policy has already been adopted by famous web portals like google in 2021.      
