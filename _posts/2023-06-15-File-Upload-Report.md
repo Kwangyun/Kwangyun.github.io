@@ -12,6 +12,8 @@ The goal of this write-up is to document and demonstrate File Upload vulnerabili
 
 ## Vulnerabiltiy Explanation {#section-1}
 
+![](/assets/upload/uploadDiagram.png)  
+
 A file upload vulnerability is a security flaw that allows an attacker to upload and execute malicious files on a target system. This occurs when users are allowed to upload files to its filesystem without sufficiently validating name, type, contents, or size. Failing to properly enforce restrictions on these could lead to server-side codes to be executed such as a web shell or remote code executions, granting attackers full control over the server. If file sizes are not properly checked, it could lead to Denial of Service (DOS), flooding limited memory space.
 
 
