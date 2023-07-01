@@ -96,7 +96,8 @@ As a result, the tester retrieved the username and password from the data base.
 ' UNION SELECT user, password FROM dvwa.users #
 
 ```
-![](/assets/sql/extract.png) 
+![](/assets/sql/extract.png)  \
+
 The tester utilized hash-identifier to identify the hash as md5.
 ![](/assets/sql/hash-identifier.png) 
 Finally, the tester utilzed hashcat to crack the password and identified the admin password as `password`
