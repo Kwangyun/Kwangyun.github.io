@@ -14,9 +14,6 @@ The goal of this write-up is to document and demonstrate SQL Injection vulnerabi
 
 ![](/assets/sql/diagram.png)  
 
-SQL injection is a security vulnerability that allows attackers to manipulate SQL queries executed by a web application's database.  This vulnerability poses a significant threat to the Confidentiality, Integrity, and Availability (CIA) triad of a system, as it can result in data breaches, unauthorized data disclosure, data manipulation,  and potential system downtime. It may also lead to a full compromise of a system through Remote Code Execution. 
-
-The base CVSS was calculated upon the following metrics.   
 | Information | Explanation                            |
 |-------------|----------------------------------------|
 | Name        | SQLi                                   |
@@ -24,6 +21,10 @@ The base CVSS was calculated upon the following metrics.
 | CVSS        | 8.8                                    |
 | String      | AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H    |
 | Path        | http://127.0.0.1/vulnerabilities/sqli/ |
+
+
+SQL injection is a security vulnerability that allows attackers to manipulate SQL queries executed by a web application's database.  This vulnerability poses a significant threat to the Confidentiality, Integrity, and Availability (CIA) triad of a system, as it can result in data breaches, unauthorized data disclosure, data manipulation,  and potential system downtime. It may also lead to a full compromise of a system through Remote Code Execution. 
+
 
 ## Proof of Concept {#section-2}
 
