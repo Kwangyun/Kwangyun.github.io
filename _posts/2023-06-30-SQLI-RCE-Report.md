@@ -105,7 +105,7 @@ Finally, the tester utilzed hashcat to crack the password and identified the adm
 ### Security-Low-Level
 ![](/assets/upload/easy.png)  
 In the `Security-Low-Level module`, there are zero security measures in place to limit user input.
-```{php}
+```{bash}
 <?php
 
 if( isset( $_REQUEST[ 'Submit' ] ) ) {
