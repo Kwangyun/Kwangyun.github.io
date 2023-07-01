@@ -71,7 +71,8 @@ Next, the encoded URL was appended to `/tmp/shell1.php` with the `cmd` parameter
 
  The tester gained an interactive reverse shell as demonstrated below.
 ![](/assets/sql/REV.gif)  
-### Utilizing SQL MAP 
+### Utilizing SQLMaP 
+An interactive os-shell is also obtainable using SQLMap. SQLMap is an open-source penetration testing tool that automates the process of detecting and exploiting SQL injection vulnerabilities in web applications.
 
 
 ![](/assets/sql/map.gif)  
