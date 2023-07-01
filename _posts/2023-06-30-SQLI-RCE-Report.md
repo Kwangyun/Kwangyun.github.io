@@ -34,7 +34,7 @@ The tester found an error, which signified a very likely SQL injection vulnerabi
 To conduct a more sophisticated `UNION` based attack, the tester proceeded to test out the number of columns that were returned from the original query.
 The `UNION` keyword lets the tester execute one or more additional `SELECT` queries and append the results to the original query. This is useful as the tester could include
 additional database information and queries of his taste.
-```{bash}
+```bash
 ' ORDER BY 1#
 ' ORDER BY 2#
 ```
