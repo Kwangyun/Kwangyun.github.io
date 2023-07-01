@@ -28,9 +28,9 @@ SQL injection is a security vulnerability that allows attackers to manipulate SQ
 
 ## Proof of Concept {#section-2}
 
-First, the tester manually detected a SQL injection vulnerability by submitting the single quote character `'`   \
+First, the tester manually detected a SQL injection vulnerability by submitting the single quote character `'`   
 
-![](/assets/sql/ERROR.png)  \
+![](/assets/sql/ERROR.png)  
 
 The tester found an error, which signified a very likely SQL injection vulnerability.
 To conduct a more sophisticated `UNION` based attack, the tester proceeded to test out the number of columns that were returned from the original query.
