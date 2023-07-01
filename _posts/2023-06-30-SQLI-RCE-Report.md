@@ -96,7 +96,7 @@ As a result, the tester retrieved the username and password from the data base.
 ' UNION SELECT user, password FROM dvwa.users #
 
 ```
-![](/assets/sql/extract.png)  \
+![](/assets/sql/extract.png)  
 
 The tester utilized hash-identifier to identify the hash as md5.
 ![](/assets/sql/hash-identifier.png) 
@@ -198,6 +198,19 @@ By excluding the `EXECUTE` privilege, the system restrict the user from executin
 
 ### Password Hashing: 
 Use strong cryptographic hash functions with salt. Modern hashing algorithms such as Argon2id, bcrypt, and PBKDF2 automatically incorporate salt and are considered the standards when hashing passwords. A salt is a unique and randomly generated string that is added to each password during the hashing process. Since the salt is unique for every user, an attacker must crack hashes one at a time using the corresponding salt, rather than calculating a hash once and comparing it against every stored hash. This provides an additional layer of security for storing passwords. 
+Below is an example code snippet in Python using the popular bcrypt library to hash and salt the password.
+```bash
+import bcrypt
+
+# Generate a salt and hash the password
+password = b"MyPassword123"  # Note the 'b' prefix to indicate a byte string
+hashed_password = bcrypt.hashpw(password, bcrypt.gensalt())
+
+# Print the hashed password
+print(hashed_password)
+
+```
+
 
 ## Conclusion
 In conclusion, SQL injection is a critical vulnerability that poses significant risks to the security and integrity of database. It enables attackers to manipulate SQL queries and potentially gain unauthorized access, disclose sensitive information, or even execute arbitrary code. Preventing SQL injection is of prime importance to protect the confidentiality, integrity, and availability of data for users.
