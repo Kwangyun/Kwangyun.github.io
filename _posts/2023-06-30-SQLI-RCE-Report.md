@@ -71,14 +71,23 @@ Next, the encoded URL was appended to `/tmp/shell1.php` with the `cmd` parameter
 
  The tester gained an interactive reverse shell as demonstrated below.
 ![](/assets/sql/REV.gif)  
-### Utilizing SQLMaP 
-An interactive os-shell is also obtainable using SQLMap. SQLMap is an open-source penetration testing tool that automates the process of detecting and exploiting SQL injection vulnerabilities in web applications.
+### Automating the Process SQLMap 
+An interactive os-shell was also obtainable using SQLMap. SQLMap is an open-source penetration testing tool that automates the process of detecting and exploiting SQL injection vulnerabilities in web applications.
 
+First, the tester intercepted the user input via Burp Suite.  
 
+![](/assets/sql/intercept.png)  
+Next, the tester saved the intercepted HTTP request to a file called `hack`
+![](/assets/sql/hack.png)
+The tester ran the following SQLMap command and set the web language to PHP and target location to `/var/www/html/tmp`  
+```bash
+sqlmap -r hack --os-shell
+```
+As seen below, the tester gained an interactive shell as `www-data`
 ![](/assets/sql/map.gif)  
 
 ### Manual Enumeration & Exploitation
-If the current user does not have sufficient privilege to conduct the `INTO OUTFILE` SQL query or does not have the sufficient tools,  there were other methods to retrieve sensitive data.
+If the current user does not have sufficient privilege to conduct the `INTO OUTFILE` SQL query or does not have the sufficient tools,  manual exploitation was available to retrieve sensitive data.
 With the below command, the tester queried all available databases.
 ```bash
 ' union SELECT null, schema_name FROM information_schema.schemata #
@@ -222,5 +231,5 @@ print(hashed_password)
 In conclusion, SQL injection is a critical vulnerability that poses significant risks to the security and integrity of database. It enables attackers to manipulate SQL queries and potentially gain unauthorized access, disclose sensitive information, or even execute arbitrary code. Preventing SQL injection is of prime importance to protect the confidentiality, integrity, and availability of data for users.
 
 ### Reference: 
-[GrootBoan](https://security.grootboan.com/) , and
+[GrootBoan](https://security.grootboan.com/) , [SECN](https://secnhack.in/take-meterpreter-of-website-using-sqlmap-os-shell/) &
 [Portswigger](https://portswigger.net/web-security/sql-injection#how-to-prevent-sql-injection) 
