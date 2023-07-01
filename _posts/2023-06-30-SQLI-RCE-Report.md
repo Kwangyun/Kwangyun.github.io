@@ -78,16 +78,18 @@ First, the tester intercepted the user input via Burp Suite.
 
 ![](/assets/sql/intercept.png)  
 Next, the tester saved the intercepted HTTP request to a file called `hack`
-![](/assets/sql/hack.png)  
+![](/assets/sql/save.png)  
 The tester ran the following SQLMap command and set the web language to PHP and target location to `/var/www/html/tmp`  
 ```bash
 sqlmap -r hack --os-shell
 ```
 As seen below, the tester gained an interactive shell as `www-data`  
+
 ![](/assets/sql/map.gif)  
 
 ### Manual Enumeration & Exploitation
-If the current user does not have sufficient privilege to conduct the `INTO OUTFILE` SQL query or does not have the sufficient tools,  manual exploitation was available to retrieve sensitive data.
+
+In cases where the current user lacks the necessary privileges to execute the `INTO OUTFILE` SQL query or lacks the requisite tools, manual exploitation provides an alternative method for extracting sensitive data.  
 With the below command, the tester queried all available databases.
 ```bash
 ' union SELECT null, schema_name FROM information_schema.schemata #
@@ -113,8 +115,10 @@ As a result, the tester retrieved the username and password from the data base.
 ```
 ![](/assets/sql/extract.png)  
 
-The tester utilized hash-identifier to identify the hash as md5.
-![](/assets/sql/hash-identifier.png) 
+The tester utilized hash-identifier to identify the hash as md5.  
+
+![](/assets/sql/hash-identifier.png)  
+
 Finally, the tester utilzed hashcat to crack the password and identified the admin password as `password`
 
 ![](/assets/sql/cracked.png) 
