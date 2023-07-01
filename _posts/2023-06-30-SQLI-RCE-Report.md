@@ -77,7 +77,7 @@ An interactive os-shell is also obtainable using SQLMap. SQLMap is an open-sourc
 
 ![](/assets/sql/map.gif)  
 
-### Manual Enumeration
+### Manual Enumeration & Exploitation
 If the current user does not have sufficient privilege to conduct the `INTO OUTFILE` SQL query or does not have the sufficient tools,  there were other methods to retrieve sensitive data.
 With the below command, the tester queried all available databases.
 ```bash
