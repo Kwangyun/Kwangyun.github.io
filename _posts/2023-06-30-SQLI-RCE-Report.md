@@ -71,8 +71,13 @@ Next, the encoded URL was appended to `/tmp/shell1.php` with the `cmd` parameter
 
  The tester gained an interactive reverse shell as demonstrated below.
 ![](/assets/sql/REV.gif)  
+### Utilizing SQL MAP 
 
-If the current user does not have sufficient privilege to conduct the `INTO OUTFILE` SQL query,  there were other methods to retrieve sensitive data.
+
+![](/assets/sql/map.gif)  
+
+### Manual Enumeration
+If the current user does not have sufficient privilege to conduct the `INTO OUTFILE` SQL query or does not have the sufficient tools,  there were other methods to retrieve sensitive data.
 With the below command, the tester queried all available databases.
 ```bash
 ' union SELECT null, schema_name FROM information_schema.schemata #
