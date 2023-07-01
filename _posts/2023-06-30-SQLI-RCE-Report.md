@@ -78,12 +78,12 @@ First, the tester intercepted the user input via Burp Suite.
 
 ![](/assets/sql/intercept.png)  
 Next, the tester saved the intercepted HTTP request to a file called `hack`
-![](/assets/sql/hack.png)
+![](/assets/sql/hack.png)  
 The tester ran the following SQLMap command and set the web language to PHP and target location to `/var/www/html/tmp`  
 ```bash
 sqlmap -r hack --os-shell
 ```
-As seen below, the tester gained an interactive shell as `www-data`
+As seen below, the tester gained an interactive shell as `www-data`  
 ![](/assets/sql/map.gif)  
 
 ### Manual Enumeration & Exploitation
