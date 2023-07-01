@@ -150,7 +150,9 @@ if( isset( $_REQUEST[ 'Submit' ] ) ) {
 ?> 
 ```
 The user input is stored in the variable `$id` using the $_REQUEST['id'] mechanism. Subsequently, the query is executed, retrieving the first_name and last_name fields from the users table based on the provided user ID.  \
-` $query  = "SELECT first_name, last_name FROM users WHERE user_id = '$id';";`
+```bash
+ $query  = "SELECT first_name, last_name FROM users WHERE user_id = '$id';";
+```
  However, this code snippet is susceptible to SQL injection attacks because it does not properly validate or sanitize the user input. This means that an attacker can exploit the vulnerability by inputting malicious SQL queries into the id field, potentially compromising the security and integrity of the database. To mitigate this risk, it is crucial to implement proper input validation and parameterization techniques to prevent SQL injection vulnerabilities.
 
 ### Security-Medium-Level
