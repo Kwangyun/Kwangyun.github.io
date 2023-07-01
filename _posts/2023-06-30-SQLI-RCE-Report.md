@@ -138,7 +138,7 @@ The user input is stored in the variable `$id` using the $_REQUEST['id'] mechani
 
 ### Security-Medium-Level
 In the `Security-Medium-Level module`, there are minimal security measures to validate user upload. 
-```{php}
+```php
 if( isset( $_POST[ 'Submit' ] ) ) {
     // Get input
     $id = $_POST[ 'id' ];
@@ -157,7 +157,7 @@ Furthermore, the dropdown list approach also demonstrated vulnerabilities as the
 
 
 ### Security-High-Level
-```{php}
+```php
 <?php
 
 if( isset( $_SESSION [ 'id' ] ) ) {
@@ -176,7 +176,7 @@ However,  the tester bypassed this prevention method by simply appending the com
 
 ## Mitigating SQL Injection Vulnerability {#section-4}  
 ### Use Parameterized Queries
-```{php}
+```php
 $stmt = $pdo->prepare("SELECT * FROM users WHERE username = :username AND password = :password");
 $stmt->bindParam(':username', $username);
 $stmt->bindParam(':password', $password);
