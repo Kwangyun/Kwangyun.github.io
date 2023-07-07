@@ -8,7 +8,7 @@
 - [**Mitigating SQL Injection Vulnerability**](#section-4)
 
 ## Outline {#section-0}
-The goal of this write-up is to document and demonstrate SQL Injection vulnerability against the Damn Vulnerable Web Application (DVWA). The objective of this attack was to gain a Remote Code Execution (RCE) as `www-data`. This report mocks a penetration testing report and a debriefing situation for a client. 
+The goal of this write-up is to document and demonstrate SQL Injection vulnerability against the Damn Vulnerable Web Application (DVWA). The objective of this attack was to gain a Remote Code Execution (RCE) as `www-data`. This report mocks a penetration testing report and a debriefing situation for a client. The full presentation to our clients can be seen [Here](https://www.youtube.com/watch?v=GfIFsArNxf4) 
 
 ## Vulnerability Explanation {#section-1}
 
