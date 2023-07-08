@@ -26,7 +26,6 @@ The goal of this write-up is to document and demonstrate Blind SQL Injection vul
 
 SQL injection is a security vulnerability that allows attackers to manipulate SQL queries executed by a web application's database.  
 
-![](/assets/sqlb/map.png)   
 In addition, Blind SQL injection is a type of SQL injection vulnerability, however, the HTTP responses do not contain the results of the relevant SQL query or the details of any database errors.  
 
 ![](/assets/sqlb/map2.png)   
