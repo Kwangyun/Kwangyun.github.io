@@ -82,9 +82,56 @@ e99a18c428cb38d5f260853678922e03:abc123
 
 ## Source Code Analysis {#section-3}
 ### Security-Low-Level
-```bash
+```php
+$getid = "SELECT first_name, last_name FROM users WHERE user_id = '$id';";
+ $result = mysqli_query($GLOBALS["___mysqli_ston"],  $getid ); // Removed 'or die' to suppress mysql errors
+
+    // Get results
+    $num = @mysqli_num_rows( $result ); // The '@' character suppresses errors
+    if( $num > 0 ) {
+        // Feedback for end user
+        echo '<pre>User ID exists in the database.</pre>';
+    }
+    else {
+        // User wasn't found, so the page wasn't!
+        header( $_SERVER[ 'SERVER_PROTOCOL' ] . ' 404 Not Found' );
+
+        // Feedback for end user
+        echo '<pre>User ID is MISSING from the database.</pre>';
+    }
+
 
 ```
+In the `Security Low Level Module`, the provided code snippet exhibits a blind SQL injection vulnerability due to the direct concatenation of the user input `($id)` into the SQL query. The code attempts to suppress SQL query error outputs. However, this does not mitigate the underlying vulnerability introduced by the direct concatenation of the `$id` variable into the SQL query. An attacker can manipulate the value of the 'id' parameter in the URL to inject arbitrary SQL code, potentially altering the query's behavior or extracting sensitive data from the database.
+
+To address this vulnerability, the developers should use prepared statements or parameterized queries to handle user input securely. 
+### Security-Medium-Level
+```php
+if( isset( $_POST[ 'Submit' ]  ) ) {
+    // Get input
+    $id = $_POST[ 'id' ];
+    $id = ((isset($GLOBALS["___mysqli_ston"]) && is_object($GLOBALS["___mysqli_ston"])) ? mysqli_real_escape_string($GLOBALS["___mysqli_ston"],  $id ) : ((trigger_error("[MySQLConverterToo] Fix the mysql_escape_string() call! This code does not work.", E_USER_ERROR)) ? "" : ""));
+
+    // Check database
+    $getid  = "SELECT first_name, last_name FROM users WHERE user_id = $id;";
+    $result = mysqli_query($GLOBALS["___mysqli_ston"],  $getid ); // Removed 'or die' to suppress mysql errors
+
+    // Get results
+    $num = @mysqli_num_rows( $result ); // The '@' character suppresses errors
+    if( $num > 0 ) {
+        // Feedback for end user
+        echo '<pre>User ID exists in the database.</pre>';
+    }
+    else {
+        // Feedback for end user
+        echo '<pre>User ID is MISSING from the database.</pre>';
+    } 
+```
+In the `Security Medium Level Module`, the code takes input from the user through the `$_POST['id']` parameter. However, this lacks proper input sanitization to protect against SQL injection attacks.
+
+To mitigate this vulnerability, the developers attempt to sanitize the input using `mysqli_real_escape_string()`. However, the usage of this function does not tackle the vulnerable `$id` parameter. Thus, the code fails to use prepared statements or parameterized queries, which are more secure approaches for handling user input in SQL queries.
+
+The vulnerable code directly inserts the sanitized `$id` value into the SQL query without appropriate parameterization. This allows an attacker to manipulate the value of the id parameter and potentially execute unauthorized SQL statements.
 
 
 ### Security-High-Level
