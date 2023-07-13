@@ -1,7 +1,8 @@
 Test:
 ## Reverse A linked List:
 #### Things to note
-1. Two Pointer Question
+1. Dummy node
+3. Two Pointer Question
 2. Temp vairiable to store node next
 ```bash
 class Solution(object):
@@ -18,3 +19,22 @@ class Solution(object):
         return prev
                  
 ```
+## 35. Search Insert Position
+
+1. Binary search
+2. two pointer.
+```bash
+        left=0
+        right=len(nums)-1
+        while left<=right:
+            mid= left+(right-left) /2 
+            if target== nums[mid]:
+                return mid
+            if target> nums[mid]:
+                left = mid+1
+            if target < nums[mid]:
+                right =mid-1 
+        return left            
+
+```
+     
