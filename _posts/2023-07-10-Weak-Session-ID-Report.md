@@ -136,20 +136,6 @@ The vulnerable code directly inserts the sanitized `$id` value into the SQL quer
 
 ### Security-High-Level
 ```php
-$getid  = "SELECT first_name, last_name FROM users WHERE user_id = '$id' LIMIT 1;";
-    $result = mysqli_query($GLOBALS["___mysqli_ston"],  $getid ); // Removed 'or die' to suppress mysql errors
-
-    // Get results
-    $num = @mysqli_num_rows( $result ); // The '@' character suppresses errors
-    if( $num > 0 ) {
-        // Feedback for end user
-        echo '<pre>User ID exists in the database.</pre>';
-    }
-    else {
-        // Might sleep a random amount
-        if( rand( 0, 5 ) == 3 ) {
-            sleep( rand( 2, 4 ) );
-        }
 
 ```
 
