@@ -22,20 +22,30 @@ A weak session ID refers to a session identifier that lacks sufficient randomnes
 
 ## Proof of Concept {#section-2}
 The tester first utilzed Burpsuite to intercept the POST request from the `Generate` button. 
-Burpsuite is a powerful web application secuirty testing and penetration testing tool. Upon intercepting the request, the tester sent the request to repeater and continously sent the request to see how the session_ id changed.
-![](/assets/session/session1.gif)   
-Examining the output, the tester easily predicted that the `session_id` is incremented by one. The tester also utilized Burspsuite's sequencer tool to analyize the randomness and predictability of session tokens. 
- ![](/assets/session/sequence1.gif)   
+Burpsuite is a powerful web application secuirty testing and penetration testing tool. Upon intercepting the request, the tester sent the request to repeater and continously sent the request to see how the session_ id changed.  
+
+![](/assets/session/session1.gif) 
+
+Examining the output, the tester easily predicted that the `session_id` is incremented by one. The tester also utilized Burspsuite's sequencer tool to analyize the randomness and predictability of session tokens.  
+
+    
  As expected, the overall quality of randomness is `extremely poor` with low entropy.
 
 
-In the second scenario, the tester also intercepted the request to examin the change in `session_id`.
- ![](/assets/session/sequence2.gif)   
- The tester noticed that the session_ids are sequentially incremented when the generate button was constantly pressed. However, the tester also realized that the session_id values incremented according to time. 
+In the second scenario, the tester also intercepted the request to examin the change in `session_id`.  
+
+
+ The tester noticed that the session_ids are sequentially incremented when the generate button was constantly pressed. However, the tester also realized that the session_id values incremented according to time.  
+
   ![](/assets/session/sequence21.gif)   
+
 The overall quality of randomness is `extremely poor` with a low entropy as well.
 
-In the last scenario, the tester also intercepted the request to examin the change in `session_id`.
+In the last scenario, the tester also intercepted the request to examin the change in `session_id`. Although, at initial glance, the cookie values seem rather random and unpredictable, further analysis reveals that the values are `md5` hashed.
+
+Cracking the hashes, the tester realized that incremental values were hashed with `md5`
+
+
 
 ## Source Code Analysis {#section-3}
 ### Security-Low-Level
@@ -69,7 +79,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 }
 ?> 
 ```
-
+In the `Security Medium Level Module `  the cookie values are set with the time() function. The output format aligns with the UNIX time. Similar to the `Low Level Module` the vulnerability arises from the lack of randomness and predictability in the session cookie values. The time() function generates session IDs based on the current time, which follows a predictable and incremental pattern. Attackers can take advantage of this predictability to guess or calculate the session IDs.
 
 
 ### Security-High-Level
@@ -88,7 +98,8 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 }
 
 ?> 
-```
+``` 
+In the `Security High Level Module ` the cookie values are created and hashed using `md5`. The session ID is set as the value of the dvwaSession cookie using the `setcookie() function`. The cookie is configured with an expiration time of 1 hour `(time()+3600)`, limited to the `/vulnerabilities/weak_id/` path. Although this enhances  randomess and reduces predictability in session cookie values, the next session_id was predictable as soon as the tester realized it was hashed with `md5`.  `md5` is a relatively weak hashing algorithm by today's standards and was therefore easily crackable.
 
 
 
