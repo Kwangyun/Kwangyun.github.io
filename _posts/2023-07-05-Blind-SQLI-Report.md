@@ -152,8 +152,9 @@ $getid  = "SELECT first_name, last_name FROM users WHERE user_id = '$id' LIMIT 1
         }
 
 ```
+In the `Security-High-Level module`, an additional security measure has been implemented by adding a `LIMIT 1;` statement to the SQL query after the `user_id = '$id'` condition. This measure aims to restrict the output of the SQL database to only one record, thereby mitigating the impact of sophisticated attacks such as the UNION-based attack.
 
-
+However,  this method alone was not sufficient to prevent automated tools such as SQLmap as the `user_id` field itself is inherently vulnerable to SQL injection. Although the user might not be able to directly see the output when manually injecting SQL queries, SQLmap was still able to exploit this state. Therfore, it is of prime importance to tackle the root cause of the problem rather than limiting what type of error message is shown in the front-end of the web page.
 
 ## Mitigating SQL Injection Vulnerability {#section-4}  
 ### Use Parameterized Queries
