@@ -35,7 +35,7 @@ In the second scenario, the tester also intercepted the request to examin the ch
   ![](/assets/session/sequence21.gif)   
 The overall quality of randomness is `extremely poor` with a low entropy as well.
 
-In the second scenario, the tester also intercepted the request to examin the change in `session_id`.
+In the last scenario, the tester also intercepted the request to examin the change in `session_id`.
 
 ## Source Code Analysis {#section-3}
 ### Security-Low-Level
