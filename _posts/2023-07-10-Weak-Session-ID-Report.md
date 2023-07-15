@@ -43,9 +43,12 @@ In the second scenario, the tester also intercepted the request to examin the ch
 The overall quality of randomness is `extremely poor` with a low entropy as well.
 
 In the last scenario, the tester also intercepted the request to examin the change in `session_id`. Although, at initial glance, the cookie values seem rather random and unpredictable, further analysis reveals that the values are `md5` hashed.
+![](/assets/session/last.gif) 
 
 Cracking the hashes, the tester realized that incremental values were hashed with `md5`
+![](/assets/session/last1.png) 
 
+The overall quality of randomness is `excellent` with high entropy. This signifies that unless, the attacker successfully predicts the hashing algorithm, such hashing method provides a high randomness.
 
 
 ## Source Code Analysis {#section-3}
