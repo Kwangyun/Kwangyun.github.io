@@ -26,18 +26,19 @@ Burpsuite is a powerful web application secuirty testing and penetration testing
 
 ![](/assets/session/session1.gif) 
 
-Examining the output, the tester easily predicted that the `session_id` is incremented by one. The tester also utilized Burspsuite's sequencer tool to analyize the randomness and predictability of session tokens.  
+Examining the output, the tester easily predicted that the `session_id` is incremented by one. The tester also utilized Burspsuite's sequencer tool to analyize the randomness and predictability of session tokens.    
+![](/assets/session/result1.gif) 
 
-    
  As expected, the overall quality of randomness is `extremely poor` with low entropy.
 
 
 In the second scenario, the tester also intercepted the request to examin the change in `session_id`.  
-
+![](/assets/session/update2.gif) 
 
  The tester noticed that the session_ids are sequentially incremented when the generate button was constantly pressed. However, the tester also realized that the session_id values incremented according to time.  
 
-  ![](/assets/session/sequence21.gif)   
+![](/assets/session/result1.gif) 
+
 
 The overall quality of randomness is `extremely poor` with a low entropy as well.
 
