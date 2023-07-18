@@ -39,7 +39,7 @@ class Solution(object):
 ```
 ## Group Anagram
 1. hashmap 
-2. removing array and join
+2. removing array and using ''.join
 ```
 d = {}
 for i in range(len(strs)):
@@ -51,3 +51,29 @@ x = ''.join(sorted(strs[i]))
     return d.values()
 ```
      
+## Encoding and Decoding
+```bash
+class Codec:
+
+    def encode(self, strs):
+        """Encodes a list of strings to a single string.
+        
+        :type strs: List[str]
+        :rtype: str
+        """
+        if (len(strs)==0): 
+            return null;
+        else:
+            return '-encodedString'.join(strs)
+        
+
+    def decode(self, s):
+        """Decodes a single string to a list of strings.
+        
+        :type s: str
+        :rtype: List[str]
+        """
+        if (len(s) == 0): return []
+        return s.split("-encodedString")
+        
+```
