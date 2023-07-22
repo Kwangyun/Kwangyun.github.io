@@ -38,7 +38,7 @@ Use `OpenProcess` function to obtain a valid `HANDLE5` to a target process that 
        · ReverseB64: Encode with base64 and reverse it to avoid detections
        · PSObfuscation: Convert content to bytes and encode with Gzip
     However, this was blocked in Windows Defender.
-  ![](/assets/Project/Invoke.png)
+  ![](/assets/Project/PowershellFail.png)
 
 2. ScareCrow (Caught by Window Defender) https://github.com/optiv/ScareCrow 
   ![](/assets/Project/scare.png)
