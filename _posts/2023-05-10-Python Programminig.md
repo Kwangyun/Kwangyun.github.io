@@ -77,7 +77,7 @@ class Codec:
         return s.split("-encodedString")
         
 ```
-IsPalinDrome
+## IsPalidrome
 ```
 
 cleaned_s = ''.join(char.lower() for char in s if char.isalnum())

