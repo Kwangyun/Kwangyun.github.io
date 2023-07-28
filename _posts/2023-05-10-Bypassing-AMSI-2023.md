@@ -22,13 +22,17 @@ If a known signature is identified execution doesn’t initiate and a message ap
 # AMSI Bypass Technique
 The following evasive techniques aim to avoid detection by antivirus and security software.  
 
-Code Fragmentation: Divide codes into smaller components and assemble at runtime, evading static analysis.  
+##### Code Fragmentation: 
+Divide codes into smaller components and assemble at runtime, evading static analysis.  
 
-Obfuscation: Utilize obfuscation techniques to obscure the true intent of the script, making it challenging for AMSI scanners to interpret the code accurately.  
+##### Obfuscation: 
+Utilize obfuscation techniques to obscure the true intent of the script, making it challenging for AMSI scanners to interpret the code accurately.  
 
-Memory patching: Modify the AMSI Dynamic Link Library (DLL) in memory to either disable or alter its functionality temporarily.  
+#####  Memory patching: 
+Modify the AMSI Dynamic Link Library (DLL) in memory to either disable or alter its functionality temporarily.  
 
-Powershell Downgrade: Downgrade to Windows PowerShell 2.0. It lacks essential security controls like AMSI protection, making it susceptible to exploitation as a means of evasion.
+#### Powershell Downgrade: 
+Downgrade to Windows PowerShell 2.0. It lacks essential security controls like AMSI protection, making it susceptible to exploitation as a means of evasion.
 
 ## Proof of Concept
 
