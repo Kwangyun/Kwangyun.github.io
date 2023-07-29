@@ -26,7 +26,7 @@ This approach challenges antivirus scanners that rely on signature-based detecti
 Obfuscation techniques are utilized to deliberately obscure the actual intent and functionality of a script. By employing various obfuscation methods, such as code encryption, renaming variables, adding meaningless code snippet to obscure intent of the script, attackers can make their code appear convoluted. This makes AMSI scanners challenging  to interpret the true purpose of the script.
 
 #####  Memory Patching: 
-Memory patching modifies the AMSI Dynamic Link Library (DLL) in memory during runtime. This technique allows threat actors to temporarily disable or alter the functionality of AMSI. This allows attackers to run malicious scripts in memory without hindrance and triggering alerts. 
+Memory patching modifies the AMSI Dynamic Link Library (DLL) in memory during runtime. This technique allows threat actors to temporarily disable or alter the functionality of AMSI. Subsequently attackers can run malicious scripts in memory without hindrance and alerts
 #### PowerShell Downgrade: 
 PowerShell downgrading is switching the current PowerShell to Windows PowerShell verison 2.0. This version does not have AMSI protection, which makes it susceptible to arbitrary code execution. By using an older version of PowerShell, attackers can bypass the built-in security measures present in newer versions and execute malicious scripts undetected.
 ## Proof of Concept {#section-2}
