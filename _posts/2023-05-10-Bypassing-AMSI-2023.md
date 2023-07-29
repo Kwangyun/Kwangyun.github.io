@@ -8,7 +8,7 @@
 
 ## Outline
 
-The goal of this write-up is to demonstrate bypassing the most up to date AMSI protection measure implemented in Windows 10 Pro (2023/07/28). The objective was to gain a Remote Code Execution (RCE) as NT/Authority System.
+The goal of this write-up is to evade the most up to date AMSI protection measure implemented in Windows 10 Pro (2023/07/28) using AMSI memory patching technique. The objective was to gain a Remote Code Execution (RCE) as NT/Authority System.
 
 ![](/assets/AV/diagram.png)  
 
@@ -19,17 +19,16 @@ By default windows defender interacts with the AMSI API to scan PowerShell scrip
 The following evasive techniques aim to avoid detection by antivirus and security software.  
 
 ##### Code Fragmentation: 
-Divide codes into smaller components and assemble at runtime, evading static analysis.  
+Code fragmentation involves breaking down malicious code into smaller, seemingly harmless components. This is then then assembled at runtime to evade static analysis.
+This approach challenges antivirus scanners that rely on signature-based detection.
 
 ##### Obfuscation: 
-Utilize obfuscation techniques to obscure the true intent of the script, making it challenging for AMSI scanners to interpret the code accurately.  
+Obfuscation techniques are utilized to deliberately obscure the actual intent and functionality of a script. By employing various obfuscation methods, such as code encryption, renaming variables, adding meaningless code snippetsrue intent of the script, attackers can make their code appear convoluted. This makes AMSI scanners challenging  to interpret the true purpose of the script.
 
 #####  Memory Patching: 
-Modify the AMSI Dynamic Link Library (DLL) in memory to either disable or alter its functionality temporarily.  
-
+Memory patching modifies the AMSI Dynamic Link Library (DLL) in memory during runtime. This technique allows threat actors to temporarily disable or alter the functionality of AMSI. This allows attackers to run malicious scripts in memory without hindrance and triggering alerts. 
 #### Powershell Downgrade: 
-Downgrade to Windows PowerShell 2.0. It lacks essential security controls like AMSI protection, making it susceptible to exploitation as a means of evasion.
-
+Powershell downgrading is switching the current Powershell to a lower version, the Windows PowerShell 2.0. This version lacks some of the essential security controls, including AMSI protection, which makes it more susceptible to exploitation by threat actors. By using an older version of PowerShell, attackers can bypass the built-in security measures present in newer versions and execute malicious scripts undetected.
 ## Proof of Concept
 
 ![](/assets/AV/Final.gif)  
@@ -86,6 +85,10 @@ By applying a patch to the `AmsiScanBuffer` function in `AMSI.dll`, using specif
 
 However, it is essential to acknowledge that even with the aforementioned payload, AMSI might still identify the content as malicious unless proper obfuscation methodologies are implemented. To conceal the payload's content and intention, the tester opted to utilize Chameleon PowerShell Obfuscator. Chameleon is a specialized tool designed to obfuscate PowerShell scripts and circumvent AMSI and commercial antivirus solutions. It employs a range of obfuscation techniques to evade common detection signatures, thereby enhancing its effectiveness in avoiding detection. Examples of obfuscation methods include but are not limited to comment deletion/substitution
 string substitution (variables, functions, data-types) ,variable concatenation ,indentation randomization ,semi-random backticks insertion and randomization.
+
+Below is a code snippet of the payload after mulitple layers of obfuscation applied:  
+![](/assets/AV/ob.png)  
+
 
 After implementing effective obfuscation techniques, the tester proceeded by hosting a Python web server on port 8443 to serve a PowerShell Reverse Shell Scrip.
 ```bash
