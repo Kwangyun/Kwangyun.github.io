@@ -11,7 +11,7 @@
 
 The goal of this write-up is to evade the most up to date Windows Defender 11 and lancuh a reverse shell from Micorosoft Word Documnet . The objective was to gain a Remote Code Execution (RCE) as NT/Authority System as the target opnes the malicious Word document.
 
-![](/assets/AV/diagram.png)  
+![](/assets/AV/Final.png)  
 
 # Windows Defender   {#section-1}
 Windows Defender 11 is Microsoft's built-in antivirus and antimalware solution. It provides real-time protection against various threats like viruses, ransomware, spyware, and other malicious software. Defender scans files, monitors activities, and offers firewall protection, all to help safeguard your system and data from potential security risks. Additionally, it includes features such as cloud-based protection and regular updates to ensure comprehensive defense against evolving threats.
