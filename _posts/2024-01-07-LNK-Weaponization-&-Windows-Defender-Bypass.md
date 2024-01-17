@@ -12,7 +12,7 @@
 
 The objective of this document is to explore evasion techniques concerning the latest security measures implemented within Windows Defender 11. Specifically, the aim is to execute a reverse shell from a Microsoft Word document. The ultimate goal is to achieve Remote Code Execution (RCE) within the context of NT/Authority System privileges upon opening the malicious Word document.
 
-![](/assets/AV/Final.png)  
+![](/assets/AV/LNKSummary.png)  
 
 # Windows Defender   {#section-1}
 Windows Defender 11 is Microsoft's built-in antivirus and antimalware solution. It provides real-time protection against various threats like viruses, ransomware, spyware, and other malicious software. Defender scans files, monitors activities, and offers firewall protection, all to help safeguard your system and data from potential security risks. Additionally, it includes features such as cloud-based protection and regular updates to ensure comprehensive defense against evolving threats.
