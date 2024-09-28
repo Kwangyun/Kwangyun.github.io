@@ -16,6 +16,14 @@
 
 This document will illustrates a POC of executing a Browser in Browser (BiB) novnc attack. This attack bypasses MFA by simulating legitimate login prompts from trusted services (e.g., Microsoft Login page). 
 
+## Browser in Browser NoVnc Attack  {#section-0}
+The Browser in Browser (BiB) attack, unveiled by researcher D0x in February 2022, is a sophisticated phishing method that bypasses multi-factor authentication (MFA) using a reverse proxy and noVNC remote access.
+
+Initially leveraging the well-known Evilginx2 framework, D0x’s attack begins by configuring a reverse proxy to intercept credentials and MFA tokens. However, modern security solutions are becoming increasingly adept at detecting these proxy-based attacks, often blocking logins or flagging accounts when a reverse proxy is involved. To circumvent these defenses, the use of noVNC allows attackers to render a seamless login prompt directly in the victim's browser, while the login process itself occurs on the attacker's infrastructure
+
+Phishing links can be crafted to automatically open the target's browser and connect to the attacker's VNC server, where the remote session provides full control over the login process.
+
+
 <video width="640" height="480" controls>
   <source src="/assets/AV/BIB.mp4" type="video/mp4">
   Your browser does not support the video tag.
