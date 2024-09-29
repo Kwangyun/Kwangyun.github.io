@@ -14,12 +14,7 @@
 ## Outline  {#section-0}
 
 
-
-video width="640" height="480" controls>
-  <source src="/assets/AV/MSI_Final.mp4" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
-
+![](/assets/AV/APC.png)
 ## Creating MSI Malware {#section-0}
 
 ## Executable to Shell Code
@@ -188,7 +183,8 @@ We can further implement a custom GetProcAddress to hide its WINAPI Function cal
 
 
 ## String Obfuscation
-Let's take the following code snippet for example, where we create a notepad process for future shell code injection.
+Let's take the following code snippet for example, where we create a notepad process for future shell code injection, 
+the string c:\\windows\\system32\notepad.exe is identified in the executable. We can check this using strings.
 ```bash
 strings.exe -n 8 implant.exe | findstr /i "C:\\windows"
 ```
