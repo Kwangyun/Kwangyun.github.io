@@ -38,13 +38,32 @@ level 5 (-j 5) for added obfuscation and evasion.
 ./donut -i /home/kali/donut/piggy.exe -e 1 -b 3 -z -j 5
 ```
 
+![](/assets/AV/donutImage.png)  
+However, as expected the shellcode.bin when uploaded to virus total  has a large detection rate
+![](/assets/AV/loaderVirus.png)  
+
 ## Polymorphic Shellcode Encoding (Shiginakatai)
+While there are many shell code encryption and encoding methods such as XOR, AES, UUID, IPV4 obfuscation, some libraries and decryption functions are flagged by antivirus solutions such as AES decryption routine.
+Here we will use a simple yet effective encoding  to obfuscate our payload, SGN encoding. “SGN is a polymorphic binary encoder for offensive security purposes such as generating statically undetectable binary payloads”.  It is the upgraded version of the famous shikata_ga_nai.rb used in metasploit.
+
+
+https://github.com/EgeBalci/sgn
+Now we will conduct shellcode obfuscation. -i is used for the input file (the meterpreter rat shellcode) and -o is the output. -a is for the architecture and -c is the number of encoding 
+![](/assets/AV/sgn.png)  
 
 
 ```bash
 sgn -i '/home/kali/donut/loader.bin' -o /home/kali/donut/loaderEncrypted.bin -a 64 -c 8 --verbose
 ```
+
 The advantage of SGN is that during run time it will un-encode itself thereby the testers do not have to implement the un-encoding function. Testers need to simply load the obfuscated payload bin to their code.
+
+Uploading the shellcode we get a 0 detection rate.
+![](/assets/AV/zero.png)  
+
+
+The advantage of SGN is that during run time it will un-encode itself thereby the testers do not have to implement the un-encoding function. Testers need to simply load the obfuscated payload bin to their code.
+
 ## Creating APC Shellcode Loader
 Creating a Shellcode Loader
 
