@@ -1,11 +1,11 @@
 ## Table of Contents
 
 - [**Outline**](#section-0)
-- [**Domain and Server Setup**](#section-1)
-- [**Cloning and Setting Up NoPhish**](#section-2)
-- [**DNS and HTTPS Configuration**](#section-3)
-- [**Launching the Phishing Attack**](#section-4)
-- [**Accessing the Admin Panel**](#section-5)
+- [**EXEtoShellCode**](#section-1)
+- [**Shellcode Encoding**](#section-2)
+- [**ShellCode Loader**](#section-3)
+- [**Payload Obfuscation**](#section-4)
+- [****](#section-5)
 - [**Conclusion**](#section-6)
 
 
@@ -39,7 +39,9 @@ level 5 (-j 5) for added obfuscation and evasion.
 ```
 
 ![](/assets/AV/donutImage.png)  
+
 However, as expected the shellcode.bin when uploaded to virus total  has a large detection rate
+
 ![](/assets/AV/loaderVirus.png)  
 
 ## Polymorphic Shellcode Encoding (Shiginakatai)
