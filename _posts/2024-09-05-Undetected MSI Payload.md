@@ -5,7 +5,7 @@
 - [**Shellcode Encoding**](#section-2)
 - [**ShellCode Loader**](#section-3)
 - [**Payload Obfuscation**](#section-4)
-- [****](#section-5)
+- [**IAT Obfuscation**](#section-5)
 - [**Conclusion**](#section-6)
 
 
@@ -159,7 +159,37 @@ int main() {
     return 0;
 }
 
+
+```
+## IAT Obfuscation
+
+One thing to note is that using the above WIN32 API directly, such as VirtualAllocEX, QueueUserAPC and etc will be likely flagged as suspicious. We can verify this by checking the Import Address Table by  utilizing a tool called PE Studio
+
+ ![](/assets/AV/PE.png)  
+Dynamic Function Resolution: GetProcAddress is used to dynamically resolve the addresses of the required functions 
+
+```bash
+
+HMODULE hKernel32 = GetModuleHandle("kernel32.dll");
+
+LPVOID (WINAPI * pVirtualAllocEx)(HANDLE, LPVOID, SIZE_T, DWORD, DWORD);
+pVirtualAllocEx = (LPVOID (WINAPI *)(HANDLE, LPVOID, SIZE_T, DWORD, DWORD)) GetProcAddress(hKernel32, "VirtualAllocEx");
+
 ```
 
+If we do not want to do this manually, we can use built in importers.
+```bash
+https://github.com/JustasMasiulis/lazy_importer
+```
+Download the lazy_importer.hpp and save it in a folder called include. 
+Simply add LI_FN() to the function.
 
- 
+We can further implement a custom GetProcAddress to hide its WINAPI Function call but this time we leave it out. 
+
+
+## String Obfuscation
+Let's take the following code snippet for example, where we create a notepad process for future shell code injection.
+```bash
+strings.exe -n 8 implant.exe | findstr /i "C:\\windows"
+```
+ ![](/assets/AV/string.png)  
