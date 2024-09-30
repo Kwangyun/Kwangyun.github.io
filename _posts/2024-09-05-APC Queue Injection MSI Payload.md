@@ -333,7 +333,7 @@ By combining these flags, each compilation creates a binary with different chara
 clang++.exe -O2 -Ob2 -Os -fno-stack-protector -o your_malware.exe implant.cpp -luser32 -lkernel32 -fno-unroll-loops -fno-exceptions -fno-rtti -s
 
 clang++.exe -O2 -Ob2 -Os -fno-stack-protector -Xlinker -pdb:none -Xlinker -subsystem:console -o malware.exe implant.cpp -luser32 -lkernel32 -fno-unroll-loops -fno-exceptions -fno-rtti  GNU
-``
+```
 
 - [**Results**](#section-8)
 
