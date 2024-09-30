@@ -82,15 +82,16 @@ The advantage of SGN is that during run time it will un-encode itself thereby th
 Creating a Shellcode Loader
 
 Now that we have our encoded shellcode, we need to create a PE, exe file to launch this shellcode using c++.
-***VirtualAlloc: Allocates memory for the payload, typically using MEM_COMMIT and PAGE_READWRITE to allow writing to the allocated memory.
 
-***RtlMoveMemory: Copies the payload (malicious code) from the file or buffer into the newly allocated memory region.
+**VirtualAlloc**: Allocates memory for the payload, typically using MEM_COMMIT and PAGE_READWRITE to allow writing to the allocated memory.
+
+**RtlMoveMemory**: Copies the payload (malicious code) from the file or buffer into the newly allocated memory region.
 VirtualProtect: Changes the protection of the allocated memory from PAGE_READWRITE to PAGE_EXECUTE_READ to allow the payload to execute.
 
-***CreateThread: Starts a new thread, executing the payload in memory. This is the method used to run the injected code.
+**CreateThread**: Starts a new thread, executing the payload in memory. This is the method used to run the injected code.
 WaitForSingleObject: Pauses the current thread until the thread running the payload finishes execution, ensuring the payload completes.
 
-***QueueUserAPC: This function queues an Asynchronous Procedure Call (APC) to a specific thread. If used with a thread in an alertable state (such as one created with SleepEx or WaitForSingleObjectEx), the payload will be executed when the thread enters that state. This technique is commonly used to inject code into a thread in a less obvious manner, bypassing some common defenses.
+**QueueUserAPC**: This function queues an Asynchronous Procedure Call (APC) to a specific thread. If used with a thread in an alertable state (such as one created with SleepEx or WaitForSingleObjectEx), the payload will be executed when the thread enters that state. This technique is commonly used to inject code into a thread in a less obvious manner, bypassing some common defenses.
 
 ```bash
 #include <windows.h>
@@ -227,14 +228,14 @@ Control flow obfuscation  breakes down a standard process of shellcode injection
 
 The State enum defines various stages of the process:
 
-STATE_ALLOCATE: Allocates memory in the target process using VirtualAllocEx.
+**STATE_ALLOCATE**: Allocates memory in the target process using VirtualAllocEx.
 
-STATE_BENIGN: Executes benign actions and adds a delay to obscure the intent of the program, making it harder for static analysis tools to detect malicious behavior.
+**STATE_BENIGN**: Executes benign actions and adds a delay to obscure the intent of the program, making it harder for static analysis tools to detect malicious behavior.
 STATE_WRITE: Writes the shellcode into the allocated memory with WriteProcessMemory.
 
-STATE_BENIGN_AGAIN: Executes additional benign actions, further confusing analysis tools and delaying detection.
+**STATE_BENIGN_AGAIN**: Executes additional benign actions, further confusing analysis tools and delaying detection.
 
-STATE_EXECUTE: Executes the shellcode by queuing it with QueueUserAPC.
+S**TATE_EXECUTE**: Executes the shellcode by queuing it with QueueUserAPC.
 
 
 
