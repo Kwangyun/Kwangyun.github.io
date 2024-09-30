@@ -12,11 +12,18 @@
 
 
 ## Outline  {#section-0}
-
-
 ![](/assets/AV/APC.png)
 
-<video width="640" height="480" controls>
+
+We will create a malicious MSI payload containing an obfuscated executable using the APC Queue shellcode injection technique. During this process, we will apply multiple obfuscation methods to bypass both signature and behavioral detection, including shellcode obfuscation, IAT obfuscation, control flow obfuscation, payload signing, and file bloating.
+
+
+APC Queue shellcode injection is a method where attackers inject malicious code into a running process by taking advantage of a system feature called Asynchronous Procedure Call (APC). APC is used by Windows to run certain tasks in a thread. In this technique, the attacker places their malicious code (shellcode) into a queue, and when the process runs its next task, it unknowingly executes the injected code instead of the original one.
+
+
+The Proof of Concept video below shows the payload successfully bypassing the latest Windows Defender, establishing a reverse connection to the C2 server.
+
+<video style="max-width: 100%; height: auto;" controls>
   <source src="/assets/AV/MSI.mp4" type="video/mp4">
 </video>
 
@@ -31,9 +38,10 @@ https://github.com/TheWover/donut
 
 This Donut command loads piggy.exe into memory with:
 1) no entropy obfuscation (-e)
+
 2) uses AMSI/WLDP/ETW bypass with a fail-safe option to continue if bypass fails (-b)
-3) compresses the file using the aPLib engine (-z 2), and employs a decoy module at 
-level 5 (-j 5) for added obfuscation and evasion.
+
+3) compresses the file using the aPLib engine (-z 2), and employs a decoy module at level 5 (-j 5) for added obfuscation and evasion.
 
 ```bash
 ./donut -i /home/kali/donut/piggy.exe -e 1 -b 3 -z -j 5
@@ -71,12 +79,15 @@ The advantage of SGN is that during run time it will un-encode itself thereby th
 Creating a Shellcode Loader
 
 Now that we have our encoded shellcode, we need to create a PE, exe file to launch this shellcode using c++.
-VirtualAlloc: Allocates memory for the payload, typically using MEM_COMMIT and PAGE_READWRITE to allow writing to the allocated memory.
-RtlMoveMemory: Copies the payload (malicious code) from the file or buffer into the newly allocated memory region.
+***VirtualAlloc: Allocates memory for the payload, typically using MEM_COMMIT and PAGE_READWRITE to allow writing to the allocated memory.
+
+***RtlMoveMemory: Copies the payload (malicious code) from the file or buffer into the newly allocated memory region.
 VirtualProtect: Changes the protection of the allocated memory from PAGE_READWRITE to PAGE_EXECUTE_READ to allow the payload to execute.
-CreateThread: Starts a new thread, executing the payload in memory. This is the method used to run the injected code.
+
+***CreateThread: Starts a new thread, executing the payload in memory. This is the method used to run the injected code.
 WaitForSingleObject: Pauses the current thread until the thread running the payload finishes execution, ensuring the payload completes.
-QueueUserAPC: This function queues an Asynchronous Procedure Call (APC) to a specific thread. If used with a thread in an alertable state (such as one created with SleepEx or WaitForSingleObjectEx), the payload will be executed when the thread enters that state. This technique is commonly used to inject code into a thread in a less obvious manner, bypassing some common defenses.
+
+***QueueUserAPC: This function queues an Asynchronous Procedure Call (APC) to a specific thread. If used with a thread in an alertable state (such as one created with SleepEx or WaitForSingleObjectEx), the payload will be executed when the thread enters that state. This technique is commonly used to inject code into a thread in a less obvious manner, bypassing some common defenses.
 
 ```bash
 #include <windows.h>
@@ -194,4 +205,15 @@ the string c:\\windows\\system32\notepad.exe is identified in the executable. We
 ```bash
 strings.exe -n 8 implant.exe | findstr /i "C:\\windows"
 ```
+As seen below, the string is identified. 
+
  ![](/assets/AV/string.png)  
+
+To hide the strings we can Import String Obfuscator skCrypter:
+
+https://github.com/skadro-official/skCrypter
+
+```bash
+#include "skCrypter"
+CreateProcessA(skCrypt(L"C:\\Windows\\System32\\notepad.exe", NULL, NULL, NULL, FALSE, CREATE_SUSPENDED, NULL, NULL, &si, &pi))
+```
