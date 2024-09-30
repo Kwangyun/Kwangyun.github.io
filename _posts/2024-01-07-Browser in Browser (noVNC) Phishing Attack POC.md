@@ -23,10 +23,9 @@ Initially leveraging the well-known Evilginx2 framework, D0x’s attack begins b
 
 Phishing links can be crafted to automatically open the target's browser and connect to the attacker's VNC server, where the remote session provides full control over the login process.
 
-
-<video width="640" height="480" controls>
+Below is a full POC video of how an attacker could conduct BIB attack, take control of a session and retreive the target's credentials.
+<video style="max-width: 100%; height: auto;" controls>
   <source src="/assets/AV/BIB.mp4" type="video/mp4">
-  Your browser does not support the video tag.
 </video>
 
 # Domain and Server Setup   {#section-1}
