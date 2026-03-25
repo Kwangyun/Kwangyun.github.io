@@ -4,6 +4,44 @@ layout: archive
 
 {{ content }}
 
+<!-- Stats bar -->
+<div id="hk-stats">
+  <div class="hk-stat">
+    <span class="hk-stat-num" data-target="4" data-suffix="+">0+</span>
+    <span class="hk-stat-label">CVEs / Findings</span>
+  </div>
+  <div class="hk-stat">
+    <span class="hk-stat-num" data-target="3" data-suffix="">0</span>
+    <span class="hk-stat-label">Hall of Fame</span>
+  </div>
+  <div class="hk-stat">
+    <span class="hk-stat-num" data-target="17" data-suffix="">0</span>
+    <span class="hk-stat-label">Research Posts</span>
+  </div>
+  <div class="hk-stat">
+    <span class="hk-stat-num" data-target="5" data-suffix="">0</span>
+    <span class="hk-stat-label">VDP Programs</span>
+  </div>
+</div>
+
+<!-- Terminal intro -->
+<div class="terminal-intro">
+  <div class="terminal-window">
+    <div class="terminal-bar">
+      <span class="dot red"></span>
+      <span class="dot yellow"></span>
+      <span class="dot green"></span>
+      <span class="terminal-title">bash &mdash; kwang@redhunter:~ &mdash; 80x24</span>
+    </div>
+    <div class="terminal-body">
+      <div id="terminal-output"></div>
+      <div class="terminal-active-line">
+        <span class="prompt">kwang@redhunter:~$</span>&nbsp;<span id="typed-cmd"></span><span class="terminal-cursor"></span>
+      </div>
+    </div>
+  </div>
+</div>
+
 <h3 class="archive__subtitle">{{ site.data.ui-text[site.locale].recent_posts | default: "Recent Posts" }}</h3>
 
 {% if paginator %}
