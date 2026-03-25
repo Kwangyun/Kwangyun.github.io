@@ -1,60 +1,146 @@
 ---
-layout: archive
+layout: default
 ---
 
-{{ content }}
-
-<!-- Stats bar -->
-<div id="hk-stats">
-  <div class="hk-stat">
-    <span class="hk-stat-num" data-target="4" data-suffix="+">0+</span>
-    <span class="hk-stat-label">CVEs / Findings</span>
-  </div>
-  <div class="hk-stat">
-    <span class="hk-stat-num" data-target="3" data-suffix="">0</span>
-    <span class="hk-stat-label">Hall of Fame</span>
-  </div>
-  <div class="hk-stat">
-    <span class="hk-stat-num" data-target="17" data-suffix="">0</span>
-    <span class="hk-stat-label">Research Posts</span>
-  </div>
-  <div class="hk-stat">
-    <span class="hk-stat-num" data-target="5" data-suffix="">0</span>
-    <span class="hk-stat-label">VDP Programs</span>
-  </div>
-</div>
-
-<!-- Terminal intro -->
-<div class="terminal-intro">
-  <div class="terminal-window">
-    <div class="terminal-bar">
-      <span class="dot red"></span>
-      <span class="dot yellow"></span>
-      <span class="dot green"></span>
-      <span class="terminal-title">bash &mdash; kwang@redhunter:~ &mdash; 80x24</span>
+<!-- ═══ HERO ═══════════════════════════════════════════════════════════ -->
+<section class="hk-hero">
+  <div class="hk-hero__inner">
+    <p class="hk-eyebrow">Authorized Red Team Operations</p>
+    <h1 class="hk-hero__title">Offensive Security<br><span class="hk-green">Consulting.</span></h1>
+    <p class="hk-hero__sub">Enterprise red team assessments, EDR/AV evasion research, and vulnerability discovery. Trusted by organizations across government, academic, and private sectors.</p>
+    <div class="hk-hero__cta">
+      <a href="#services" class="hk-btn hk-btn--primary">View Services</a>
+      <a href="#research" class="hk-btn hk-btn--ghost">Read Research</a>
     </div>
-    <div class="terminal-body">
-      <div id="terminal-output"></div>
-      <div class="terminal-active-line">
-        <span class="prompt">kwang@redhunter:~$</span>&nbsp;<span id="typed-cmd"></span><span class="terminal-cursor"></span>
+    <div class="hk-hero__badges">
+      <span class="hk-badge">NASA Hall of Fame</span>
+      <span class="hk-badge">Harvard VDP</span>
+      <span class="hk-badge">UN VDP</span>
+      <span class="hk-badge">ByteDance Red Team</span>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ METRICS ════════════════════════════════════════════════════════ -->
+<section class="hk-metrics" id="hk-stats">
+  <div class="hk-metric">
+    <span class="hk-metric__num" data-target="4" data-suffix="+">0+</span>
+    <span class="hk-metric__label">Confirmed Findings</span>
+  </div>
+  <div class="hk-metric">
+    <span class="hk-metric__num" data-target="3" data-suffix="">0</span>
+    <span class="hk-metric__label">Hall of Fame</span>
+  </div>
+  <div class="hk-metric">
+    <span class="hk-metric__num" data-target="17" data-suffix="">0</span>
+    <span class="hk-metric__label">Research Posts</span>
+  </div>
+  <div class="hk-metric">
+    <span class="hk-metric__num" data-target="5" data-suffix="">0</span>
+    <span class="hk-metric__label">VDP Programs</span>
+  </div>
+</section>
+
+<!-- ═══ SERVICES ═══════════════════════════════════════════════════════ -->
+<section class="hk-section" id="services">
+  <p class="hk-section__label">What We Do</p>
+  <h2 class="hk-section__title">Services</h2>
+  <div class="hk-services">
+
+    <div class="hk-service-card">
+      <div class="hk-service-card__icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
       </div>
+      <h3>Red Team Operations</h3>
+      <p>Full-scope adversary simulation engagements. Custom tooling, living-off-the-land techniques, and detection gap analysis tailored to your environment.</p>
+      <ul>
+        <li>Assumed breach scenarios</li>
+        <li>C2 infrastructure setup</li>
+        <li>Detection engineering feedback</li>
+      </ul>
+    </div>
+
+    <div class="hk-service-card">
+      <div class="hk-service-card__icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>
+      </div>
+      <h3>EDR &amp; AV Evasion Research</h3>
+      <p>Evaluate the resilience of your endpoint security stack. BYOVD, ETW/AMSI patching, in-memory execution, and DLL sideloading assessments.</p>
+      <ul>
+        <li>Driver vulnerability analysis</li>
+        <li>Bypass proof-of-concept development</li>
+        <li>Defensive hardening recommendations</li>
+      </ul>
+    </div>
+
+    <div class="hk-service-card">
+      <div class="hk-service-card__icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      </div>
+      <h3>Vulnerability Research</h3>
+      <p>Web application and API security assessments with a focus on authentication bypass, broken access control, and sensitive data exposure.</p>
+      <ul>
+        <li>Authenticated &amp; unauthenticated testing</li>
+        <li>Responsible disclosure support</li>
+        <li>CVSS-scored findings reports</li>
+      </ul>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══ ABOUT ══════════════════════════════════════════════════════════ -->
+<section class="hk-section hk-about" id="about">
+  <p class="hk-section__label">Background</p>
+  <h2 class="hk-section__title">About</h2>
+  <div class="hk-about__grid">
+    <div class="hk-about__text">
+      <p>Kwang is a red team operator and security researcher based in California. Currently on the red team at ByteDance, with a track record of discovering and responsibly disclosing vulnerabilities across government and academic institutions.</p>
+      <p>Findings have been recognized by NASA, Harvard University, the United Nations, and the U.S. Department of Education. Research covers EDR bypass, BYOVD, malware development, and web application security.</p>
+      <a href="https://github.com/kwangyun" class="hk-btn hk-btn--ghost" target="_blank" rel="noopener">GitHub Profile</a>
+    </div>
+    <div class="hk-about__hof">
+      <p class="hk-about__hof-title">Recognition</p>
+      <div class="hk-hof-item"><span class="hk-hof-org">NASA</span><span class="hk-hof-detail">Reflected XSS — Hall of Fame + LOR</span></div>
+      <div class="hk-hof-item"><span class="hk-hof-org">Harvard University</span><span class="hk-hof-detail">P1 Authorization Bypass — VDP</span></div>
+      <div class="hk-hof-item"><span class="hk-hof-org">United Nations</span><span class="hk-hof-detail">Broken Auth + Sensitive Data Exposure</span></div>
+      <div class="hk-hof-item"><span class="hk-hof-org">Dept. of Education</span><span class="hk-hof-detail">Unauthenticated Admin API Exposure</span></div>
     </div>
   </div>
-</div>
+</section>
 
-<h3 class="archive__subtitle">{{ site.data.ui-text[site.locale].recent_posts | default: "Recent Posts" }}</h3>
+<!-- ═══ RESEARCH / POSTS ════════════════════════════════════════════════ -->
+<section class="hk-section" id="research">
+  <p class="hk-section__label">Writing</p>
+  <h2 class="hk-section__title">Latest Research</h2>
 
-{% if paginator %}
-  {% assign posts = paginator.posts %}
-{% else %}
-  {% assign posts = site.posts %}
-{% endif %}
+  {% if paginator %}
+    {% assign posts = paginator.posts %}
+  {% else %}
+    {% assign posts = site.posts %}
+  {% endif %}
 
-{% assign entries_layout = page.entries_layout | default: 'list' %}
-<div class="entries-{{ entries_layout }}">
-  {% for post in posts %}
-    {% include archive-single.html type=entries_layout %}
-  {% endfor %}
-</div>
+  <div class="hk-posts">
+    {% for post in posts %}
+    <a class="hk-post-card" href="{{ post.url | relative_url }}">
+      <div class="hk-post-card__meta">
+        <span class="hk-post-card__date">{{ post.date | date: "%b %d, %Y" }}</span>
+        {% if post.read_time %}<span class="hk-post-card__read">{{ post.content | number_of_words | divided_by: 150 | plus: 1 }} min read</span>{% endif %}
+      </div>
+      <h3 class="hk-post-card__title">{{ post.title }}</h3>
+      {% if post.excerpt %}<p class="hk-post-card__excerpt">{{ post.excerpt | strip_html | truncate: 120 }}</p>{% endif %}
+      <span class="hk-post-card__arrow">Read &rarr;</span>
+    </a>
+    {% endfor %}
+  </div>
 
-{% include paginator.html %}
+  {% include paginator.html %}
+</section>
+
+<!-- ═══ CONTACT ════════════════════════════════════════════════════════ -->
+<section class="hk-section hk-contact" id="contact">
+  <p class="hk-section__label">Get In Touch</p>
+  <h2 class="hk-section__title">Work With Me</h2>
+  <p class="hk-contact__sub">Available for red team engagements, security assessments, and research collaborations. All work is conducted under written authorization agreements.</p>
+  <a href="https://github.com/kwangyun" class="hk-btn hk-btn--primary" target="_blank" rel="noopener">Reach Out via GitHub</a>
+</section>
