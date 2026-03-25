@@ -2,145 +2,282 @@
 layout: default
 ---
 
-<!-- ═══ HERO ═══════════════════════════════════════════════════════════ -->
-<section class="hk-hero">
-  <div class="hk-hero__inner">
-    <p class="hk-eyebrow">Authorized Red Team Operations</p>
-    <h1 class="hk-hero__title">Offensive Security<br><span class="hk-green">Consulting.</span></h1>
-    <p class="hk-hero__sub">Enterprise red team assessments, EDR/AV evasion research, and vulnerability discovery. Trusted by organizations across government, academic, and private sectors.</p>
-    <div class="hk-hero__cta">
-      <a href="#services" class="hk-btn hk-btn--primary">View Services</a>
-      <a href="#research" class="hk-btn hk-btn--ghost">Read Research</a>
+<!-- ╔══════════════════════════════════════════════════════════════╗
+     ║  HERO                                                        ║
+     ╚══════════════════════════════════════════════════════════════╝ -->
+<section class="c-hero" id="home">
+  <div class="c-hero__blob c-hero__blob--1"></div>
+  <div class="c-hero__blob c-hero__blob--2"></div>
+  <div class="c-hero__inner">
+    <span class="c-label c-reveal">Offensive Security Consulting</span>
+    <h1 class="c-hero__title c-reveal">
+      Find the Gaps<br>
+      <span class="c-accent">Before Attackers Do.</span>
+    </h1>
+    <p class="c-hero__sub c-reveal">
+      Enterprise red team operations, penetration testing, AI security assessments,
+      and career coaching. Trusted by government agencies, Fortune-tier universities,
+      and international organizations.
+    </p>
+    <div class="c-hero__cta c-reveal">
+      <a href="#contact" class="c-btn c-btn--primary">Schedule a Consultation</a>
+      <a href="#services" class="c-btn c-btn--ghost">Our Services</a>
     </div>
-    <div class="hk-hero__badges">
-      <span class="hk-badge">NASA Hall of Fame</span>
-      <span class="hk-badge">Harvard VDP</span>
-      <span class="hk-badge">UN VDP</span>
-      <span class="hk-badge">ByteDance Red Team</span>
-    </div>
-  </div>
-</section>
-
-<!-- ═══ METRICS ════════════════════════════════════════════════════════ -->
-<section class="hk-metrics" id="hk-stats">
-  <div class="hk-metric">
-    <span class="hk-metric__num" data-target="4" data-suffix="+">0+</span>
-    <span class="hk-metric__label">Confirmed Findings</span>
-  </div>
-  <div class="hk-metric">
-    <span class="hk-metric__num" data-target="3" data-suffix="">0</span>
-    <span class="hk-metric__label">Hall of Fame</span>
-  </div>
-  <div class="hk-metric">
-    <span class="hk-metric__num" data-target="17" data-suffix="">0</span>
-    <span class="hk-metric__label">Research Posts</span>
-  </div>
-  <div class="hk-metric">
-    <span class="hk-metric__num" data-target="5" data-suffix="">0</span>
-    <span class="hk-metric__label">VDP Programs</span>
-  </div>
-</section>
-
-<!-- ═══ SERVICES ═══════════════════════════════════════════════════════ -->
-<section class="hk-section" id="services">
-  <p class="hk-section__label">What We Do</p>
-  <h2 class="hk-section__title">Services</h2>
-  <div class="hk-services">
-
-    <div class="hk-service-card">
-      <div class="hk-service-card__icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+    <div class="c-trust c-reveal">
+      <span class="c-trust__label">Recognized by</span>
+      <div class="c-trust__items">
+        <span class="c-trust__item">NASA</span>
+        <span class="c-trust__sep">·</span>
+        <span class="c-trust__item">Harvard University</span>
+        <span class="c-trust__sep">·</span>
+        <span class="c-trust__item">United Nations</span>
+        <span class="c-trust__sep">·</span>
+        <span class="c-trust__item">U.S. Dept. of Education</span>
       </div>
-      <h3>Red Team Operations</h3>
-      <p>Full-scope adversary simulation engagements. Custom tooling, living-off-the-land techniques, and detection gap analysis tailored to your environment.</p>
-      <ul>
-        <li>Assumed breach scenarios</li>
-        <li>C2 infrastructure setup</li>
-        <li>Detection engineering feedback</li>
-      </ul>
-    </div>
-
-    <div class="hk-service-card">
-      <div class="hk-service-card__icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>
-      </div>
-      <h3>EDR &amp; AV Evasion Research</h3>
-      <p>Evaluate the resilience of your endpoint security stack. BYOVD, ETW/AMSI patching, in-memory execution, and DLL sideloading assessments.</p>
-      <ul>
-        <li>Driver vulnerability analysis</li>
-        <li>Bypass proof-of-concept development</li>
-        <li>Defensive hardening recommendations</li>
-      </ul>
-    </div>
-
-    <div class="hk-service-card">
-      <div class="hk-service-card__icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-      </div>
-      <h3>Vulnerability Research</h3>
-      <p>Web application and API security assessments with a focus on authentication bypass, broken access control, and sensitive data exposure.</p>
-      <ul>
-        <li>Authenticated &amp; unauthenticated testing</li>
-        <li>Responsible disclosure support</li>
-        <li>CVSS-scored findings reports</li>
-      </ul>
-    </div>
-
-  </div>
-</section>
-
-<!-- ═══ ABOUT ══════════════════════════════════════════════════════════ -->
-<section class="hk-section hk-about" id="about">
-  <p class="hk-section__label">Background</p>
-  <h2 class="hk-section__title">About</h2>
-  <div class="hk-about__grid">
-    <div class="hk-about__text">
-      <p>Kwang is a red team operator and security researcher based in California. Currently on the red team at ByteDance, with a track record of discovering and responsibly disclosing vulnerabilities across government and academic institutions.</p>
-      <p>Findings have been recognized by NASA, Harvard University, the United Nations, and the U.S. Department of Education. Research covers EDR bypass, BYOVD, malware development, and web application security.</p>
-      <a href="https://github.com/kwangyun" class="hk-btn hk-btn--ghost" target="_blank" rel="noopener">GitHub Profile</a>
-    </div>
-    <div class="hk-about__hof">
-      <p class="hk-about__hof-title">Recognition</p>
-      <div class="hk-hof-item"><span class="hk-hof-org">NASA</span><span class="hk-hof-detail">Reflected XSS — Hall of Fame + LOR</span></div>
-      <div class="hk-hof-item"><span class="hk-hof-org">Harvard University</span><span class="hk-hof-detail">P1 Authorization Bypass — VDP</span></div>
-      <div class="hk-hof-item"><span class="hk-hof-org">United Nations</span><span class="hk-hof-detail">Broken Auth + Sensitive Data Exposure</span></div>
-      <div class="hk-hof-item"><span class="hk-hof-org">Dept. of Education</span><span class="hk-hof-detail">Unauthenticated Admin API Exposure</span></div>
     </div>
   </div>
 </section>
 
-<!-- ═══ RESEARCH / POSTS ════════════════════════════════════════════════ -->
-<section class="hk-section" id="research">
-  <p class="hk-section__label">Writing</p>
-  <h2 class="hk-section__title">Latest Research</h2>
-
-  {% if paginator %}
-    {% assign posts = paginator.posts %}
-  {% else %}
-    {% assign posts = site.posts %}
-  {% endif %}
-
-  <div class="hk-posts">
-    {% for post in posts %}
-    <a class="hk-post-card" href="{{ post.url | relative_url }}">
-      <div class="hk-post-card__meta">
-        <span class="hk-post-card__date">{{ post.date | date: "%b %d, %Y" }}</span>
-        {% if post.read_time %}<span class="hk-post-card__read">{{ post.content | number_of_words | divided_by: 150 | plus: 1 }} min read</span>{% endif %}
-      </div>
-      <h3 class="hk-post-card__title">{{ post.title }}</h3>
-      {% if post.excerpt %}<p class="hk-post-card__excerpt">{{ post.excerpt | strip_html | truncate: 120 }}</p>{% endif %}
-      <span class="hk-post-card__arrow">Read &rarr;</span>
-    </a>
-    {% endfor %}
+<!-- ╔══════════════════════════════════════════════════════════════╗
+     ║  METRICS                                                     ║
+     ╚══════════════════════════════════════════════════════════════╝ -->
+<div class="c-metrics" id="c-metrics">
+  <div class="c-metric c-reveal">
+    <span class="c-metric__num" data-target="4" data-suffix="+">0</span>
+    <span class="c-metric__label">Confirmed Findings</span>
   </div>
+  <div class="c-metric c-reveal">
+    <span class="c-metric__num" data-target="3" data-suffix="">0</span>
+    <span class="c-metric__label">Hall of Fame</span>
+  </div>
+  <div class="c-metric c-reveal">
+    <span class="c-metric__num" data-target="17" data-suffix="+">0</span>
+    <span class="c-metric__label">Research Articles</span>
+  </div>
+  <div class="c-metric c-reveal">
+    <span class="c-metric__num" data-target="5" data-suffix="">0</span>
+    <span class="c-metric__label">VDP Programs</span>
+  </div>
+</div>
 
-  {% include paginator.html %}
+<!-- ╔══════════════════════════════════════════════════════════════╗
+     ║  SERVICES                                                    ║
+     ╚══════════════════════════════════════════════════════════════╝ -->
+<section class="c-section" id="services">
+  <div class="c-wrap">
+    <div class="c-section__head">
+      <span class="c-label">What We Offer</span>
+      <h2 class="c-section__title">Security Services</h2>
+      <p class="c-section__sub">Comprehensive offensive security engagements tailored to your threat model, compliance requirements, and organizational maturity.</p>
+    </div>
+    <div class="c-services">
+
+      <div class="c-service c-reveal">
+        <div class="c-service__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <h3>Red Team Operations</h3>
+        <p>Full-scope adversary simulation targeting your people, processes, and technology. Custom tooling, C2 infrastructure, and detection gap reporting aligned with MITRE ATT&amp;CK.</p>
+        <ul class="c-service__list">
+          <li>Assumed breach &amp; full red team</li>
+          <li>Custom implant &amp; C2 development</li>
+          <li>Detection engineering feedback</li>
+          <li>Executive debrief &amp; reporting</li>
+        </ul>
+      </div>
+
+      <div class="c-service c-reveal">
+        <div class="c-service__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+        </div>
+        <h3>Penetration Testing</h3>
+        <p>Rigorous black-box, grey-box, and white-box assessments across internal networks, external perimeters, web applications, and wireless infrastructure.</p>
+        <ul class="c-service__list">
+          <li>Internal &amp; external network testing</li>
+          <li>Web application &amp; API security</li>
+          <li>WiFi security assessments (WPA2/Enterprise)</li>
+          <li>CVSS-scored findings &amp; remediation guidance</li>
+        </ul>
+      </div>
+
+      <div class="c-service c-reveal">
+        <div class="c-service__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 1 0 10 10"/><path d="M12 6v6l4 2"/><path d="M22 2 12 12"/><circle cx="19" cy="5" r="3"/></svg>
+        </div>
+        <h3>AI Red Teaming</h3>
+        <p>Security assessments for AI/ML systems including LLMs, RAG pipelines, and agentic frameworks. Identify model-layer risks before deployment.</p>
+        <ul class="c-service__list">
+          <li>LLM jailbreaking &amp; prompt injection</li>
+          <li>RAG pipeline data exfiltration testing</li>
+          <li>Agentic system privilege escalation</li>
+          <li>AI governance risk reporting</li>
+        </ul>
+      </div>
+
+      <div class="c-service c-reveal">
+        <div class="c-service__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        </div>
+        <h3>Vulnerability Research</h3>
+        <p>Independent security research, responsible disclosure support, and VDP program consulting. Delivered with high-quality technical write-ups suitable for CVE submission.</p>
+        <ul class="c-service__list">
+          <li>Web, API &amp; authentication bypass research</li>
+          <li>EDR/AV evasion &amp; driver analysis</li>
+          <li>Responsible disclosure &amp; VDP support</li>
+          <li>Technical report writing</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
 </section>
 
-<!-- ═══ CONTACT ════════════════════════════════════════════════════════ -->
-<section class="hk-section hk-contact" id="contact">
-  <p class="hk-section__label">Get In Touch</p>
-  <h2 class="hk-section__title">Work With Me</h2>
-  <p class="hk-contact__sub">Available for red team engagements, security assessments, and research collaborations. All work is conducted under written authorization agreements.</p>
-  <a href="https://github.com/kwangyun" class="hk-btn hk-btn--primary" target="_blank" rel="noopener">Reach Out via GitHub</a>
+<!-- ╔══════════════════════════════════════════════════════════════╗
+     ║  CAREER SESSIONS / BOOKING                                  ║
+     ╚══════════════════════════════════════════════════════════════╝ -->
+<section class="c-section c-section--alt" id="sessions">
+  <div class="c-wrap">
+    <div class="c-section__head">
+      <span class="c-label">Career Coaching</span>
+      <h2 class="c-section__title">Work With Me</h2>
+      <p class="c-section__sub">1-on-1 sessions for security professionals looking to break into red teaming, pass technical interviews, or advance their career at top firms.</p>
+    </div>
+    <div class="c-sessions">
+
+      <div class="c-session c-reveal">
+        <div class="c-session__header">
+          <h3>Resume Review</h3>
+          <span class="c-session__price">$79</span>
+        </div>
+        <p>Detailed critique of your security resume. I review for technical accuracy, impact framing, ATS optimization, and alignment with red team / offensive security roles at top companies.</p>
+        <ul class="c-service__list">
+          <li>Written feedback within 48 hours</li>
+          <li>Line-by-line edits &amp; suggestions</li>
+          <li>Role-specific positioning</li>
+        </ul>
+        <a href="https://calendly.com/kwangyun/resume-review" target="_blank" rel="noopener" class="c-btn c-btn--primary c-btn--full">Book Session</a>
+      </div>
+
+      <div class="c-session c-reveal c-session--featured">
+        <div class="c-session__badge">Most Popular</div>
+        <div class="c-session__header">
+          <h3>Mock Interview</h3>
+          <span class="c-session__price">$129</span>
+        </div>
+        <p>Realistic technical interview simulation for red team, pentesting, and security engineering roles. Covers live challenges, behavioral questions, and real-time feedback.</p>
+        <ul class="c-service__list">
+          <li>60-minute live session via Zoom</li>
+          <li>Offensive security technical questions</li>
+          <li>Post-session written scorecard</li>
+        </ul>
+        <a href="https://calendly.com/kwangyun/mock-interview" target="_blank" rel="noopener" class="c-btn c-btn--primary c-btn--full">Book Session</a>
+      </div>
+
+      <div class="c-session c-reveal">
+        <div class="c-session__header">
+          <h3>Career Strategy</h3>
+          <span class="c-session__price">$99</span>
+        </div>
+        <p>Strategic 1-on-1 session to plan your path into offensive security. Covers certifications, lab building, portfolio strategy, bug bounty, and breaking into red teams at top companies.</p>
+        <ul class="c-service__list">
+          <li>45-minute live session</li>
+          <li>Personalized roadmap document</li>
+          <li>Follow-up Q&amp;A via email</li>
+        </ul>
+        <a href="https://calendly.com/kwangyun/career-strategy" target="_blank" rel="noopener" class="c-btn c-btn--primary c-btn--full">Book Session</a>
+      </div>
+
+    </div>
+
+    <div class="c-booking-note c-reveal">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="18" height="18"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+      All sessions are conducted via Zoom. Bookings confirmed within 24 hours. Reschedule up to 24 hours before session at no charge.
+    </div>
+  </div>
+</section>
+
+<!-- ╔══════════════════════════════════════════════════════════════╗
+     ║  RESEARCH / BLOG                                             ║
+     ╚══════════════════════════════════════════════════════════════╝ -->
+<section class="c-section" id="research">
+  <div class="c-wrap">
+    <div class="c-section__head c-section__head--row">
+      <div>
+        <span class="c-label">Research &amp; Writing</span>
+        <h2 class="c-section__title">Latest Posts</h2>
+      </div>
+    </div>
+    <div class="c-posts">
+      {% if paginator %}
+        {% assign posts = paginator.posts %}
+      {% else %}
+        {% assign posts = site.posts %}
+      {% endif %}
+      {% for post in posts limit: 6 %}
+      <a class="c-post c-reveal" href="{{ post.url | relative_url }}">
+        <div class="c-post__meta">
+          <time>{{ post.date | date: "%b %d, %Y" }}</time>
+          <span>{{ post.content | number_of_words | divided_by: 150 | plus: 1 }} min read</span>
+        </div>
+        <h3 class="c-post__title">{{ post.title }}</h3>
+        <p class="c-post__excerpt">{{ post.excerpt | strip_html | truncate: 110 }}</p>
+        <span class="c-post__cta">Read article →</span>
+      </a>
+      {% endfor %}
+    </div>
+    {% include paginator.html %}
+  </div>
+</section>
+
+<!-- ╔══════════════════════════════════════════════════════════════╗
+     ║  ABOUT                                                       ║
+     ╚══════════════════════════════════════════════════════════════╝ -->
+<section class="c-section c-section--alt" id="about">
+  <div class="c-wrap">
+    <div class="c-about">
+      <div class="c-about__text c-reveal">
+        <span class="c-label">About</span>
+        <h2 class="c-section__title">Who I Am</h2>
+        <p>Red team operator and security researcher based in California. Currently on the red team at ByteDance, with a research track record spanning government and academic institutions across the United States and internationally.</p>
+        <p>My work has been recognized by NASA, Harvard University, the United Nations, and the U.S. Department of Education. I specialize in EDR bypass, BYOVD, custom implant development, and web application security research.</p>
+        <a href="https://github.com/kwangyun" class="c-btn c-btn--ghost" target="_blank" rel="noopener">View GitHub Profile</a>
+      </div>
+      <div class="c-about__recognition c-reveal">
+        <p class="c-recog__title">Recognition &amp; Disclosure</p>
+        <div class="c-recog-list">
+          <div class="c-recog-item">
+            <span class="c-recog__org">NASA</span>
+            <span class="c-recog__finding">Reflected XSS — Hall of Fame &amp; Letter of Recognition</span>
+          </div>
+          <div class="c-recog-item">
+            <span class="c-recog__org">Harvard University</span>
+            <span class="c-recog__finding">P1 Authorization Bypass (CVSS 7.5) — VDP</span>
+          </div>
+          <div class="c-recog-item">
+            <span class="c-recog__org">United Nations</span>
+            <span class="c-recog__finding">Broken Auth + Sensitive Data Exposure — 13 systems</span>
+          </div>
+          <div class="c-recog-item">
+            <span class="c-recog__org">U.S. Dept. of Education</span>
+            <span class="c-recog__finding">Unauthenticated Admin API Exposure — eNAEP platform</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ╔══════════════════════════════════════════════════════════════╗
+     ║  CONTACT CTA                                                 ║
+     ╚══════════════════════════════════════════════════════════════╝ -->
+<section class="c-cta" id="contact">
+  <div class="c-cta__blob"></div>
+  <div class="c-wrap c-cta__inner c-reveal">
+    <h2 class="c-cta__title">Ready to Strengthen Your Security Posture?</h2>
+    <p class="c-cta__sub">All engagements conducted under written authorization agreements. Inquiries typically receive a response within 24 business hours.</p>
+    <div class="c-cta__actions">
+      <a href="https://calendly.com/kwangyun" target="_blank" rel="noopener" class="c-btn c-btn--primary">Schedule a Free Consultation</a>
+      <a href="https://github.com/kwangyun" target="_blank" rel="noopener" class="c-btn c-btn--ghost">GitHub</a>
+    </div>
+  </div>
 </section>

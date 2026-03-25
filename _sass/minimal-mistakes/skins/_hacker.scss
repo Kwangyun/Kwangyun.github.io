@@ -1,29 +1,25 @@
 /* ==========================================================================
-   Hacker skin — terminal/matrix aesthetic
+   Kwang Security — Professional Consulting Skin
    ========================================================================== */
 
-$background-color: #0a0a0a !default;
-$text-color: #c8ffc8 !default;
-$primary-color: #00ff41 !default;
-$border-color: rgba(0, 255, 65, 0.25) !default;
-$code-background-color: #0d1117 !default;
-$code-background-color-dark: #000000 !default;
-$form-background-color: #0d1117 !default;
-$footer-background-color: #000000 !default;
-$link-color: #00ff41 !default;
-$link-color-hover: #ffffff !default;
-$link-color-visited: rgba(0, 255, 65, 0.75) !default;
-$masthead-link-color: #00ff41 !default;
+$background-color       : #06060f !default;
+$text-color             : #e8e8f0 !default;
+$primary-color          : #4d7cfe !default;
+$border-color           : rgba(255, 255, 255, 0.08) !default;
+$code-background-color  : #0d0d1a !default;
+$code-background-color-dark: #06060f !default;
+$form-background-color  : #0d0d1a !default;
+$footer-background-color: #03030a !default;
+$link-color             : #4d7cfe !default;
+$link-color-hover       : #6b94ff !default;
+$link-color-visited     : #4d7cfe !default;
+$masthead-link-color    : #e8e8f0 !default;
 $masthead-link-color-hover: #ffffff !default;
-$navicon-link-color-hover: rgba(0, 255, 65, 0.15) !default;
+$navicon-link-color-hover: rgba(77, 124, 254, 0.15) !default;
 
 .author__urls.social-icons i,
 .author__urls.social-icons .svg-inline--fa,
 .page__footer-follow .social-icons i,
 .page__footer-follow .social-icons .svg-inline--fa {
   color: inherit;
-}
-
-.ais-search-box .ais-search-box--input {
-  background-color: $form-background-color;
 }
