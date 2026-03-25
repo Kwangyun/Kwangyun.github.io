@@ -1,8 +1,17 @@
-// Kwang Security — consulting site interactions
+// Kwang Security — premium consulting interactions
 (function () {
   'use strict';
 
-  // ── Scroll reveal ─────────────────────────────────────────────────────────
+  // ── Masthead: darken on scroll ────────────────────────────────────────────
+  function initNav() {
+    var nav = document.querySelector('.masthead');
+    if (!nav) return;
+    window.addEventListener('scroll', function () {
+      nav.classList.toggle('scrolled', window.scrollY > 40);
+    }, { passive: true });
+  }
+
+  // ── Scroll reveal with staggered children ────────────────────────────────
   function initReveal() {
     if (!window.IntersectionObserver) {
       document.querySelectorAll('.c-reveal').forEach(function (el) {
@@ -10,22 +19,32 @@
       });
       return;
     }
+
     var io = new IntersectionObserver(function (entries) {
       entries.forEach(function (entry) {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('is-visible');
-          io.unobserve(entry.target);
-        }
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add('is-visible');
+        io.unobserve(entry.target);
       });
-    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+    }, { threshold: 0.1, rootMargin: '0px 0px -30px 0px' });
 
-    document.querySelectorAll('.c-reveal').forEach(function (el, i) {
-      el.style.transitionDelay = Math.min(i * 0.04, 0.4) + 's';
+    // Stagger siblings inside grids
+    var groups = ['.c-services', '.c-sessions', '.c-posts', '.c-recog-list', '.c-hero__inner'];
+    groups.forEach(function (sel) {
+      document.querySelectorAll(sel).forEach(function (parent) {
+        Array.from(parent.children).forEach(function (child, i) {
+          if (!child.classList.contains('c-reveal')) return;
+          child.style.transitionDelay = (i * 0.08) + 's';
+        });
+      });
+    });
+
+    document.querySelectorAll('.c-reveal').forEach(function (el) {
       io.observe(el);
     });
   }
 
-  // ── Animated counters ─────────────────────────────────────────────────────
+  // ── Animated counters (easeOutExpo) ──────────────────────────────────────
   function initCounters() {
     var el = document.getElementById('c-metrics');
     if (!el || !window.IntersectionObserver) return;
@@ -37,53 +56,85 @@
       io.disconnect();
 
       el.querySelectorAll('.c-metric__num').forEach(function (num) {
-        var target = parseInt(num.getAttribute('data-target'), 10);
-        var suffix = num.getAttribute('data-suffix') || '';
-        var current = 0;
-        var step = Math.max(1, Math.ceil(target / 40));
-        var timer = setInterval(function () {
-          current = Math.min(current + step, target);
-          num.textContent = current + suffix;
-          if (current >= target) clearInterval(timer);
-        }, 30);
-      });
-    }, { threshold: 0.5 });
+        var target  = parseInt(num.getAttribute('data-target'), 10);
+        var suffix  = num.getAttribute('data-suffix') || '';
+        var start   = performance.now();
+        var duration = 1600;
 
+        function tick(now) {
+          var elapsed = now - start;
+          var progress = Math.min(elapsed / duration, 1);
+          // easeOutExpo
+          var eased = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
+          var value = Math.floor(eased * target);
+          num.textContent = value + suffix;
+          if (progress < 1) requestAnimationFrame(tick);
+          else num.textContent = target + suffix;
+        }
+        requestAnimationFrame(tick);
+      });
+    }, { threshold: 0.6 });
     io.observe(el);
   }
 
-  // ── Smooth nav highlight on scroll ───────────────────────────────────────
+  // ── Magnetic buttons ─────────────────────────────────────────────────────
+  function initMagnetic() {
+    document.querySelectorAll('.c-btn--primary, .c-btn--ghost').forEach(function (btn) {
+      btn.addEventListener('mousemove', function (e) {
+        var r  = btn.getBoundingClientRect();
+        var x  = (e.clientX - r.left - r.width  / 2) * 0.22;
+        var y  = (e.clientY - r.top  - r.height / 2) * 0.22;
+        btn.style.transform = 'translate(' + x + 'px,' + y + 'px) translateY(-2px)';
+      });
+      btn.addEventListener('mouseleave', function () {
+        btn.style.transform = '';
+      });
+    });
+  }
+
+  // ── Smooth active nav on scroll ───────────────────────────────────────────
   function initNavHighlight() {
     var links = document.querySelectorAll('.masthead__menu-item a');
     if (!links.length) return;
-
     var sections = [];
     links.forEach(function (link) {
-      var hash = link.getAttribute('href');
-      if (hash && hash.includes('#')) {
-        var id = hash.split('#')[1];
-        var section = document.getElementById(id);
-        if (section) sections.push({ link: link, section: section });
-      }
+      var href = link.getAttribute('href') || '';
+      if (!href.includes('#')) return;
+      var id  = href.split('#')[1];
+      var sec = document.getElementById(id);
+      if (sec) sections.push({ link: link, sec: sec });
     });
-
     window.addEventListener('scroll', function () {
-      var scrollY = window.scrollY + 120;
+      var y = window.scrollY + 140;
       sections.forEach(function (item) {
-        var top    = item.section.offsetTop;
-        var bottom = top + item.section.offsetHeight;
-        if (scrollY >= top && scrollY < bottom) {
-          links.forEach(function (l) { l.style.color = ''; });
-          item.link.style.color = 'var(--accent)';
-        }
+        var top = item.sec.offsetTop;
+        var bot = top + item.sec.offsetHeight;
+        var active = y >= top && y < bot;
+        item.link.style.color = active ? 'var(--blue)' : '';
       });
     }, { passive: true });
   }
 
-  // ── Boot ──────────────────────────────────────────────────────────────────
+  // ── Hero parallax (subtle) ────────────────────────────────────────────────
+  function initParallax() {
+    var blobs = document.querySelectorAll('.c-hero__blob');
+    if (!blobs.length) return;
+    window.addEventListener('scroll', function () {
+      var y = window.scrollY;
+      blobs.forEach(function (blob, i) {
+        var speed = (i + 1) * 0.08;
+        blob.style.transform = 'translateY(' + (y * speed) + 'px)';
+      });
+    }, { passive: true });
+  }
+
+  // ── Boot ─────────────────────────────────────────────────────────────────
   document.addEventListener('DOMContentLoaded', function () {
+    initNav();
     initReveal();
     initCounters();
+    initMagnetic();
     initNavHighlight();
+    initParallax();
   });
 })();
