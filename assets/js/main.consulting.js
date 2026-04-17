@@ -186,29 +186,48 @@
     }, { passive: true });
   }
 
-  // ── Process tabs (Ellis-style interactive timeline) ───────────────────────
+  // ── Process: connected timeline + tab detail (Ellis O-1 replica) ─────────
   function initProcessTabs() {
-    var tabs = document.querySelectorAll('.c-process__tab');
-    var panels = document.querySelectorAll('.c-process__panel');
-    if (!tabs.length) return;
+    var steps = document.querySelectorAll('.c-timeline__step');
+    var tabs = document.querySelectorAll('.c-process-detail__tab');
+    var panels = document.querySelectorAll('.c-process-detail__panel');
+    var trackFill = document.querySelector('[data-track-fill]');
+    if (!steps.length && !tabs.length) return;
 
-    tabs.forEach(function (tab) {
-      tab.addEventListener('click', function () {
-        var step = tab.getAttribute('data-step');
-        tabs.forEach(function (t) {
-          t.classList.remove('is-active');
-          t.setAttribute('aria-selected', 'false');
-        });
-        panels.forEach(function (p) { p.classList.remove('is-active'); });
-
-        tab.classList.add('is-active');
-        tab.setAttribute('aria-selected', 'true');
-        var panel = document.querySelector('.c-process__panel[data-panel="' + step + '"]');
-        if (panel) panel.classList.add('is-active');
+    function activate(stepId) {
+      // Timeline nodes — mark previous steps as "complete", current as "active"
+      steps.forEach(function (s) {
+        var id = parseInt(s.getAttribute('data-step'), 10);
+        s.classList.remove('is-active', 'is-complete');
+        if (id < parseInt(stepId, 10)) s.classList.add('is-complete');
+        if (id === parseInt(stepId, 10)) s.classList.add('is-active');
       });
+
+      // Grow the teal track fill to the active node
+      if (trackFill && steps.length > 1) {
+        var pct = ((parseInt(stepId, 10) - 1) / (steps.length - 1)) * 100;
+        trackFill.style.width = 'calc((100% - 0px) * ' + (pct / 100) + ')';
+        // More accurate: match track's inner span
+        trackFill.style.width = (pct * 0.75) + '%'; // track is between step 1 and step 4 centers
+      }
+
+      // Tabs + panels
+      tabs.forEach(function (t) { t.classList.remove('is-active'); });
+      panels.forEach(function (p) { p.classList.remove('is-active'); });
+      var tab = document.querySelector('.c-process-detail__tab[data-step="' + stepId + '"]');
+      var panel = document.querySelector('.c-process-detail__panel[data-panel="' + stepId + '"]');
+      if (tab) tab.classList.add('is-active');
+      if (panel) panel.classList.add('is-active');
+    }
+
+    steps.forEach(function (s) {
+      s.addEventListener('click', function () { activate(s.getAttribute('data-step')); });
+    });
+    tabs.forEach(function (t) {
+      t.addEventListener('click', function () { activate(t.getAttribute('data-step')); });
     });
 
-    // Keyboard navigation (arrow keys)
+    // Keyboard navigation on tabs
     tabs.forEach(function (tab, idx) {
       tab.addEventListener('keydown', function (e) {
         if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
@@ -220,6 +239,9 @@
         tabs[next].click();
       });
     });
+
+    // Initialize on step 1
+    activate('1');
   }
 
   // ── Boot ─────────────────────────────────────────────────────────────────
