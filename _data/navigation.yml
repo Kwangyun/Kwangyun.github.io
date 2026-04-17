@@ -8,5 +8,7 @@ main:
     url: /#research
   - title: "About"
     url: /#about
+  - title: "FAQ"
+    url: /#faq
   - title: "Contact"
     url: /#contact

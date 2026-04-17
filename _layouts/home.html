@@ -245,18 +245,59 @@ layout: default
   </div>
 </section>
 
-<!-- ABOUT -->
+<!-- OPERATOR / PRINCIPAL -->
 <section class="c-section c-section--alt" id="about">
   <div class="c-wrap">
-    <div class="c-about">
-      <div class="c-about__text c-reveal">
-        <span class="c-label">About</span>
-        <h2 class="c-section__title">Who I Am</h2>
-        <p>Security researcher and red team operator based in California. I've spent years finding vulnerabilities that others miss — in enterprise networks, web applications, AI systems, and endpoint defenses.</p>
-        <p>I work with organizations that take security seriously. Every engagement is hands-on, scoped clearly, and delivered with a report you can actually act on.</p>
-        <a href="#contact" class="c-btn c-btn--primary">Work Together</a>
+    <div class="c-operator">
+      <div class="c-operator__lead c-reveal">
+        <span class="c-label">The Principal</span>
+        <h2 class="c-section__title">Kwangyun Keum</h2>
+        <p class="c-operator__role">Offensive Privacy Engineer — TikTok USDS · Red team operator, vulnerability researcher, and published author.</p>
+        <p class="c-operator__bio">Every engagement is run by the same person you'll meet on the intro call. I currently work on the internal offensive privacy team at a Fortune-500 tech company, and I take on a limited number of external engagements per quarter — each one hands-on, scoped in writing, and delivered with a report your team can actually act on.</p>
+        <p class="c-operator__bio">My research has been acknowledged by NASA, the U.S. Department of Education, Harvard University, the Department of Homeland Security, and the United Nations through their formal vulnerability-disclosure programs. My writing on EDR evasion, payload development, and AI system security is published here and on conference circuits.</p>
+        <div class="c-operator__ctas">
+          <a href="#contact" class="c-btn c-btn--primary">Schedule an Intro</a>
+          <a href="#research" class="c-btn c-btn--ghost">Read the Research</a>
+        </div>
       </div>
-      <div class="c-about__right c-reveal">
+
+      <div class="c-operator__stats c-reveal">
+        <div class="c-stat-card">
+          <div class="c-stat-card__label">Current Role</div>
+          <div class="c-stat-card__value">TikTok USDS</div>
+          <div class="c-stat-card__note">Offensive Privacy Engineer</div>
+        </div>
+
+        <div class="c-stat-card">
+          <div class="c-stat-card__label">Certifications</div>
+          <div class="c-stat-card__badges">
+            <span class="c-stat-badge">OSCP</span>
+            <span class="c-stat-badge">OSWP</span>
+            <span class="c-stat-badge">CRTO</span>
+          </div>
+          <div class="c-stat-card__note">Offensive Security &amp; Red Team</div>
+        </div>
+
+        <div class="c-stat-card">
+          <div class="c-stat-card__label">Published Research</div>
+          <div class="c-stat-card__value">17<span class="c-stat-card__suffix">+</span></div>
+          <div class="c-stat-card__note">Technical articles &amp; advisories</div>
+        </div>
+
+        <div class="c-stat-card c-stat-card--featured">
+          <div class="c-stat-card__label">Federal VDP Hall of Fame</div>
+          <div class="c-stat-card__chips">
+            <span class="c-chip">NASA</span>
+            <span class="c-chip">DoE</span>
+            <span class="c-chip">DHS</span>
+            <span class="c-chip">Harvard</span>
+            <span class="c-chip">UN</span>
+          </div>
+          <div class="c-stat-card__note">Confirmed P1 findings · Letter of Recognition from NASA</div>
+        </div>
+      </div>
+
+      <div class="c-about__right c-reveal" style="display:none;">
         <div class="c-about__pillars">
           <div class="c-pillar">
             <span class="c-pillar__icon">
@@ -287,6 +328,119 @@ layout: default
           </div>
         </div>
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="c-section" id="faq">
+  <div class="c-wrap">
+    <div class="c-section__head" style="max-width:720px;margin-left:auto;margin-right:auto;text-align:center;">
+      <span class="c-label" style="display:inline-flex;">Answers</span>
+      <h2 class="c-section__title">Questions buyers actually ask.</h2>
+      <p class="c-section__sub">Written for technical leaders evaluating a red team or pentest engagement. If your question isn't here, reach out directly.</p>
+    </div>
+
+    <div class="c-faq">
+      <details class="c-faq__item" open>
+        <summary class="c-faq__q">
+          <span>What's the difference between a red team engagement and a penetration test?</span>
+          <svg class="c-faq__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </summary>
+        <div class="c-faq__a">
+          <p>A <strong>pentest</strong> evaluates a defined asset — a web app, an API, a network segment — for exploitable vulnerabilities, measured by coverage and findings count. A <strong>red team</strong> engagement evaluates your organization's ability to prevent, detect, and respond to a goal-driven adversary ("achieve domain admin", "exfiltrate PII", "gain access to the wire transfer system"), measured by what we accomplished and what your security stack did about it. Red teams test people, process, and technology as a whole; pentests test a surface. If you've never had a pentest, start there — a red team on an untested surface produces findings you already knew.</p>
+        </div>
+      </details>
+
+      <details class="c-faq__item">
+        <summary class="c-faq__q">
+          <span>When is my organization ready for a red team engagement?</span>
+          <svg class="c-faq__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </summary>
+        <div class="c-faq__a">
+          <p>You're ready when: (1) you have an established vulnerability management program and have remediated prior pentest findings, (2) you have a functioning SOC or MDR with defined detection and response processes, and (3) leadership is prepared to receive and act on findings about your team's response — not just your tooling. Earlier-stage organizations get more value from a targeted external network assessment or web app pentest first. I'll tell you honestly if I think a red team isn't the right engagement for you right now.</p>
+        </div>
+      </details>
+
+      <details class="c-faq__item">
+        <summary class="c-faq__q">
+          <span>What happens if your activity is detected during the engagement?</span>
+          <svg class="c-faq__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </summary>
+        <div class="c-faq__a">
+          <p>Detection is valuable — it's a data point, not a failure. When we're caught, we work with your designated "white cell" (a small internal group that knows the engagement is running) to decide: continue from a different angle, pivot to assumed-breach, or conclude and document the detection chain. Every action we take is logged with timestamps so your SOC can later reconstruct what triggered the alert and what passed undetected. The final report explicitly maps which TTPs were detected, which were not, and why.</p>
+        </div>
+      </details>
+
+      <details class="c-faq__item">
+        <summary class="c-faq__q">
+          <span>Will the engagement disrupt our production environment?</span>
+          <svg class="c-faq__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </summary>
+        <div class="c-faq__a">
+          <p>Production testing is typical for red team engagements — that's where the threat lives. That said: no DoS testing, no destructive payloads, no data modification, and no exfiltration of real customer data beyond what's needed to prove access. All exploitation is contained to proving impact. For high-risk actions (credential spraying, lateral movement into finance systems, etc.) we coordinate a time window and maintain an emergency rollback contact throughout the engagement.</p>
+        </div>
+      </details>
+
+      <details class="c-faq__item">
+        <summary class="c-faq__q">
+          <span>How do you measure success?</span>
+          <svg class="c-faq__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </summary>
+        <div class="c-faq__a">
+          <p>Success is measured on two axes: <strong>attacker outcomes</strong> (did we achieve the stated objectives, and how far did we get) and <strong>defender outcomes</strong> (which TTPs your controls caught, which they missed, how your response team performed). A "successful" engagement can look like a fast compromise with slow detection, or like a blocked attacker who revealed three detection-engineering wins. Both are findings worth paying for.</p>
+        </div>
+      </details>
+
+      <details class="c-faq__item">
+        <summary class="c-faq__q">
+          <span>Who on our team should know about the engagement?</span>
+          <svg class="c-faq__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </summary>
+        <div class="c-faq__a">
+          <p>Minimum: a "white cell" of 2–4 people — typically the CISO, a senior security engineer who can authorize actions, and a legal/executive contact. Your SOC and broader security team should <em>not</em> be informed ahead of time — that's what makes the detection data meaningful. For engagements that include physical or social-engineering components, HR and physical security leadership are usually in the loop as well.</p>
+        </div>
+      </details>
+
+      <details class="c-faq__item">
+        <summary class="c-faq__q">
+          <span>What if the scope doesn't fit within the timeline?</span>
+          <svg class="c-faq__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </summary>
+        <div class="c-faq__a">
+          <p>We adjust scope, not quality. If we discover during testing that the original objectives require more time (e.g., a new attack path emerges that's worth pursuing), I'll propose a written change order with added days and updated objectives — you approve or decline before any additional work. I won't extend engagements silently or leave work half-finished.</p>
+        </div>
+      </details>
+
+      <details class="c-faq__item">
+        <summary class="c-faq__q">
+          <span>Is social engineering included?</span>
+          <svg class="c-faq__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </summary>
+        <div class="c-faq__a">
+          <p>Optional, scoped separately. Phishing and pretexting campaigns can be added to a red team engagement; physical intrusion and vishing are available by request. For organizations with active awareness programs, we typically design multi-stage phishing simulations that measure both click-through and follow-on control performance (MFA bypass resistance, conditional access logging, response time). Social engineering is always run under written authorization and with a pre-defined abort criteria.</p>
+        </div>
+      </details>
+
+      <details class="c-faq__item">
+        <summary class="c-faq__q">
+          <span>What deliverables do I receive?</span>
+          <svg class="c-faq__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </summary>
+        <div class="c-faq__a">
+          <p>Every engagement includes: (1) an <strong>executive summary</strong> written for non-technical leadership with business impact framing, (2) a <strong>technical report</strong> with reproduction steps, screenshots, and CVSS-scored findings, (3) an <strong>attack timeline</strong> mapped to MITRE ATT&amp;CK, (4) a <strong>remediation roadmap</strong> prioritized by effort and impact, (5) a live <strong>findings readout call</strong> with your engineering and security teams, and (6) a <strong>free retest</strong> within 30 days of report delivery to validate fixes.</p>
+        </div>
+      </details>
+
+      <details class="c-faq__item">
+        <summary class="c-faq__q">
+          <span>How do you handle critical findings discovered mid-engagement?</span>
+          <svg class="c-faq__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </summary>
+        <div class="c-faq__a">
+          <p>Criticals don't wait for the report. The moment we identify something that poses immediate risk — active exposure of sensitive data, unauthenticated remote code execution, a credential leak — we pause exploitation, notify your white-cell contact within the hour, and include full reproduction details and a recommended immediate mitigation. You make the call on how to handle it. We continue the engagement around the finding.</p>
+        </div>
+      </details>
     </div>
   </div>
 </section>
