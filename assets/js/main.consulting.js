@@ -450,10 +450,7 @@
       div.className = 'tl-line';
       div.innerHTML = html;
       term.appendChild(div);
-      // Auto-scroll within body if overflowing
-      if (term.children.length > maxLinesBeforeScroll) {
-        term.scrollTop = term.scrollHeight;
-      }
+      term.scrollTop = term.scrollHeight;
     }
 
     function removeCursor() {
@@ -549,17 +546,21 @@
       }
     }
 
-    // Only start when visible — saves CPU
+    // Only start when visible — saves CPU. Observe the terminal itself.
     var started = false;
-    var io = new IntersectionObserver(function (entries) {
-      entries.forEach(function (e) {
-        if (e.isIntersecting && !started) {
-          started = true;
-          runLoop();
-        }
-      });
-    }, { threshold: 0.2 });
-    io.observe(term.closest('.c-live-demo'));
+    function start() {
+      if (started) return;
+      started = true;
+      runLoop();
+    }
+    if ('IntersectionObserver' in window) {
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) { if (e.isIntersecting) start(); });
+      }, { threshold: 0.1 });
+      io.observe(term);
+    } else {
+      start();
+    }
   }
 
   // ── Boot ─────────────────────────────────────────────────────────────────

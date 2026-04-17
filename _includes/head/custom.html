@@ -1335,46 +1335,20 @@ img { max-width: 100%; }
 .c-reveal.is-visible { opacity: 1; transform: translateY(0); }
 
 /* ═══════════════════════════════════════════════════════════
-   HERO SPLIT LAYOUT — left content + right terminal
+   HERO TERMINAL WRAPPER — centered below CTAs
 ═══════════════════════════════════════════════════════════ */
-.c-hero__inner--split {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
-  gap: 64px;
-  align-items: center;
-  max-width: 1320px !important;
-  width: 100%;
-}
-@media (max-width: 1024px) {
-  .c-hero__inner--split {
-    grid-template-columns: 1fr;
-    gap: 48px;
-    max-width: 720px !important;
-  }
-}
-
-.c-hero__content { min-width: 0; }
-
 .c-hero__term {
+  margin: 36px auto 28px;
+  width: 100%;
+  max-width: 760px;
   position: relative;
   z-index: 4;
 }
 
-.c-hero__term-note {
-  margin: 14px 4px 0;
-  font-family: 'JetBrains Mono', 'SF Mono', monospace;
-  font-size: .72em;
-  line-height: 1.5;
-  color: #94a3b8;
-  letter-spacing: -.005em;
-}
-
-/* Center hero content vertically + tighter spacing on desktop */
-@media (min-width: 1025px) {
-  .c-hero { padding-top: 120px; padding-bottom: 80px; }
-  .c-hero__inner--split { text-align: left; }
-  .c-hero__content .c-label { display: inline-flex; }
-  .c-terminal { margin-left: 0 !important; margin-right: auto; }
+/* Allow hero to grow to fit content (was 100vh fixed) */
+.c-hero {
+  min-height: auto !important;
+  padding: 130px 5% 80px !important;
 }
 
 /* ═══════════════════════════════════════════════════════════
@@ -1386,13 +1360,13 @@ img { max-width: 100%; }
   border-radius: 12px;
   overflow: hidden;
   box-shadow:
-    0 30px 80px rgba(13,148,136,.12),
-    0 12px 32px rgba(15,23,42,.18),
+    0 30px 70px rgba(13,148,136,.14),
+    0 10px 28px rgba(15,23,42,.18),
     0 1px 3px rgba(15,23,42,.08);
   font-family: 'JetBrains Mono', 'SF Mono', 'Menlo', 'Monaco', 'Consolas', monospace;
   position: relative;
 }
-/* Soft teal glow ring outside the window */
+/* Soft teal glow ring */
 .c-term-window::before {
   content: '';
   position: absolute;
@@ -1400,30 +1374,31 @@ img { max-width: 100%; }
   border-radius: 12px;
   padding: 1px;
   background: linear-gradient(135deg,
-    rgba(13,148,136,0.4) 0%,
-    rgba(15,23,42,0) 35%,
-    rgba(15,23,42,0) 65%,
-    rgba(6,182,212,0.4) 100%);
+    rgba(13,148,136,0.45) 0%,
+    rgba(15,23,42,0) 40%,
+    rgba(15,23,42,0) 60%,
+    rgba(6,182,212,0.45) 100%);
   -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
           mask-composite: exclude;
   pointer-events: none;
 }
 
-/* Hero variant — slightly tighter */
+/* Hero variant */
 .c-term-window--hero { width: 100%; }
 .c-term-window--hero .c-term-window__body {
-  min-height: 360px;
-  max-height: 440px;
-  padding: 18px 22px 22px;
+  height: 320px;
+  padding: 16px 20px 20px;
   font-size: .76em;
+  overflow-y: auto;
+  scrollbar-width: none;          /* Firefox: hide scrollbar */
 }
+.c-term-window--hero .c-term-window__body::-webkit-scrollbar { display: none; }
 @media (max-width: 640px) {
   .c-term-window--hero .c-term-window__body {
-    min-height: 300px;
-    max-height: 380px;
+    height: 280px;
     font-size: .68em;
-    padding: 14px 16px 18px;
+    padding: 12px 14px 16px;
   }
 }
 
@@ -1468,12 +1443,12 @@ img { max-width: 100%; }
   font-size: .82em;
   line-height: 1.65;
   color: #cbd5e1;
-  min-height: 440px;
-  max-height: 560px;
-  overflow: hidden;
   position: relative;
   letter-spacing: -.005em;
+  overflow-y: auto;
+  scrollbar-width: none;
 }
+.c-term-window__body::-webkit-scrollbar { display: none; }
 @media (max-width: 640px) {
   .c-term-window__body { font-size: .72em; padding: 18px 18px 22px; min-height: 380px; max-height: 460px; }
 }
