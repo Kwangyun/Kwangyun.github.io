@@ -509,30 +509,6 @@ img { max-width: 100%; }
   overflow: hidden;
 }
 
-/* ── Animated EKG background ─────────────────────────────── */
-.c-process-bg {
-  position: absolute;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  opacity: .55;
-  pointer-events: none;
-  z-index: 0;
-}
-.c-process-bg__line {
-  stroke-dasharray: 2400;
-  stroke-dashoffset: 2400;
-  animation: ekg-scroll 8s linear infinite;
-}
-.c-process-bg__line--2 {
-  animation-duration: 11s;
-  animation-delay: -2s;
-  opacity: .6;
-}
-@keyframes ekg-scroll {
-  0%   { stroke-dashoffset: 2400; }
-  100% { stroke-dashoffset: 0; }
-}
-
 .c-process-wrap { position: relative; z-index: 1; }
 
 /* ── Live dot on eyebrow ─────────────────────────────────── */
