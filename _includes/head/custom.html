@@ -1335,19 +1335,96 @@ img { max-width: 100%; }
 .c-reveal.is-visible { opacity: 1; transform: translateY(0); }
 
 /* ═══════════════════════════════════════════════════════════
-   LIVE ENGAGEMENT FEED — Kali terminal on loop
+   HERO SPLIT LAYOUT — left content + right terminal
 ═══════════════════════════════════════════════════════════ */
-.c-live-demo { padding-bottom: 120px; }
+.c-hero__inner--split {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+  gap: 64px;
+  align-items: center;
+  max-width: 1320px !important;
+  width: 100%;
+}
+@media (max-width: 1024px) {
+  .c-hero__inner--split {
+    grid-template-columns: 1fr;
+    gap: 48px;
+    max-width: 720px !important;
+  }
+}
 
+.c-hero__content { min-width: 0; }
+
+.c-hero__term {
+  position: relative;
+  z-index: 4;
+}
+
+.c-hero__term-note {
+  margin: 14px 4px 0;
+  font-family: 'JetBrains Mono', 'SF Mono', monospace;
+  font-size: .72em;
+  line-height: 1.5;
+  color: #94a3b8;
+  letter-spacing: -.005em;
+}
+
+/* Center hero content vertically + tighter spacing on desktop */
+@media (min-width: 1025px) {
+  .c-hero { padding-top: 120px; padding-bottom: 80px; }
+  .c-hero__inner--split { text-align: left; }
+  .c-hero__content .c-label { display: inline-flex; }
+  .c-terminal { margin-left: 0 !important; margin-right: auto; }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   KALI TERMINAL WINDOW — the live engagement feed
+═══════════════════════════════════════════════════════════ */
 .c-term-window {
-  max-width: 980px;
-  margin: 0 auto;
   background: #0a0e14;
   border: 1px solid #1e293b;
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 20px 60px rgba(15,23,42,.18), 0 4px 12px rgba(15,23,42,.08);
+  box-shadow:
+    0 30px 80px rgba(13,148,136,.12),
+    0 12px 32px rgba(15,23,42,.18),
+    0 1px 3px rgba(15,23,42,.08);
   font-family: 'JetBrains Mono', 'SF Mono', 'Menlo', 'Monaco', 'Consolas', monospace;
+  position: relative;
+}
+/* Soft teal glow ring outside the window */
+.c-term-window::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: 12px;
+  padding: 1px;
+  background: linear-gradient(135deg,
+    rgba(13,148,136,0.4) 0%,
+    rgba(15,23,42,0) 35%,
+    rgba(15,23,42,0) 65%,
+    rgba(6,182,212,0.4) 100%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* Hero variant — slightly tighter */
+.c-term-window--hero { width: 100%; }
+.c-term-window--hero .c-term-window__body {
+  min-height: 360px;
+  max-height: 440px;
+  padding: 18px 22px 22px;
+  font-size: .76em;
+}
+@media (max-width: 640px) {
+  .c-term-window--hero .c-term-window__body {
+    min-height: 300px;
+    max-height: 380px;
+    font-size: .68em;
+    padding: 14px 16px 18px;
+  }
 }
 
 /* macOS-style chrome bar */

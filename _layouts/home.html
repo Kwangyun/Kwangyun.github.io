@@ -14,53 +14,71 @@ layout: default
     <span class="c-particle"></span>
     <span class="c-particle"></span>
   </div>
-  <div class="c-hero__inner">
-    <span class="c-label c-reveal">Offensive Security Consulting</span>
-    <h1 class="c-hero__title c-reveal">
-      Someone will find<br>
-      <span class="c-grad">your vulnerabilities.</span>
-    </h1>
-    <p class="c-hero__sub c-reveal">
-      Make sure it's us first. Red team operations, penetration testing,
-      and AI security assessments — delivered by a practitioner, not a sales team.
-    </p>
-    <div class="c-hero__cta c-reveal">
-      <a href="#contact" class="c-btn c-btn--primary">Get in Touch</a>
-      <a href="#services" class="c-btn c-btn--ghost">View Services</a>
-    </div>
-
-    <!-- Terminal status ticker -->
-    <div class="c-terminal c-reveal" role="status" aria-label="Engagement availability">
-      <span class="c-terminal__prompt">&gt;</span>
-      <span class="c-terminal__key">engagement_status</span>
-      <span class="c-terminal__sep">:</span>
-      <span class="c-terminal__val c-terminal__val--accent">accepting scope</span>
-      <span class="c-terminal__dot">·</span>
-      <span class="c-terminal__key">next_availability</span>
-      <span class="c-terminal__sep">:</span>
-      <span class="c-terminal__val">May 2026</span>
-      <span class="c-terminal__dot">·</span>
-      <span class="c-terminal__key">slots</span>
-      <span class="c-terminal__sep">:</span>
-      <span class="c-terminal__val">3 of 4</span>
-      <span class="c-terminal__cursor">_</span>
-    </div>
-
-    <div class="c-certs c-reveal">
-      <div class="c-certs__items">
-        <span class="c-cert-badge">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="13" height="13"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg>
-          OSCP
-        </span>
-        <span class="c-cert-badge">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="13" height="13"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg>
-          OSWP
-        </span>
-        <span class="c-cert-badge c-cert-badge--purple">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="13" height="13"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg>
-          CRTO
-        </span>
+  <div class="c-hero__inner c-hero__inner--split">
+    <div class="c-hero__content">
+      <span class="c-label c-reveal">Offensive Security Consulting</span>
+      <h1 class="c-hero__title c-reveal">
+        Someone will find<br>
+        <span class="c-grad">your vulnerabilities.</span>
+      </h1>
+      <p class="c-hero__sub c-reveal">
+        Make sure it's us first. Red team operations, penetration testing,
+        and AI security assessments — delivered by a practitioner, not a sales team.
+      </p>
+      <div class="c-hero__cta c-reveal">
+        <a href="#contact" class="c-btn c-btn--primary">Get in Touch</a>
+        <a href="#services" class="c-btn c-btn--ghost">View Services</a>
       </div>
+
+      <!-- Terminal status ticker -->
+      <div class="c-terminal c-reveal" role="status" aria-label="Engagement availability">
+        <span class="c-terminal__prompt">&gt;</span>
+        <span class="c-terminal__key">engagement_status</span>
+        <span class="c-terminal__sep">:</span>
+        <span class="c-terminal__val c-terminal__val--accent">accepting scope</span>
+        <span class="c-terminal__dot">·</span>
+        <span class="c-terminal__key">next_availability</span>
+        <span class="c-terminal__sep">:</span>
+        <span class="c-terminal__val">May 2026</span>
+        <span class="c-terminal__dot">·</span>
+        <span class="c-terminal__key">slots</span>
+        <span class="c-terminal__sep">:</span>
+        <span class="c-terminal__val">3 of 4</span>
+        <span class="c-terminal__cursor">_</span>
+      </div>
+
+      <div class="c-certs c-reveal">
+        <div class="c-certs__items">
+          <span class="c-cert-badge">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="13" height="13"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg>
+            OSCP
+          </span>
+          <span class="c-cert-badge">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="13" height="13"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg>
+            OSWP
+          </span>
+          <span class="c-cert-badge c-cert-badge--purple">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="13" height="13"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg>
+            CRTO
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Live Kali terminal — full AD kill-chain on loop -->
+    <div class="c-hero__term c-reveal">
+      <div class="c-term-window c-term-window--hero">
+        <div class="c-term-window__chrome">
+          <span class="c-term-window__dot c-term-window__dot--red"></span>
+          <span class="c-term-window__dot c-term-window__dot--yellow"></span>
+          <span class="c-term-window__dot c-term-window__dot--green"></span>
+          <span class="c-term-window__title">kwangyun@kali · ~/engagements/acme</span>
+        </div>
+        <div class="c-term-window__body" data-live-term>
+          <!-- Populated by JS -->
+        </div>
+      </div>
+      <p class="c-hero__term-note"><span class="c-term-note-mark">//</span> Live replay of an authorized AD engagement · all data redacted</p>
     </div>
   </div>
   <a href="#services" class="c-scroll-cue" aria-label="Scroll to services">
@@ -144,32 +162,6 @@ layout: default
   </div>
 </section>
 
-
-<!-- LIVE TERMINAL DEMO — full AD kill-chain on loop -->
-<section class="c-section c-section--alt c-live-demo" id="engagement-feed">
-  <div class="c-wrap">
-    <div class="c-section__head" style="text-align:center;max-width:760px;margin-left:auto;margin-right:auto;">
-      <span class="c-label" style="display:inline-flex;"><span class="c-live-dot"></span>Live Engagement Feed</span>
-      <h2 class="c-section__title">Full Active Directory engagement — replayed live.</h2>
-      <p class="c-section__sub">Tooling and TTPs from an authorized red team engagement. Real command chain, redacted data, running on loop. If you recognize this flow, we speak the same language.</p>
-    </div>
-
-    <div class="c-term-window">
-      <div class="c-term-window__chrome">
-        <span class="c-term-window__dot c-term-window__dot--red"></span>
-        <span class="c-term-window__dot c-term-window__dot--yellow"></span>
-        <span class="c-term-window__dot c-term-window__dot--green"></span>
-        <span class="c-term-window__title">kwangyun@kali: ~/engagements/acme-red-team</span>
-        <span class="c-term-window__meta">bash · 140×36</span>
-      </div>
-      <div class="c-term-window__body" data-live-term>
-        <!-- Populated by JS -->
-      </div>
-    </div>
-
-    <p class="c-live-demo__footnote"><span class="c-term-note-mark">//</span> Commands recorded from an authorized engagement. Domain names, IP ranges, usernames, and hashes replaced with demo values. No real credentials displayed.</p>
-  </div>
-</section>
 
 <!-- PROCESS (Ellis-style — white background, horizontal timeline, expand-on-click) -->
 <section class="c-process-section" id="process">

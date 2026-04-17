@@ -435,30 +435,13 @@
         ],
         postWait: 1100,
       },
-      {
-        cmd: '<span class="tl-cmd">echo</span> <span class="tl-str">"Engagement complete."</span>',
-        out: [
-          '',
-          '<span class="tl-banner">╭───────────────────────────────────────────────────────────────╮</span>',
-          '<span class="tl-banner">│  ENGAGEMENT CONCLUDED · acme.local · 2026-04-16 17:42 UTC     │</span>',
-          '<span class="tl-banner">│                                                               │</span>',
-          '<span class="tl-banner">│  Initial foothold:       LLMNR poisoning (Tier 0 misconfig)   │</span>',
-          '<span class="tl-banner">│  Lateral movement:       Kerberoasting → svc_sql → DA         │</span>',
-          '<span class="tl-banner">│  Objective achieved:     Domain Admin on DC01 (9 days)        │</span>',
-          '<span class="tl-banner">│  Detection gaps:         12 documented · 4 critical           │</span>',
-          '<span class="tl-banner">│  Report delivery:        scheduled + retest in 30 days        │</span>',
-          '<span class="tl-banner">╰───────────────────────────────────────────────────────────────╯</span>',
-          '',
-        ],
-        postWait: 2600,
-      },
     ];
 
-    var typingSpeed = 14;         // ms per char while typing command
-    var lineDelay = 95;           // ms between output lines
-    var interFrameWait = 500;     // pause after output before next prompt
+    var typingSpeed = 38;         // ms per char while typing command (slower, deliberate)
+    var lineDelay = 180;          // ms between output lines
+    var interFrameWait = 1100;    // pause after output before next prompt
     var clearBetweenLoops = true;
-    var maxLinesBeforeScroll = 22;
+    var maxLinesBeforeScroll = 18;
 
     var rafHandle = null;
 
