@@ -2,6 +2,8 @@
 main:
   - title: "Services"
     url: /#services
+  - title: "Process"
+    url: /#process
   - title: "Research"
     url: /#research
   - title: "About"

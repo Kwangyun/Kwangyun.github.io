@@ -186,6 +186,42 @@
     }, { passive: true });
   }
 
+  // ── Process tabs (Ellis-style interactive timeline) ───────────────────────
+  function initProcessTabs() {
+    var tabs = document.querySelectorAll('.c-process__tab');
+    var panels = document.querySelectorAll('.c-process__panel');
+    if (!tabs.length) return;
+
+    tabs.forEach(function (tab) {
+      tab.addEventListener('click', function () {
+        var step = tab.getAttribute('data-step');
+        tabs.forEach(function (t) {
+          t.classList.remove('is-active');
+          t.setAttribute('aria-selected', 'false');
+        });
+        panels.forEach(function (p) { p.classList.remove('is-active'); });
+
+        tab.classList.add('is-active');
+        tab.setAttribute('aria-selected', 'true');
+        var panel = document.querySelector('.c-process__panel[data-panel="' + step + '"]');
+        if (panel) panel.classList.add('is-active');
+      });
+    });
+
+    // Keyboard navigation (arrow keys)
+    tabs.forEach(function (tab, idx) {
+      tab.addEventListener('keydown', function (e) {
+        if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+        e.preventDefault();
+        var next = e.key === 'ArrowRight'
+          ? (idx + 1) % tabs.length
+          : (idx - 1 + tabs.length) % tabs.length;
+        tabs[next].focus();
+        tabs[next].click();
+      });
+    });
+  }
+
   // ── Boot ─────────────────────────────────────────────────────────────────
   document.addEventListener('DOMContentLoaded', function () {
     initAurora();
@@ -196,5 +232,6 @@
     initCounters();
     initMagnetic();
     initNavHighlight();
+    initProcessTabs();
   });
 })();
