@@ -506,6 +506,160 @@ img { max-width: 100%; }
   z-index: 3;
   border-top: 1px solid rgba(15,23,42,0.06);
   border-bottom: 1px solid rgba(15,23,42,0.06);
+  overflow: hidden;
+}
+
+/* ── Animated EKG background ─────────────────────────────── */
+.c-process-bg {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  opacity: .55;
+  pointer-events: none;
+  z-index: 0;
+}
+.c-process-bg__line {
+  stroke-dasharray: 2400;
+  stroke-dashoffset: 2400;
+  animation: ekg-scroll 8s linear infinite;
+}
+.c-process-bg__line--2 {
+  animation-duration: 11s;
+  animation-delay: -2s;
+  opacity: .6;
+}
+@keyframes ekg-scroll {
+  0%   { stroke-dashoffset: 2400; }
+  100% { stroke-dashoffset: 0; }
+}
+
+.c-process-wrap { position: relative; z-index: 1; }
+
+/* ── Live dot on eyebrow ─────────────────────────────────── */
+.c-live-dot {
+  display: inline-block;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: #10b981;
+  margin-right: 8px;
+  position: relative;
+  animation: live-dot-pulse 1.5s ease-in-out infinite;
+}
+.c-live-dot::after {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 2px solid #10b981;
+  opacity: 0;
+  animation: live-dot-ring 1.5s ease-out infinite;
+}
+@keyframes live-dot-pulse {
+  0%,100% { background: #10b981; }
+  50%     { background: #34d399; }
+}
+@keyframes live-dot-ring {
+  0%   { transform: scale(0.8); opacity: .8; }
+  100% { transform: scale(1.8); opacity: 0; }
+}
+
+/* ── Live metrics bar ────────────────────────────────────── */
+.c-process-metrics {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: #e2e8f0;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  overflow: hidden;
+  max-width: 900px;
+  margin: 0 auto 60px;
+  box-shadow: 0 4px 24px rgba(13,148,136,.06);
+}
+@media (max-width: 700px) {
+  .c-process-metrics { grid-template-columns: repeat(2, 1fr); }
+}
+.c-pm {
+  background: #ffffff;
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  transition: background .3s ease;
+}
+.c-pm:hover { background: #f8fafc; }
+.c-pm__label {
+  font-family: 'Inter', sans-serif;
+  font-size: .7em;
+  font-weight: 600;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: #94a3b8;
+}
+.c-pm__value {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 1.2em;
+  font-weight: 700;
+  letter-spacing: -.02em;
+  color: #0f172a;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: color .3s ease;
+  font-variant-numeric: tabular-nums;
+}
+.c-pm[data-highlight="true"] .c-pm__value { color: #0d9488; }
+.c-pm__pulse {
+  display: inline-block;
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 0 0 rgba(16,185,129,.5);
+  animation: pm-pulse 1.4s ease-in-out infinite;
+}
+@keyframes pm-pulse {
+  0%   { box-shadow: 0 0 0 0 rgba(16,185,129,.5); }
+  70%  { box-shadow: 0 0 0 8px rgba(16,185,129,0); }
+  100% { box-shadow: 0 0 0 0 rgba(16,185,129,0); }
+}
+
+/* ── Flowing data dots along timeline track ──────────────── */
+.c-timeline__flow {
+  position: absolute;
+  top: 36px;
+  left: calc(12.5% + 40px);
+  right: calc(12.5% + 40px);
+  height: 2px;
+  z-index: 3;
+  pointer-events: none;
+}
+.c-flow-dot {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 10px; height: 10px;
+  margin-top: -5px;
+  border-radius: 50%;
+  background: #0d9488;
+  box-shadow: 0 0 12px rgba(13,148,136,.8), 0 0 24px rgba(13,148,136,.4);
+  transform: translateX(-5px);
+  animation: flow-dot 4s linear infinite;
+  opacity: 0;
+}
+.c-flow-dot:nth-child(1) { animation-delay: 0s;   }
+.c-flow-dot:nth-child(2) { animation-delay: 0.8s; }
+.c-flow-dot:nth-child(3) { animation-delay: 1.6s; }
+.c-flow-dot:nth-child(4) { animation-delay: 2.4s; }
+.c-flow-dot:nth-child(5) { animation-delay: 3.2s; }
+@keyframes flow-dot {
+  0%   { left: 0%;   opacity: 0; transform: translateX(-5px) scale(0.6); }
+  10%  { opacity: 1; transform: translateX(-5px) scale(1); }
+  90%  { opacity: 1; transform: translateX(-5px) scale(1); }
+  100% { left: 100%; opacity: 0; transform: translateX(-5px) scale(0.6); }
+}
+
+@media (max-width: 780px) {
+  .c-timeline__flow { display: none; }
 }
 
 .c-process-wrap {

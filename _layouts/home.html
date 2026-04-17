@@ -129,9 +129,25 @@ layout: default
 
 <!-- PROCESS (Ellis-style — white background, horizontal timeline, expand-on-click) -->
 <section class="c-process-section" id="process">
+  <!-- Animated EKG/graph background -->
+  <svg class="c-process-bg" viewBox="0 0 1200 200" preserveAspectRatio="none" aria-hidden="true">
+    <defs>
+      <linearGradient id="ekgGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%"   stop-color="#0d9488" stop-opacity="0"/>
+        <stop offset="50%"  stop-color="#0d9488" stop-opacity="0.35"/>
+        <stop offset="100%" stop-color="#0d9488" stop-opacity="0"/>
+      </linearGradient>
+    </defs>
+    <path class="c-process-bg__line" d="M-100,100 L100,100 L120,60 L140,140 L160,100 L300,100 L320,40 L340,160 L360,100 L520,100 L540,70 L560,130 L580,100 L760,100 L780,30 L800,170 L820,100 L980,100 L1000,60 L1020,140 L1040,100 L1300,100" fill="none" stroke="url(#ekgGrad)" stroke-width="2"/>
+    <path class="c-process-bg__line c-process-bg__line--2" d="M-100,100 L80,100 L105,75 L130,125 L155,100 L280,100 L305,55 L330,145 L355,100 L500,100 L525,80 L550,120 L575,100 L740,100 L765,45 L790,155 L815,100 L960,100 L985,75 L1010,125 L1035,100 L1300,100" fill="none" stroke="url(#ekgGrad)" stroke-width="1.5"/>
+  </svg>
+
   <div class="c-process-wrap">
     <div class="c-process-head">
-      <span class="c-process-eyebrow">The Process</span>
+      <span class="c-process-eyebrow">
+        <span class="c-live-dot"></span>
+        The Process
+      </span>
       <h2 class="c-process-title">How an engagement works.</h2>
       <p class="c-process-lede">Every engagement follows the same four phases — end-to-end in about four weeks. Timelines scale with scope.</p>
       <div class="c-process-total">
@@ -140,10 +156,39 @@ layout: default
       </div>
     </div>
 
+    <!-- Live metrics bar -->
+    <div class="c-process-metrics" aria-hidden="true">
+      <div class="c-pm">
+        <span class="c-pm__label">Active Phase</span>
+        <span class="c-pm__value" data-pm="phase">Scoping</span>
+      </div>
+      <div class="c-pm">
+        <span class="c-pm__label">Progress</span>
+        <span class="c-pm__value" data-pm="progress">25%</span>
+      </div>
+      <div class="c-pm">
+        <span class="c-pm__label">Checks Running</span>
+        <span class="c-pm__value" data-pm="checks">14</span>
+      </div>
+      <div class="c-pm">
+        <span class="c-pm__label">Auto-advance</span>
+        <span class="c-pm__value"><span class="c-pm__pulse"></span>Live</span>
+      </div>
+    </div>
+
     <!-- Connected horizontal timeline — all 4 steps always visible -->
     <div class="c-timeline">
       <div class="c-timeline__track"></div>
       <div class="c-timeline__track-fill" data-track-fill></div>
+
+      <!-- Flowing data dots traveling along the track -->
+      <div class="c-timeline__flow" aria-hidden="true">
+        <span class="c-flow-dot"></span>
+        <span class="c-flow-dot"></span>
+        <span class="c-flow-dot"></span>
+        <span class="c-flow-dot"></span>
+        <span class="c-flow-dot"></span>
+      </div>
 
       <div class="c-timeline__step is-active" data-step="1">
         <div class="c-timeline__node">01</div>

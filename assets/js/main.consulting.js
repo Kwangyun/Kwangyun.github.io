@@ -192,32 +192,85 @@
     var tabs = document.querySelectorAll('.c-process-detail__tab');
     var panels = document.querySelectorAll('.c-process-detail__panel');
     var trackFill = document.querySelector('[data-track-fill]');
+    var pmPhase = document.querySelector('[data-pm="phase"]');
+    var pmProgress = document.querySelector('[data-pm="progress"]');
+    var pmChecks = document.querySelector('[data-pm="checks"]');
     if (!steps.length && !tabs.length) return;
 
-    function activate(stepId) {
-      // Timeline nodes — mark previous steps as "complete", current as "active"
+    var phaseNames = ['Scoping', 'Discovery', 'Exploitation', 'Reporting'];
+    var phaseChecks = [14, 287, 62, 9];
+    var autoTimer = null;
+    var checksTimer = null;
+
+    function activate(stepId, fromAuto) {
+      var stepNum = parseInt(stepId, 10);
+
       steps.forEach(function (s) {
         var id = parseInt(s.getAttribute('data-step'), 10);
         s.classList.remove('is-active', 'is-complete');
-        if (id < parseInt(stepId, 10)) s.classList.add('is-complete');
-        if (id === parseInt(stepId, 10)) s.classList.add('is-active');
+        if (id < stepNum) s.classList.add('is-complete');
+        if (id === stepNum) s.classList.add('is-active');
       });
 
-      // Grow the teal track fill to the active node
       if (trackFill && steps.length > 1) {
-        var pct = ((parseInt(stepId, 10) - 1) / (steps.length - 1)) * 100;
-        trackFill.style.width = 'calc((100% - 0px) * ' + (pct / 100) + ')';
-        // More accurate: match track's inner span
-        trackFill.style.width = (pct * 0.75) + '%'; // track is between step 1 and step 4 centers
+        var pct = ((stepNum - 1) / (steps.length - 1)) * 100;
+        trackFill.style.width = (pct * 0.75) + '%';
       }
 
-      // Tabs + panels
       tabs.forEach(function (t) { t.classList.remove('is-active'); });
       panels.forEach(function (p) { p.classList.remove('is-active'); });
       var tab = document.querySelector('.c-process-detail__tab[data-step="' + stepId + '"]');
       var panel = document.querySelector('.c-process-detail__panel[data-panel="' + stepId + '"]');
       if (tab) tab.classList.add('is-active');
       if (panel) panel.classList.add('is-active');
+
+      // Update live metrics bar
+      if (pmPhase)    pmPhase.textContent = phaseNames[stepNum - 1];
+      if (pmProgress) pmProgress.textContent = (stepNum * 25) + '%';
+      if (pmChecks)   pmChecks.setAttribute('data-target', phaseChecks[stepNum - 1]);
+      startChecksTick(phaseChecks[stepNum - 1]);
+
+      // Reset auto-advance timer when user interacts
+      if (!fromAuto) restartAuto();
+    }
+
+    function nextStep() {
+      var active = document.querySelector('.c-timeline__step.is-active');
+      var current = active ? parseInt(active.getAttribute('data-step'), 10) : 1;
+      var next = (current % steps.length) + 1;
+      activate(String(next), true);
+    }
+
+    function startAuto() {
+      stopAuto();
+      autoTimer = setInterval(nextStep, 5000);
+    }
+    function stopAuto() {
+      if (autoTimer) { clearInterval(autoTimer); autoTimer = null; }
+    }
+    function restartAuto() { stopAuto(); startAuto(); }
+
+    // Animated count up/drift on checks number
+    function startChecksTick(target) {
+      if (!pmChecks) return;
+      if (checksTimer) clearInterval(checksTimer);
+      var current = parseInt(pmChecks.textContent.replace(/,/g, ''), 10) || 0;
+      var step = target > current ? Math.max(1, Math.round((target - current) / 20)) : -Math.max(1, Math.round((current - target) / 20));
+      var countedTo = current;
+      checksTimer = setInterval(function () {
+        countedTo += step;
+        if ((step > 0 && countedTo >= target) || (step < 0 && countedTo <= target)) {
+          countedTo = target;
+          clearInterval(checksTimer);
+          // Then start a small jitter to simulate "live" scanning
+          checksTimer = setInterval(function () {
+            var jitter = Math.floor(Math.random() * 5) - 2;
+            var val = Math.max(1, target + jitter);
+            pmChecks.textContent = val.toLocaleString();
+          }, 900);
+        }
+        pmChecks.textContent = countedTo.toLocaleString();
+      }, 50);
     }
 
     steps.forEach(function (s) {
@@ -240,8 +293,16 @@
       });
     });
 
-    // Initialize on step 1
-    activate('1');
+    // Pause auto-advance when user hovers the section
+    var section = document.getElementById('process');
+    if (section) {
+      section.addEventListener('mouseenter', stopAuto);
+      section.addEventListener('mouseleave', startAuto);
+    }
+
+    // Start on step 1 + begin auto-cycling
+    activate('1', true);
+    startAuto();
   }
 
   // ── Boot ─────────────────────────────────────────────────────────────────
