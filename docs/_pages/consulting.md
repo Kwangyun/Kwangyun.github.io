@@ -172,68 +172,100 @@ body {
 }
 
 .timeline {
-  position: relative;
-  max-width: 900px;
+  max-width: 1200px;
   margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 30px;
+  position: relative;
 }
 
 .timeline::before {
   content: '';
   position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 3px;
-  height: 100%;
-  background: linear-gradient(to bottom, #667eea, #764ba2);
+  top: 80px;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(to right, #667eea, #764ba2, #667eea);
+  z-index: 0;
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .timeline::before {
+    display: block;
+  }
 }
 
 .timeline-item {
-  margin-bottom: 50px;
   position: relative;
+  z-index: 1;
 }
 
 .timeline-item:nth-child(odd) .timeline-content {
-  margin-left: 0;
-  margin-right: 52%;
-  text-align: right;
-}
-
-.timeline-item:nth-child(even) .timeline-content {
-  margin-left: 52%;
-  margin-right: 0;
   text-align: left;
 }
 
 .timeline-dot {
   position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 30px;
-  height: 30px;
-  background: #667eea;
+  left: 0;
+  top: -30px;
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   border: 4px solid white;
   border-radius: 50%;
-  top: 0;
-  box-shadow: 0 0 0 8px rgba(102, 126, 234, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  color: white;
+  font-size: 20px;
+  box-shadow: 0 5px 20px rgba(102, 126, 234, 0.3);
+}
+
+@media (max-width: 1023px) {
+  .timeline-dot {
+    left: 15px;
+  }
 }
 
 .timeline-content {
   background: white;
-  padding: 30px;
-  border-radius: 10px;
+  padding: 40px;
+  border-radius: 15px;
   box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+  margin-top: 50px;
+  position: relative;
+  border-top: 4px solid #667eea;
+  transition: all 0.3s ease;
+}
+
+.timeline-content:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 40px rgba(102, 126, 234, 0.15);
 }
 
 .timeline-content h4 {
-  font-size: 18px;
+  font-size: 20px;
   margin-bottom: 10px;
+  color: #1a1a1a;
+  font-weight: 700;
+}
+
+.timeline-content .duration {
+  font-size: 14px;
   color: #667eea;
   font-weight: 600;
+  margin-bottom: 15px;
+  display: block;
 }
 
 .timeline-content p {
   color: #666;
   line-height: 1.8;
+  font-size: 15px;
 }
 
 /* Comparison Section */
@@ -373,29 +405,48 @@ footer {
     font-size: 36px;
   }
 
+  .hero p {
+    font-size: 16px;
+  }
+
   .section-title {
     font-size: 32px;
   }
 
+  .timeline {
+    grid-template-columns: 1fr;
+  }
+
   .timeline::before {
-    left: 0;
+    display: none;
   }
 
   .timeline-dot {
-    left: 0;
+    left: 20px;
+    top: -20px;
+    width: 50px;
+    height: 50px;
+    font-size: 18px;
   }
 
-  .timeline-item:nth-child(odd) .timeline-content,
-  .timeline-item:nth-child(even) .timeline-content {
-    margin-left: 50px;
-    margin-right: 0;
-    text-align: left;
+  .timeline-content {
+    margin-top: 40px;
+    margin-left: 70px;
+    padding: 30px;
   }
 
   .cta-button.secondary {
     display: block;
     margin-left: 0;
     margin-top: 15px;
+  }
+
+  .comparison-table table {
+    font-size: 14px;
+  }
+
+  table th, table td {
+    padding: 15px;
   }
 }
 </style>
@@ -457,45 +508,41 @@ footer {
 <section class="process">
   <div class="container">
     <h2 class="section-title">Our Process</h2>
-    <p class="section-subtitle">A structured approach to comprehensive security assessment</p>
+    <p class="section-subtitle">A structured 4-week engagement from kickoff to actionable insights</p>
     
     <div class="timeline">
       <div class="timeline-item">
-        <div class="timeline-dot"></div>
+        <div class="timeline-dot">01</div>
         <div class="timeline-content">
-          <h4>1. Reconnaissance & Scoping</h4>
+          <h4>Reconnaissance & Scoping</h4>
+          <span class="duration">Week 1 (5 days)</span>
           <p>We begin with detailed reconnaissance to understand your systems, architecture, and security posture. This ensures our assessment is targeted and comprehensive.</p>
         </div>
       </div>
 
       <div class="timeline-item">
-        <div class="timeline-dot"></div>
+        <div class="timeline-dot">02</div>
         <div class="timeline-content">
-          <h4>2. Vulnerability Discovery</h4>
+          <h4>Vulnerability Discovery</h4>
+          <span class="duration">Week 2 (7 days)</span>
           <p>Using industry-leading tools and manual testing techniques, we identify vulnerabilities across authentication, authorization, injection, business logic, and infrastructure.</p>
         </div>
       </div>
 
       <div class="timeline-item">
-        <div class="timeline-dot"></div>
+        <div class="timeline-dot">03</div>
         <div class="timeline-content">
-          <h4>3. Exploitation & Validation</h4>
+          <h4>Exploitation & Validation</h4>
+          <span class="duration">Week 3 (5 days)</span>
           <p>We validate findings with controlled exploitation to prove impact and severity. All testing is authorized and adheres to responsible disclosure practices.</p>
         </div>
       </div>
 
       <div class="timeline-item">
-        <div class="timeline-dot"></div>
+        <div class="timeline-dot">04</div>
         <div class="timeline-content">
-          <h4>4. Impact Assessment</h4>
-          <p>Each vulnerability is analyzed for business impact, assigned CVSS scores, and mapped to relevant compliance frameworks (OWASP, CWE, NIST).</p>
-        </div>
-      </div>
-
-      <div class="timeline-item">
-        <div class="timeline-dot"></div>
-        <div class="timeline-content">
-          <h4>5. Reporting & Remediation</h4>
+          <h4>Reporting & Remediation</h4>
+          <span class="duration">Week 4 (5 days)</span>
           <p>Comprehensive reports with executive summaries, technical details, proof-of-concept code, and step-by-step remediation guidance for your development team.</p>
         </div>
       </div>
