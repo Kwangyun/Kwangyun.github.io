@@ -246,9 +246,10 @@
 
   // ── Boot ─────────────────────────────────────────────────────────────────
   document.addEventListener('DOMContentLoaded', function () {
-    initAurora();
-    initNoise();
-    initGrid();
+    // Aurora / noise / grid disabled for light theme
+    // initAurora();
+    // initNoise();
+    // initGrid();
     initNav();
     initReveal();
     initCounters();
