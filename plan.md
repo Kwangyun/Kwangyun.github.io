@@ -137,3 +137,54 @@ All three sit over the existing teal light-bed (extended wider). Dark bezels, th
 - A literal desk surface (light-bed handles environment)
 - Motion-synced tilt on scroll
 
+---
+
+# Phase 3 — Operator at the Screen
+
+> Revised direction: **one monitor, one human.** The three-monitor shot was too "product showcase" and missed the visceral "hacker operating" feeling the user asked for. Phase 3 replaces it with a single large monitor + a silhouetted operator in the foreground.
+
+## Reference tone
+
+Mr. Robot opening shots of Elliot at keyboard · Cyberpunk cinematics (operator silhouettes at screens) · Corridor Digital over-the-shoulder hacking shots · Defcon poster illustration style. Single focused figure, single focused screen. Camera POV: slightly above and behind the operator, looking at the screen over their shoulder.
+
+## Composition
+
+- **Center**: the live terminal at full size (460px body), split pane restored so operator notes sit alongside command output
+- **Foreground (bottom)**: a hand-drawn SVG silhouette of an operator — back of head + shoulders only, no face, no hoodie, no accessories
+- **Lighting**: screen-glow teal gradient fill on the silhouette (top is rim-lit teal, bottom fades to pure dark), plus CSS `drop-shadow` above the silhouette for soft ambient halo
+- **No side monitors** — they fight the focused-operator story
+- **No literal desk / keyboard** — the silhouette implies the workstation
+
+## SVG silhouette spec
+
+ViewBox `0 0 600 200`. Single path:
+- Shoulders span full width, peaks ~y:120 at x:70 and x:530
+- Neck saddle dips into head base at x:240 and x:360
+- Head dome from y:100 (base) to y:6 (apex), width ~120px
+- All curves cubic/quadratic bezier for smoothness
+- No hair, no ear, no detail — anonymous operator
+
+Fill: `<linearGradient>` id `hacker-rim` — teal @ 0% → mid-teal @ 12% → dark @ 35% → pure dark @ 100%. Replicates the effect of screen light hitting the top of the head and dying out as it travels down the silhouette.
+
+## Markup changes
+
+- Remove `.c-workstation__side--left` and `.c-workstation__side--right` entirely
+- Restore `.c-term-window__split` wrapper inside the terminal with the notes `<aside>` back inside it
+- Add `<svg class="c-hacker">` as a sibling of `.c-workstation__center`, rendered after the monitor
+
+## CSS spec
+
+- `.c-workstation` → `flex-direction: column`, center-aligned
+- `.c-hacker` → `width: min(100%, 680px)`, `margin-top: -40px` (overlaps monitor shadow, sells foreground depth), `filter: drop-shadow(0 -8px 24px rgba(45,212,191,0.35))`
+- Prior side-monitor styles removed (dead selectors)
+- Mobile: silhouette scales naturally with SVG viewBox
+
+## What NOT to do
+
+- No hoodie / face / detail on the silhouette — anonymity is the design
+- No keyboard / desk render — implied
+- No animation on the silhouette itself — it's a static foreground element
+- No second figure / scene characters
+- No background wall / room — just the light-bed behind the monitor
+
+
