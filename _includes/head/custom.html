@@ -1340,7 +1340,7 @@ img { max-width: 100%; }
 .c-hero__term {
   margin: 36px auto 28px;
   width: 100%;
-  max-width: 760px;
+  max-width: 780px;
   position: relative;
   z-index: 4;
 }
@@ -1358,6 +1358,244 @@ img { max-width: 100%; }
   pointer-events: none;
 }
 .c-hero__term .c-term-window { position: relative; z-index: 1; }
+
+/* ═══════════════════════════════════════════════════════════
+   WORKSTATION SCENE — three-monitor composition
+   Center terminal + two tilted ambient side monitors
+═══════════════════════════════════════════════════════════ */
+.c-workstation {
+  position: relative;
+  width: 100%;
+  max-width: 1240px;
+  margin: 44px auto 36px;
+  padding: 30px 0 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  perspective: 1800px;
+  perspective-origin: 50% 55%;
+  z-index: 4;
+}
+.c-workstation__center {
+  position: relative;
+  z-index: 3;
+  margin: 0 auto;
+  flex: 0 0 auto;
+}
+.c-workstation__center .c-hero__term,
+.c-hero__term.c-workstation__center {
+  margin: 0 auto;
+}
+/* Subtle stand under the center monitor — suggests it's sitting on a surface */
+.c-workstation__stand {
+  position: absolute;
+  left: 50%;
+  bottom: -18px;
+  width: 120px;
+  height: 6px;
+  transform: translateX(-50%);
+  background: linear-gradient(180deg, rgba(15,23,42,0.35) 0%, transparent 100%);
+  border-radius: 0 0 8px 8px;
+  filter: blur(1px);
+  pointer-events: none;
+}
+.c-workstation__side {
+  position: absolute;
+  top: 50%;
+  width: 310px;
+  opacity: 0.62;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+  -webkit-font-smoothing: antialiased;
+  transition: opacity .35s ease;
+  z-index: 1;
+}
+.c-workstation__side:hover { opacity: 0.88; }
+.c-workstation__side--left {
+  left: 2%;
+  transform: translate3d(0,-50%,0) rotateY(22deg);
+  transform-origin: right center;
+}
+.c-workstation__side--right {
+  right: 2%;
+  transform: translate3d(0,-50%,0) rotateY(-22deg);
+  transform-origin: left center;
+}
+
+/* Side-monitor shell — same dark canvas as the main terminal but its own frame */
+.c-side-monitor {
+  position: relative;
+  background: #0a0e14;
+  border: 1px solid #1e293b;
+  border-radius: 10px;
+  box-shadow:
+    0 30px 60px rgba(15,23,42,0.28),
+    0 12px 24px rgba(13,148,136,0.12);
+  overflow: hidden;
+  font-family: 'JetBrains Mono', 'SF Mono', 'Menlo', monospace;
+}
+.c-side-monitor::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 10px;
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(13,148,136,0.38) 0%, transparent 45%, transparent 55%, rgba(94,234,212,0.28) 100%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+  pointer-events: none;
+}
+.c-side-monitor__chrome {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 9px 12px;
+  background: linear-gradient(180deg, #161b22 0%, #0d1117 100%);
+  border-bottom: 1px solid #1e293b;
+  font-size: .58em;
+  letter-spacing: .1em;
+  color: #475569;
+}
+.c-side-monitor__label { color: #64748b; font-weight: 600; }
+.c-side-monitor__count {
+  color: #5eead4;
+  background: rgba(13,148,136,0.1);
+  padding: 2px 7px;
+  border-radius: 3px;
+  min-width: 20px;
+  text-align: center;
+}
+.c-side-monitor__dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: #5eead4;
+  box-shadow: 0 0 6px rgba(94,234,212,0.6);
+  animation: term-rec-pulse 2.4s ease-in-out infinite;
+}
+.c-side-monitor__body {
+  padding: 14px 14px 16px;
+  height: 320px;
+  overflow-y: auto;
+  scrollbar-width: none;
+  font-size: .58em;
+  line-height: 1.55;
+  color: #94a3b8;
+  -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 30px, #000 calc(100% - 6px), transparent 100%);
+          mask-image: linear-gradient(180deg, transparent 0, #000 30px, #000 calc(100% - 6px), transparent 100%);
+}
+.c-side-monitor__body::-webkit-scrollbar { display: none; }
+
+/* Suggest a tiny stand/base under each side monitor */
+.c-side-monitor__stand {
+  position: absolute;
+  left: 50%;
+  bottom: -10px;
+  width: 70px;
+  height: 4px;
+  transform: translateX(-50%);
+  background: linear-gradient(180deg, rgba(15,23,42,0.35) 0%, transparent 100%);
+  filter: blur(0.8px);
+  pointer-events: none;
+}
+
+/* Right-side AD map — BloodHound-style attack-path graph */
+.c-side-monitor__body--map {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  mask: none;
+  -webkit-mask-image: none;
+}
+.c-ad-map {
+  width: 100%;
+  flex: 1;
+  min-height: 0;
+}
+.c-ad-map__edges line {
+  stroke: rgba(13,148,136,0.35);
+  stroke-width: 1;
+  stroke-dasharray: 2 3;
+}
+.c-ad-map__path {
+  fill: none;
+  stroke: #f87171;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  filter: drop-shadow(0 0 4px rgba(248,113,113,0.45));
+  stroke-dasharray: 3 4;
+  animation: ad-path-pulse 2.8s ease-in-out infinite;
+}
+@keyframes ad-path-pulse {
+  0%,100% { stroke-dashoffset: 0;  opacity: .9; }
+  50%     { stroke-dashoffset: 14; opacity: .55; }
+}
+.c-ad-map__node {
+  fill: #0a0e14;
+  stroke: #5eead4;
+  stroke-width: 1.5;
+}
+.c-ad-map__node--dc {
+  fill: rgba(13,148,136,0.3);
+  stroke: #2dd4bf;
+  stroke-width: 2;
+}
+.c-ad-map__node--da {
+  fill: rgba(248,113,113,0.25);
+  stroke: #f87171;
+  stroke-width: 2;
+  animation: ad-node-pulse 2.2s ease-in-out infinite;
+}
+.c-ad-map__node--hot {
+  fill: rgba(251,191,36,0.2);
+  stroke: #fbbf24;
+}
+@keyframes ad-node-pulse {
+  0%,100% { filter: drop-shadow(0 0 0   rgba(248,113,113,0)); }
+  50%     { filter: drop-shadow(0 0 5px rgba(248,113,113,0.65)); }
+}
+.c-ad-map__labels text {
+  fill: #64748b;
+  font-size: 7px;
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: .05em;
+}
+.c-ad-map__legend {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 4px 2px;
+  font-size: .56em;
+  color: #64748b;
+  letter-spacing: .05em;
+  border-top: 1px solid rgba(13,148,136,0.14);
+  margin-top: 6px;
+}
+.c-ad-map__legend span { display: inline-flex; align-items: center; gap: 5px; }
+.c-ad-map__key {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  display: inline-block;
+}
+.c-ad-map__key--nodes { background: #5eead4; }
+.c-ad-map__key--edges { background: #475569; }
+.c-ad-map__key--da    { background: #f87171; }
+
+/* Hide the side monitors below 1180px — center terminal takes the full spotlight */
+@media (max-width: 1180px) {
+  .c-workstation { padding: 20px 0 26px; max-width: 820px; }
+  .c-workstation__side { display: none; }
+}
+
+/* Respect motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .c-ad-map__path,
+  .c-ad-map__node--da,
+  .c-side-monitor__dot,
+  .c-term-badge--rec .c-term-badge__pulse {
+    animation: none !important;
+  }
+}
 
 /* Allow hero to grow to fit content (was 100vh fixed) */
 .c-hero {
@@ -1400,19 +1638,12 @@ img { max-width: 100%; }
 
 /* Hero variant */
 .c-term-window--hero { width: 100%; }
-.c-term-window--hero .c-term-window__split {
-  display: flex;
-  height: 320px;
-  position: relative;
-}
 .c-term-window--hero .c-term-window__body {
-  flex: 1 1 62%;
-  height: 100%;
-  padding: 26px 20px 20px;
-  font-size: .76em;
+  height: 460px;
+  padding: 26px 26px 22px;
+  font-size: .82em;
   overflow-y: auto;
   scrollbar-width: none;          /* Firefox: hide scrollbar */
-  border-right: 1px solid rgba(13,148,136,0.14);
   /* Graceful fade of older lines as new ones scroll in */
   -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 42px, #000 calc(100% - 6px), transparent 100%);
           mask-image: linear-gradient(180deg, transparent 0, #000 42px, #000 calc(100% - 6px), transparent 100%);
@@ -1421,44 +1652,7 @@ img { max-width: 100%; }
 .c-term-window--hero .c-term-window__body.is-resetting { opacity: 0; }
 .c-term-window--hero .c-term-window__body::-webkit-scrollbar { display: none; }
 
-/* Operator notes side panel — 40% width, timestamped one-liners */
-.c-term-notes {
-  flex: 0 0 38%;
-  height: 100%;
-  background: #070b11;
-  padding: 14px 14px 18px;
-  font-family: 'JetBrains Mono', 'SF Mono', 'Menlo', monospace;
-  font-size: .58em;
-  line-height: 1.55;
-  color: #94a3b8;
-  overflow-y: auto;
-  scrollbar-width: none;
-  -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 38px, #000 100%);
-          mask-image: linear-gradient(180deg, transparent 0, #000 38px, #000 100%);
-}
-.c-term-notes::-webkit-scrollbar { display: none; }
-.c-term-notes__head {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-bottom: 9px;
-  margin-bottom: 10px;
-  border-bottom: 1px solid rgba(13,148,136,0.14);
-  color: #475569;
-  font-size: 1em;
-  font-weight: 600;
-  letter-spacing: .1em;
-}
-.c-term-notes__title { color: #475569; }
-.c-term-notes__count {
-  color: #5eead4;
-  background: rgba(13,148,136,0.1);
-  padding: 2px 7px;
-  border-radius: 3px;
-  font-size: .92em;
-  min-width: 20px;
-  text-align: center;
-}
+/* Operator notes list — now lives in the left side monitor */
 .c-term-notes__item {
   display: block;
   margin-bottom: 7px;

@@ -86,3 +86,54 @@ No change to the kill-chain content (`frames` array). No change to site palette.
 ## Rollout
 
 Ship tiers as independent commits so each can stand on its own. Review after Tier 1 before committing to Tier 2+.
+
+---
+
+# Phase 2 — Workstation Composition
+
+> Goal: re-frame the terminal as part of a **three-monitor operator workstation**, so the live kill-chain reads as "a hacker is running this right now on their desk" — without resorting to stock hoodie-hacker imagery.
+
+## Reference tone
+
+Apple Pro Display XDR product shots · Linear's perspective-tilted UI cards · Mr. Robot's workstation crops · Panic's Playdate hero — floating device compositions on soft gradient washes. **Not** TV-show hacker silhouettes, **not** Matrix green, **not** 3D renders.
+
+## Composition
+
+Three monitors in a front-center product shot:
+
+- **Left monitor** (tilted +22° Y-axis, ~0.6 opacity): operator-notes panel, moved out of the terminal's split pane into a standalone side monitor. Timestamped one-liners still driven by the terminal.
+- **Center monitor** (flat, dominant, z-index: 3): the full live kill-chain terminal. Enlarged to ~460px body height now that the split pane is gone — reads bigger, breathes better.
+- **Right monitor** (tilted -22° Y-axis, ~0.6 opacity): BloodHound-style AD attack-path SVG — DC at center, ~8 nodes around it, one pulsing red highlight path to Domain Admin. Small "nodes / edges / DAs" metric legend.
+
+All three sit over the existing teal light-bed (extended wider). Dark bezels, thin teal edge accent ring, soft drop shadows. No keyboard, no silhouette, no desk — the composition implies the workstation.
+
+## Markup changes
+
+- Wrap `.c-hero__term` in a new `.c-workstation` scene container.
+- Split-pane `<aside class="c-term-notes">` moves OUT of the terminal body and INTO a new `.c-workstation__side--left` monitor shell. Same `data-term-notes` attr, so JS keeps working unchanged.
+- Add `.c-workstation__side--right` with inline SVG BloodHound graph.
+- Remove the `.c-term-window__split` wrapper — terminal body becomes a direct child of `.c-term-window` again.
+
+## CSS spec
+
+- `.c-workstation` — `perspective: 1800px`, `perspective-origin: 50% 55%`, no `overflow: hidden` on any ancestor in the composition.
+- Side monitors use `transform: rotateY(±22deg) translateX(...)`, `transform-style: preserve-3d`, `backface-visibility: hidden`, `translateZ(0)` + antialiased font smoothing.
+- Center monitor: `z-index: 3`, `max-width: 780px`, flat. Terminal body grows from 320 → 460px tall.
+- Sides: `opacity: 0.6`, absolutely positioned on desktop, `display: none` below 1180px.
+- Reduced-motion: disable pulse animations on side monitors and AD-map path.
+
+## What NOT to do
+
+- No hacker silhouette / figure
+- No keyboard illustration
+- No stock imagery / PNGs
+- No >3 monitors (density collapses legibility)
+- No retro green palette — keep brand teal/slate
+- No parallax/scroll-linked animation on side monitors (jank risk)
+
+## Out of scope for Phase 2
+
+- Real product-shot reflections (too heavy)
+- A literal desk surface (light-bed handles environment)
+- Motion-synced tilt on scroll
+
