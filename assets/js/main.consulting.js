@@ -201,6 +201,7 @@
     var phaseChecks = [14, 287, 62, 9];
     var autoTimer = null;
     var checksTimer = null;
+    var autoEnabled = true;
 
     function activate(stepId, fromAuto) {
       var stepNum = parseInt(stepId, 10);
@@ -243,6 +244,7 @@
 
     function startAuto() {
       stopAuto();
+      if (!autoEnabled) return;
       autoTimer = setInterval(nextStep, 5000);
     }
     function stopAuto() {
@@ -303,6 +305,13 @@
     // Start on step 1 + begin auto-cycling
     activate('1', true);
     startAuto();
+
+    // Expose for the terminal to drive phase-in-sync without fighting the auto-cycler
+    window.__process = {
+      activate: function (stepId) { activate(String(stepId), true); },
+      disableAuto: function () { autoEnabled = false; stopAuto(); },
+      enableAuto: function () { autoEnabled = true; startAuto(); }
+    };
   }
 
   // ── Live Engagement Feed — full AD kill-chain terminal loop ─────────────
@@ -437,11 +446,171 @@
       },
     ];
 
-    var typingSpeed = 38;         // ms per char while typing command (slower, deliberate)
-    var lineDelay = 180;          // ms between output lines
+    var lineDelay = 180;          // ms between output lines (default)
     var interFrameWait = 1100;    // pause after output before next prompt
     var clearBetweenLoops = true;
     var maxLinesBeforeScroll = 18;
+
+    // Per-frame pace hints (assigned below) — scan = scanner stream, burst = fast dump,
+    // crack = slow during setup then dwell on final result line.
+    var paceByFrame = ['scan','scan','scan','crack','burst','scan','crack','scan','burst'];
+    function delayForPace(pace, lineIdx, total) {
+      if (pace === 'scan')  return 80 + Math.random() * 40;
+      if (pace === 'burst') return 28 + Math.random() * 18;
+      if (pace === 'crack') {
+        if (lineIdx >= total - 2) return 380 + Math.random() * 120;
+        return 90 + Math.random() * 40;
+      }
+      return lineDelay;
+    }
+
+    // Frame index → process-timeline step + human phase label for the objective strip.
+    // Frames 0–1 recon = discovery; 2–7 credential/lateral = exploitation; 8 dcsync = reporting.
+    function phaseFor(frameIdx) {
+      if (frameIdx <= 1) return { step: 2, label: 'discovery' };
+      if (frameIdx <= 7) return { step: 3, label: 'exploitation' };
+      return { step: 4, label: 'reporting' };
+    }
+
+    var termClockEl = document.querySelector('[data-term-clock]');
+    var termPhaseEl = document.querySelector('[data-term-phase]');
+    var notesListEl = document.querySelector('[data-term-notes]');
+    var notesCountEl = document.querySelector('[data-term-notes-count]');
+    var loadEl = document.querySelector('[data-term-load]');
+    var upEl = document.querySelector('[data-term-up]');
+    var downEl = document.querySelector('[data-term-down]');
+    var toggleBtn = document.querySelector('[data-term-toggle]');
+    var termProcessDriven = false;
+    var clockTimer = null;
+    var clockStart = 0;
+    var clockPausedAt = 0;
+    var paused = false;
+    var pauseResolver = null;
+
+    // Frame → operator-notes mapping. Each entry = array of {text, cls}.
+    // These surface as timestamped one-liners in the right-hand pane as the engagement progresses.
+    var notesByFrame = [
+      [{ text: 'recon started · LDAP+Kerberos live on DC01', cls: '' }],
+      [{ text: 'SMB signing disabled on DC01', cls: 'flag' },
+       { text: 'SYSVOL + NETLOGON readable (guest)', cls: '' }],
+      [{ text: 'LLMNR poisoning live on eth0', cls: '' },
+       { text: 'NTLMv2 captured · svc_backup', cls: 'ok' }],
+      [{ text: 'cracked: Winter2025! (14s, RTX 4090)', cls: 'ok' }],
+      [{ text: '2,847 principals enumerated via RID brute', cls: '' }],
+      [{ text: 'kerberoast TGS · svc_sql (Domain Admins)', cls: 'flag' }],
+      [{ text: 'cracked: Summer2025! · svc_sql → DA', cls: 'ok' }],
+      [{ text: 'BloodHound: 2-edge path to Domain Admin', cls: 'ok' }],
+      [{ text: 'krbtgt hash captured — Golden Ticket viable', cls: 'hot' },
+       { text: '2,847 NTDS credentials exfiltrated (evidence)', cls: 'hot' }]
+    ];
+
+    function pad2(n) { return (n < 10 ? '0' : '') + n; }
+    function formatClock(ms) {
+      var s = Math.floor(ms / 1000);
+      return pad2(Math.floor(s / 3600)) + ':' + pad2(Math.floor((s % 3600) / 60)) + ':' + pad2(s % 60);
+    }
+    function startClock() {
+      stopClock();
+      clockStart = Date.now();
+      if (termClockEl) termClockEl.textContent = '00:00:00';
+      clockTimer = setInterval(function () {
+        if (paused) return;
+        if (termClockEl) termClockEl.textContent = formatClock(Date.now() - clockStart);
+      }, 1000);
+    }
+    function stopClock() {
+      if (clockTimer) { clearInterval(clockTimer); clockTimer = null; }
+    }
+
+    // Operator notes — append a timestamped one-liner to the side pane. Timestamp uses
+    // the current T+ clock value so it stays in lockstep with the engagement progression.
+    var noteCount = 0;
+    function addNote(entry) {
+      if (!notesListEl) return;
+      var clockText = termClockEl ? termClockEl.textContent : '00:00:00';
+      var shortTime = clockText.slice(-5); // show MM:SS, not HH:MM:SS
+      var item = document.createElement('span');
+      item.className = 'c-term-notes__item';
+      var timeEl = document.createElement('span');
+      timeEl.className = 'c-term-notes__time';
+      timeEl.textContent = '+' + shortTime;
+      var textEl = document.createElement('span');
+      var cls = 'c-term-notes__text';
+      if (entry.cls) cls += ' c-term-notes__text--' + entry.cls;
+      textEl.className = cls;
+      textEl.textContent = entry.text;
+      item.appendChild(timeEl);
+      item.appendChild(textEl);
+      notesListEl.appendChild(item);
+      notesListEl.scrollTop = notesListEl.scrollHeight;
+      noteCount++;
+      if (notesCountEl) notesCountEl.textContent = noteCount;
+    }
+    function resetNotes() {
+      if (notesListEl) notesListEl.innerHTML = '';
+      noteCount = 0;
+      if (notesCountEl) notesCountEl.textContent = '0';
+    }
+
+    // Status-line drift — load average + sync bandwidth tick every few seconds
+    function tickStatus() {
+      if (loadEl) loadEl.textContent = (0.32 + Math.random() * 0.45).toFixed(2);
+      if (upEl)   upEl.textContent   = (6 + Math.floor(Math.random() * 11)) + 'MB';
+      if (downEl) downEl.textContent = (180 + Math.floor(Math.random() * 220)) + 'KB';
+    }
+    tickStatus();
+    setInterval(function () { if (!paused) tickStatus(); }, 3600);
+
+    // Pause / play — blocks the loop at await points while paused
+    function waitIfPaused() {
+      if (!paused) return Promise.resolve();
+      return new Promise(function (resolve) { pauseResolver = resolve; });
+    }
+    function togglePause() {
+      paused = !paused;
+      if (toggleBtn) {
+        toggleBtn.classList.toggle('is-paused', paused);
+        toggleBtn.setAttribute('aria-label', paused ? 'Resume the replay' : 'Pause the replay');
+      }
+      if (paused) {
+        clockPausedAt = Date.now() - clockStart;
+      } else {
+        // Rebase clockStart so resumed T+ picks up from the paused value
+        if (clockPausedAt) clockStart = Date.now() - clockPausedAt;
+        if (pauseResolver) { pauseResolver(); pauseResolver = null; }
+      }
+    }
+    if (toggleBtn) {
+      toggleBtn.addEventListener('click', togglePause);
+    }
+
+    function applyPhase(frameIdx) {
+      var p = phaseFor(frameIdx);
+      if (termPhaseEl) termPhaseEl.textContent = p.label;
+      if (window.__process && window.__process.activate) {
+        if (!termProcessDriven && window.__process.disableAuto) {
+          window.__process.disableAuto();
+          termProcessDriven = true;
+        }
+        window.__process.activate(p.step);
+      }
+    }
+
+    // Human typing cadence — normal-ish distribution around 42ms, clamped 15–110
+    function humanCharDelay() {
+      var u1 = Math.random() || 0.0001;
+      var u2 = Math.random();
+      var z = Math.sqrt(-2 * Math.log(u1)) * Math.cos(2 * Math.PI * u2);
+      var ms = 42 + z * 22;
+      if (ms < 15) ms = 15;
+      if (ms > 110) ms = 110;
+      return ms;
+    }
+    // Token-boundary "thinking" pause — only fires on space boundaries
+    function maybeTokenPause() {
+      if (Math.random() < 0.55) return 150 + Math.random() * 260;
+      return 0;
+    }
 
     var rafHandle = null;
 
@@ -479,15 +648,18 @@
       // Parse HTML into a tmp node, then stream its characters, preserving tags
       var tmp = document.createElement('div');
       tmp.innerHTML = html;
-      var src = tmp.firstChild;
       var cursor = line.querySelector('.tl-cursor');
-      // Walk nodes and type content character-by-character
+      // Walk nodes and type content character-by-character with human cadence
       async function typeNode(node, target) {
         if (node.nodeType === Node.TEXT_NODE) {
           var text = node.textContent;
           for (var i = 0; i < text.length; i++) {
             target.insertBefore(document.createTextNode(text[i]), cursor);
-            await sleep(typingSpeed);
+            await sleep(humanCharDelay());
+            if (text[i] === ' ') {
+              var pause = maybeTokenPause();
+              if (pause) await sleep(pause);
+            }
           }
         } else if (node.nodeType === Node.ELEMENT_NODE) {
           var clone = document.createElement(node.tagName);
@@ -505,7 +677,11 @@
           var text = node.textContent;
           for (var i = 0; i < text.length; i++) {
             clone.appendChild(document.createTextNode(text[i]));
-            await sleep(typingSpeed);
+            await sleep(humanCharDelay());
+            if (text[i] === ' ') {
+              var pause = maybeTokenPause();
+              if (pause) await sleep(pause);
+            }
           }
         } else if (node.nodeType === Node.ELEMENT_NODE) {
           var sub = document.createElement(node.tagName);
@@ -523,24 +699,66 @@
       }
     }
 
-    async function runFrame(frame) {
+    // "Pasted" command — reveal the full command HTML instantly before the cursor
+    function pasteHtmlInto(line, html) {
+      var cursor = line.querySelector('.tl-cursor');
+      var tmp = document.createElement('span');
+      tmp.innerHTML = html;
+      while (tmp.firstChild) line.insertBefore(tmp.firstChild, cursor);
+    }
+
+    async function runFrame(frame, frameIdx, pasteMode) {
+      await waitIfPaused();
+      applyPhase(frameIdx);
       var line = writePrompt();
-      await typeHtmlInto(line, frame.cmd);
+      if (pasteMode) {
+        pasteHtmlInto(line, frame.cmd);
+        await sleep(240);
+      } else {
+        await typeHtmlInto(line, frame.cmd);
+      }
       await sleep(300);
       removeCursor();
-      // Newline implicit — each output line is its own span.tl-line
-      for (var i = 0; i < frame.out.length; i++) {
+      // Output pacing differs by frame intent — scanners stream, dumps burst, crackers dwell
+      var pace = paceByFrame[frameIdx] || 'default';
+      var total = frame.out.length;
+      for (var i = 0; i < total; i++) {
+        await waitIfPaused();
         appendLine(frame.out[i]);
-        await sleep(lineDelay);
+        await sleep(delayForPace(pace, i, total));
       }
+      // Commit operator notes for this frame to the side pane
+      var notes = notesByFrame[frameIdx] || [];
+      for (var n = 0; n < notes.length; n++) addNote(notes[n]);
       await sleep(frame.postWait || interFrameWait);
+    }
+
+    // Establishing-shot banner — orients the viewer at the start of every loop
+    function writeBanner() {
+      appendLine('<span class="tl-dim">─── ENGAGEMENT · ACME CORP · RED TEAM REPLAY ───</span>');
+      appendLine('<span class="tl-dim">  host  </span><span class="tl-hi">kali-op1</span><span class="tl-dim">  ·  vpn  </span><span class="tl-hi">acme-ops</span><span class="tl-dim">  ·  session  </span><span class="tl-hi">tmux 0:0*</span>');
+      appendLine('<span class="tl-dim">  objective  </span><span class="tl-hi">domain admin</span><span class="tl-dim">  ·  operator  </span><span class="tl-hi">kwangyun</span>');
+      appendLine('<span class="tl-dim">  ─────────────────────────────────────────────</span>');
     }
 
     async function runLoop() {
       while (true) {
-        if (clearBetweenLoops) term.innerHTML = '';
+        await waitIfPaused();
+        if (clearBetweenLoops) {
+          term.classList.add('is-resetting');
+          await sleep(300);
+          term.innerHTML = '';
+          term.classList.remove('is-resetting');
+          resetNotes();
+          await sleep(120);
+        }
+        startClock();
+        writeBanner();
+        await sleep(900);
+        // One random frame per loop "pastes" instead of types — feels like a real operator
+        var pasteIdx = Math.floor(Math.random() * frames.length);
         for (var i = 0; i < frames.length; i++) {
-          await runFrame(frames[i]);
+          await runFrame(frames[i], i, i === pasteIdx);
         }
         await sleep(1600);
       }

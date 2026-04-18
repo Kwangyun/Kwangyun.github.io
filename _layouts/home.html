@@ -33,13 +33,51 @@ layout: default
     <div class="c-hero__term c-reveal">
       <div class="c-term-window c-term-window--hero">
         <div class="c-term-window__chrome">
-          <span class="c-term-window__dot c-term-window__dot--red"></span>
-          <span class="c-term-window__dot c-term-window__dot--yellow"></span>
-          <span class="c-term-window__dot c-term-window__dot--green"></span>
+          <span class="c-term-badge c-term-badge--rec" aria-label="Recording">
+            <span class="c-term-badge__pulse"></span>REC
+          </span>
+          <span class="c-term-badge c-term-badge--vpn" aria-label="VPN connected">
+            <span class="c-term-badge__glyph">⎇</span>VPN UP
+          </span>
           <span class="c-term-window__title">kwangyun@kali · ~/engagements/acme</span>
+          <span class="c-term-replay" title="Recorded replay — not live client traffic">REPLAY · 2026-04-12</span>
+          <button class="c-term-ctrl" type="button" data-term-toggle aria-label="Pause or resume the replay">
+            <svg class="c-term-ctrl__icon c-term-ctrl__icon--pause" viewBox="0 0 24 24" width="11" height="11" aria-hidden="true"><rect x="6" y="5" width="4" height="14" fill="currentColor"/><rect x="14" y="5" width="4" height="14" fill="currentColor"/></svg>
+            <svg class="c-term-ctrl__icon c-term-ctrl__icon--play" viewBox="0 0 24 24" width="11" height="11" aria-hidden="true"><polygon points="7 5 19 12 7 19" fill="currentColor"/></svg>
+          </button>
         </div>
-        <div class="c-term-window__body" data-live-term>
-          <!-- Populated by JS -->
+        <div class="c-term-strip" aria-hidden="true">
+          <span class="c-term-strip__item"><span class="c-term-strip__k">TARGET</span><span class="c-term-strip__v">acme.local</span></span>
+          <span class="c-term-strip__sep">·</span>
+          <span class="c-term-strip__item"><span class="c-term-strip__k">OBJECTIVE</span><span class="c-term-strip__v">domain admin</span></span>
+          <span class="c-term-strip__sep">·</span>
+          <span class="c-term-strip__item"><span class="c-term-strip__k">T+</span><span class="c-term-strip__v" data-term-clock>00:00:00</span></span>
+          <span class="c-term-strip__sep">·</span>
+          <span class="c-term-strip__item"><span class="c-term-strip__k">PHASE</span><span class="c-term-strip__v c-term-strip__v--phase" data-term-phase>scoping</span></span>
+        </div>
+        <div class="c-term-window__split">
+          <div class="c-term-window__body" data-live-term>
+            <!-- Populated by JS -->
+          </div>
+          <aside class="c-term-notes" aria-label="Operator notes">
+            <div class="c-term-notes__head">
+              <span class="c-term-notes__title">// OPERATOR NOTES</span>
+              <span class="c-term-notes__count" data-term-notes-count>0</span>
+            </div>
+            <div class="c-term-notes__list" data-term-notes></div>
+          </aside>
+        </div>
+        <div class="c-term-window__status" aria-hidden="true">
+          <span class="c-term-status__lhs">
+            <span class="c-term-status__sigil">[</span><span class="c-term-status__host">kali</span><span class="c-term-status__arrow">▸</span><span class="c-term-status__target">acme</span><span class="c-term-status__sigil">]</span>
+            <span class="c-term-status__dim">2:ssh*</span>
+            <span class="c-term-status__dim">1:tunnel-</span>
+          </span>
+          <span class="c-term-status__rhs">
+            <span class="c-term-status__dim">load</span> <span data-term-load>0.42</span>
+            <span class="c-term-status__sep">·</span>
+            <span class="c-term-status__dim">sync</span> ↑<span data-term-up>8MB</span> ↓<span data-term-down>241KB</span>
+          </span>
         </div>
       </div>
     </div>
