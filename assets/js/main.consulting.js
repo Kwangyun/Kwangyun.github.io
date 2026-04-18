@@ -596,19 +596,19 @@
       }
     }
 
-    // Human typing cadence — normal-ish distribution around 42ms, clamped 15–110
+    // Human typing cadence — normal-ish distribution around 90ms, clamped 35–210
     function humanCharDelay() {
       var u1 = Math.random() || 0.0001;
       var u2 = Math.random();
       var z = Math.sqrt(-2 * Math.log(u1)) * Math.cos(2 * Math.PI * u2);
-      var ms = 42 + z * 22;
-      if (ms < 15) ms = 15;
-      if (ms > 110) ms = 110;
+      var ms = 90 + z * 32;
+      if (ms < 35)  ms = 35;
+      if (ms > 210) ms = 210;
       return ms;
     }
     // Token-boundary "thinking" pause — only fires on space boundaries
     function maybeTokenPause() {
-      if (Math.random() < 0.55) return 150 + Math.random() * 260;
+      if (Math.random() < 0.7) return 260 + Math.random() * 420;
       return 0;
     }
 
