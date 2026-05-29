@@ -16,11 +16,11 @@ minimal_mistakes_skin    : "hacker"  #"air", "aqua", "contrast", "dark", "dirt",
 
 # Site Settings
 locale                   : "en-US"
-title                    : "Keum Offensive"
+title                    : "Kwangyun Keum"
 title_separator          : "·"
-subtitle                 : # site tagline that appears below site title in masthead
-name                     : "Keum Offensive"
-description              : "Boutique offensive security consulting — red team operations, penetration testing, and AI red teaming. Delivered by a named practitioner."
+subtitle                 : "Security Research Blog"
+name                     : "Kwangyun Keum"
+description              : "Security research, vulnerability disclosures, and offensive technique breakdowns by Kwangyun Keum — Red Team Operator at ByteDance. NASA · Harvard · UN Hall of Fame."
 url                      : https://Kwangyun.github.io
 baseurl                  : # the subpath of your site, e.g. "/blog"
 repository               : # GitHub username/repo-name e.g. "mmistakes/minimal-mistakes"
