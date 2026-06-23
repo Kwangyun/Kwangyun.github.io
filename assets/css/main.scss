@@ -5,5 +5,197 @@ search: false
 
 @charset "utf-8";
 
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;1,400&display=swap');
+
 @import "minimal-mistakes/skins/{{ site.minimal_mistakes_skin | default: 'default' }}"; // skin
 @import "minimal-mistakes"; // main partials
+
+/* ============================================================
+   Kwangyun Security Blog — Custom Overrides
+   ============================================================ */
+
+/* --- Code blocks: JetBrains Mono + terminal styling --- */
+code,
+kbd,
+pre,
+samp,
+.highlight {
+  font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace !important;
+  font-size: 0.85em;
+  font-variant-ligatures: none;
+}
+
+.highlight {
+  position: relative;
+  border: 1px solid rgba(77, 124, 254, 0.25);
+  border-radius: 6px;
+  margin: 1.5em 0;
+  box-shadow: 0 0 18px rgba(77, 124, 254, 0.08);
+  overflow: hidden;
+
+  pre {
+    margin: 0;
+    border-radius: 0;
+    border: none;
+    box-shadow: none;
+  }
+}
+
+/* Language label from Rouge class on the wrapper figure */
+figure.highlight {
+  border: 1px solid rgba(77, 124, 254, 0.25);
+  border-radius: 6px;
+  margin: 1.5em 0;
+  box-shadow: 0 0 18px rgba(77, 124, 254, 0.08);
+  overflow: hidden;
+}
+
+/* Inline code */
+p > code,
+li > code,
+td > code {
+  background: rgba(77, 124, 254, 0.12);
+  border: 1px solid rgba(77, 124, 254, 0.25);
+  border-radius: 3px;
+  padding: 0.1em 0.4em;
+  color: #a5c1ff;
+}
+
+/* --- Headings: neon glow accent --- */
+.page__content {
+  h2 {
+    border-left: 3px solid #4d7cfe;
+    padding-left: 0.6em;
+    color: #c8d8ff;
+    text-shadow: 0 0 12px rgba(77, 124, 254, 0.35);
+    margin-top: 2em;
+  }
+
+  h3 {
+    color: #a5c1ff;
+    margin-top: 1.5em;
+  }
+
+  /* Horizontal rules: thin neon line */
+  hr {
+    border: none;
+    border-top: 1px solid rgba(77, 124, 254, 0.3);
+    box-shadow: 0 0 8px rgba(77, 124, 254, 0.2);
+    margin: 2.5em 0;
+  }
+}
+
+/* --- Tables: hacker grid style --- */
+.page__content table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88em;
+  font-family: 'JetBrains Mono', monospace;
+  margin: 1.5em 0;
+
+  thead tr {
+    background: rgba(77, 124, 254, 0.15);
+    border-bottom: 2px solid rgba(77, 124, 254, 0.4);
+  }
+
+  th {
+    color: #4d7cfe;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-size: 0.8em;
+    padding: 0.6em 1em;
+  }
+
+  td {
+    padding: 0.55em 1em;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  tr:hover td {
+    background: rgba(77, 124, 254, 0.06);
+  }
+}
+
+/* --- TOC: sticky sidebar improvements --- */
+.toc {
+  border: 1px solid rgba(77, 124, 254, 0.2) !important;
+  border-radius: 6px;
+  box-shadow: 0 0 16px rgba(77, 124, 254, 0.08);
+
+  .nav__title {
+    background: rgba(77, 124, 254, 0.15) !important;
+    color: #4d7cfe !important;
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0.05em;
+    font-size: 0.85em;
+  }
+
+  a {
+    color: #8aabff !important;
+    &:hover {
+      color: #ffffff !important;
+    }
+  }
+}
+
+/* --- Post header overlay gradient --- */
+.page__hero--overlay {
+  background-color: #06060f;
+  .page__title {
+    text-shadow: 0 0 20px rgba(77, 124, 254, 0.5);
+  }
+}
+
+/* --- Read-time & meta bar --- */
+.page__meta {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.78em;
+  color: rgba(232, 232, 240, 0.55);
+}
+
+/* --- Related posts cards --- */
+.grid__item .archive__item-title {
+  font-size: 0.9em;
+}
+
+/* --- Image captions --- */
+.page__content img + em,
+figure figcaption {
+  display: block;
+  text-align: center;
+  font-size: 0.8em;
+  color: rgba(232, 232, 240, 0.45);
+  margin-top: -0.5em;
+  font-style: normal;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* --- Blockquote: accent bar --- */
+.page__content blockquote {
+  border-left: 3px solid #4d7cfe;
+  background: rgba(77, 124, 254, 0.05);
+  padding: 0.8em 1.2em;
+  border-radius: 0 4px 4px 0;
+  color: rgba(232, 232, 240, 0.8);
+  font-style: normal;
+}
+
+/* --- Video responsive wrapper --- */
+video {
+  border: 1px solid rgba(77, 124, 254, 0.3);
+  border-radius: 6px;
+  box-shadow: 0 0 20px rgba(77, 124, 254, 0.15);
+}
+
+/* --- Masthead: subtle bottom border --- */
+.masthead {
+  border-bottom: 1px solid rgba(77, 124, 254, 0.2);
+  box-shadow: 0 2px 20px rgba(77, 124, 254, 0.08);
+}
+
+/* --- Author sidebar: scroll with page, no sticky overlay --- */
+.sidebar.sticky {
+  position: relative !important;
+  max-height: none !important;
+  overflow-y: visible !important;
+}
