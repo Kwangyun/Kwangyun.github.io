@@ -1,14 +1,8 @@
 # main navigation
 main:
-  - title: "Services"
-    url: /#services
-  - title: "Process"
-    url: /#process
-  - title: "Research"
-    url: /#research
+  - title: "Home"
+    url: /
   - title: "About"
-    url: /#about
-  - title: "FAQ"
-    url: /#faq
-  - title: "Contact"
-    url: /#contact
+    url: /about/
+  - title: "GitHub"
+    url: https://github.com/kwangyun

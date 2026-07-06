@@ -1,3 +1,15 @@
+---
+title: "Browser-in-Browser (noVNC) Phishing Attack PoC"
+categories:
+  - phishing
+tags:
+  - phishing
+  - mfa-bypass
+  - novnc
+  - evilginx
+excerpt: "Proof of concept for a Browser-in-Browser noVNC phishing attack that bypasses MFA using a reverse proxy and remote session control."
+---
+
 ## Table of Contents
 
 - [**Outline**](#section-0)

@@ -1,3 +1,15 @@
+---
+title: "Blind SQL Injection to RCE"
+categories:
+  - web-appsec
+tags:
+  - sql-injection
+  - sqlmap
+  - rce
+  - dvwa
+excerpt: "Automating blind SQL injection on DVWA with SQLMap to dump and crack credentials, and mitigations like parameterized queries."
+---
+
 # Blind SQL Injection Remote Code Execution Report
 
 

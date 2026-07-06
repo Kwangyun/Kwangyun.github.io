@@ -1,3 +1,15 @@
+---
+title: "File Upload Vulnerability Report"
+categories:
+  - web-appsec
+tags:
+  - file-upload
+  - rce
+  - bypass
+  - dvwa
+excerpt: "Bypassing DVWA file upload filters with content-type spoofing and double extensions to plant a PHP reverse shell via LFI."
+---
+
 # File Upload Vulnerabiltiy Report
 
 ## Table of Contents

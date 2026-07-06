@@ -1,3 +1,15 @@
+---
+title: "Command Injection & RCE in DVWA"
+categories:
+  - web-appsec
+tags:
+  - command-injection
+  - rce
+  - socat
+  - dvwa
+excerpt: "Exploiting OS command injection in DVWA to read files and gain a socat reverse shell, with input validation and sanitization defenses."
+---
+
 # Command Injection Vulnerabilty and RCE in DVWA  
 
 ## Table of Contents

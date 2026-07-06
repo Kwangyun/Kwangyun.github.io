@@ -1,3 +1,14 @@
+---
+title: "CSRF Vulnerability Report"
+categories:
+  - web-appsec
+tags:
+  - csrf
+  - phishing
+  - dvwa
+excerpt: "Using a phishing email to trigger a CSRF password change on DVWA's admin account, plus defenses like CSRF tokens and SameSite cookies."
+---
+
 # CSRF Vulnerabiltiy Report
 
 ## Table of Contents

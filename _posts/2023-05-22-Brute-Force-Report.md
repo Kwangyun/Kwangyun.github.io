@@ -1,3 +1,15 @@
+---
+title: "Brute Forcing the DVWA Login Page"
+categories:
+  - web-appsec
+tags:
+  - brute-force
+  - hydra
+  - burpsuite
+  - dvwa
+excerpt: "Brute forcing the DVWA admin login with Hydra, Burp Suite and a custom Python tool, plus mitigations like MFA and account lockout."
+---
+
 
 # Brute Forcing DVWA Login Page
 

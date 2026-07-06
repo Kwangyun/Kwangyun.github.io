@@ -1,137 +1,128 @@
 ---
 layout: home
-author_profile: true
+author_profile: false
 ---
 
-<div id="rubik-wrap" style="width:100%;max-width:280px;height:250px;margin:1.5em auto 2.5em;display:block;">
-  <canvas id="rubik-canvas" style="display:block;width:100%;height:100%;"></canvas>
-</div>
+<section class="hero">
+  <div class="hero__inner">
+    <div class="hero__cube"><canvas id="rubik-canvas"></canvas></div>
+    <p class="hero__eyebrow"><span class="blink"></span>whoami</p>
+    <h1 class="hero__name">Kwangyun Keum</h1>
+    <p class="hero__role">Red Team Operator <span class="sep">/</span> Security Researcher — offensive tooling, evasion &amp; adversary emulation.</p>
+  </div>
+</section>
+
 <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
 <script>
 (function () {
   'use strict';
-  var wrap   = document.getElementById('rubik-wrap');
   var canvas = document.getElementById('rubik-canvas');
+  if (!canvas || !window.THREE) return;
+  var wrap = canvas.parentElement;
   var W = wrap.offsetWidth, H = wrap.offsetHeight;
 
   var renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true });
   renderer.setSize(W, H);
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.6));
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.75));
 
-  var scene  = new THREE.Scene();
-  var camera = new THREE.PerspectiveCamera(45, W / H, 0.1, 100);
-  camera.position.set(0, 0, 8);
+  var scene = new THREE.Scene();
+  var camera = new THREE.PerspectiveCamera(42, W / H, 0.1, 100);
+  camera.position.set(0, 0, 8.4);
 
-  scene.add(new THREE.AmbientLight(0xffffff, 0.95));
-  var pl1 = new THREE.PointLight(0xff6b6b, 2.4); pl1.position.set(-3, 3, 5); scene.add(pl1);
-  var pl2 = new THREE.PointLight(0xffffff, 1.2); pl2.position.set(2, -1, 4); scene.add(pl2);
+  scene.add(new THREE.AmbientLight(0xffffff, 0.62));
+  var pl1 = new THREE.PointLight(0xff3b3b, 3.1); pl1.position.set(-4, 4, 6); scene.add(pl1);
+  var pl2 = new THREE.PointLight(0xffffff, 1.0); pl2.position.set(3, -2, 5); scene.add(pl2);
+  var pl3 = new THREE.PointLight(0xef4444, 1.6); pl3.position.set(0, 0, -6); scene.add(pl3);
 
   var matRed = new THREE.MeshStandardMaterial({
-    color: 0x3a0a0f, emissive: 0xef4444, emissiveIntensity: 0.55, metalness: 0.45, roughness: 0.45
+    color: 0x2a060a, emissive: 0xef4444, emissiveIntensity: 0.85, metalness: 0.35, roughness: 0.38
   });
-  var matBlack = new THREE.MeshStandardMaterial({ color: 0x0b0b0e, metalness: 0.55, roughness: 0.55 });
+  var matBlack = new THREE.MeshStandardMaterial({ color: 0x08080a, metalness: 0.6, roughness: 0.5 });
 
   var SP = 0.82;
-  var grp = new THREE.Group();
-  scene.add(grp);
+  var grp = new THREE.Group(); scene.add(grp);
 
   var cubies = [];
-  for (var ix = -1; ix <= 1; ix++) {
-    for (var iy = -1; iy <= 1; iy++) {
-      for (var iz = -1; iz <= 1; iz++) {
-        if (ix === 0 && iy === 0 && iz === 0) continue;
-        var geo = new THREE.BoxGeometry(0.76, 0.76, 0.76);
-        // face order: +x -x +y -y +z -z
-        var mats = [
-          ix ===  1 ? matRed : matBlack,
-          ix === -1 ? matRed : matBlack,
-          iy ===  1 ? matRed : matBlack,
-          iy === -1 ? matRed : matBlack,
-          iz ===  1 ? matRed : matBlack,
-          iz === -1 ? matRed : matBlack,
-        ];
-        var mesh = new THREE.Mesh(geo, mats);
-        mesh.position.set(ix * SP, iy * SP, iz * SP);
-        grp.add(mesh);
-        cubies.push({
-          mesh: mesh, ix: ix, iy: iy, iz: iz,
-          pos: new THREE.Vector3(ix * SP, iy * SP, iz * SP),
-          quat: new THREE.Quaternion()
-        });
-      }
-    }
+  for (var ix = -1; ix <= 1; ix++)
+  for (var iy = -1; iy <= 1; iy++)
+  for (var iz = -1; iz <= 1; iz++) {
+    if (ix === 0 && iy === 0 && iz === 0) continue;
+    var geo = new THREE.BoxGeometry(0.76, 0.76, 0.76);
+    var mats = [
+      ix === 1 ? matRed : matBlack, ix === -1 ? matRed : matBlack,
+      iy === 1 ? matRed : matBlack, iy === -1 ? matRed : matBlack,
+      iz === 1 ? matRed : matBlack, iz === -1 ? matRed : matBlack
+    ];
+    var mesh = new THREE.Mesh(geo, mats);
+    mesh.position.set(ix * SP, iy * SP, iz * SP);
+    grp.add(mesh);
+    cubies.push({ mesh: mesh, ix: ix, iy: iy, iz: iz,
+      pos: new THREE.Vector3(ix * SP, iy * SP, iz * SP), quat: new THREE.Quaternion() });
   }
 
-  var AXES = [
-    new THREE.Vector3(1, 0, 0),
-    new THREE.Vector3(0, 1, 0),
-    new THREE.Vector3(0, 0, 1)
-  ];
+  var AXES = [new THREE.Vector3(1,0,0), new THREE.Vector3(0,1,0), new THREE.Vector3(0,0,1)];
   var HALF = Math.PI / 2;
   var tmpQ = new THREE.Quaternion();
-  var ease = function (t) { return t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2; };
-
-  var anim = { turning: false, axis: 0, layer: 0, dir: 1, t: 0, rest: 0.8, members: [] };
+  var ease = function (t){ return t < 0.5 ? 2*t*t : 1 - Math.pow(-2*t+2,2)/2; };
+  var anim = { turning:false, axis:0, layer:0, dir:1, t:0, rest:0.5, members:[] };
   var lastTime = 0;
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  function animate(time) {
+  function animate(time){
     requestAnimationFrame(animate);
-    var dt = Math.min((time - lastTime) / 1000, 0.05);
-    lastTime = time;
+    var dt = Math.min((time - lastTime)/1000, 0.05); lastTime = time;
 
-    grp.rotation.y += dt * 0.45;
-    grp.rotation.x = -0.5 + Math.sin(time * 0.0003) * 0.15;
-
-    for (var i = 0; i < cubies.length; i++) {
-      cubies[i].mesh.position.copy(cubies[i].pos);
-      cubies[i].mesh.quaternion.copy(cubies[i].quat);
+    if (!reduce){
+      grp.rotation.y += dt * 0.5;
+      grp.rotation.x = -0.42 + Math.sin(time * 0.00032) * 0.16;
+    } else {
+      grp.rotation.x = -0.42; grp.rotation.y = 0.6;
     }
 
-    if (!anim.turning) {
-      anim.rest -= dt;
-      if (anim.rest <= 0) {
-        anim.axis  = Math.floor(Math.random() * 3);
-        anim.layer = [-1, 0, 1][Math.floor(Math.random() * 3)];
-        anim.dir   = Math.random() < 0.5 ? 1 : -1;
-        var key    = ['ix', 'iy', 'iz'][anim.axis];
-        anim.members = cubies.filter(function (c) { return c[key] === anim.layer; });
-        anim.t = 0; anim.turning = true;
-      }
-    } else {
-      anim.t += dt / 0.5;
-      var tt = Math.min(1, anim.t);
-      var ang = anim.dir * HALF * ease(tt);
-      var av  = AXES[anim.axis];
-      for (var j = 0; j < anim.members.length; j++) {
-        var c = anim.members[j];
-        tmpQ.setFromAxisAngle(av, ang);
-        c.mesh.quaternion.copy(tmpQ).multiply(c.quat);
-        c.mesh.position.copy(c.pos).applyAxisAngle(av, ang);
-      }
-      if (tt >= 1) {
-        var av2  = AXES[anim.axis];
-        var turn = new THREE.Quaternion().setFromAxisAngle(av2, anim.dir * HALF);
-        for (var k = 0; k < anim.members.length; k++) {
-          var m = anim.members[k];
-          m.pos.applyAxisAngle(av2, anim.dir * HALF);
-          m.ix = Math.round(m.pos.x / SP);
-          m.iy = Math.round(m.pos.y / SP);
-          m.iz = Math.round(m.pos.z / SP);
-          m.pos.set(m.ix, m.iy, m.iz).multiplyScalar(SP);
-          m.quat.premultiply(turn);
+    for (var i=0;i<cubies.length;i++){ cubies[i].mesh.position.copy(cubies[i].pos); cubies[i].mesh.quaternion.copy(cubies[i].quat); }
+
+    if (!reduce){
+      if (!anim.turning){
+        anim.rest -= dt;
+        if (anim.rest <= 0){
+          anim.axis = Math.floor(Math.random()*3);
+          anim.layer = [-1,0,1][Math.floor(Math.random()*3)];
+          anim.dir = Math.random() < 0.5 ? 1 : -1;
+          var key = ['ix','iy','iz'][anim.axis];
+          anim.members = cubies.filter(function(c){ return c[key] === anim.layer; });
+          anim.t = 0; anim.turning = true;
         }
-        anim.turning = false; anim.rest = 0.45;
+      } else {
+        anim.t += dt / 0.42;
+        var tt = Math.min(1, anim.t);
+        var ang = anim.dir * HALF * ease(tt);
+        var av = AXES[anim.axis];
+        for (var j=0;j<anim.members.length;j++){
+          var c = anim.members[j];
+          tmpQ.setFromAxisAngle(av, ang);
+          c.mesh.quaternion.copy(tmpQ).multiply(c.quat);
+          c.mesh.position.copy(c.pos).applyAxisAngle(av, ang);
+        }
+        if (tt >= 1){
+          var turn = new THREE.Quaternion().setFromAxisAngle(av, anim.dir * HALF);
+          for (var k=0;k<anim.members.length;k++){
+            var m = anim.members[k];
+            m.pos.applyAxisAngle(av, anim.dir * HALF);
+            m.ix = Math.round(m.pos.x / SP); m.iy = Math.round(m.pos.y / SP); m.iz = Math.round(m.pos.z / SP);
+            m.pos.set(m.ix, m.iy, m.iz).multiplyScalar(SP);
+            m.quat.premultiply(turn);
+          }
+          anim.turning = false; anim.rest = 0.32;
+        }
       }
     }
     renderer.render(scene, camera);
   }
   animate(0);
 
-  window.addEventListener('resize', function () {
+  window.addEventListener('resize', function(){
     W = wrap.offsetWidth; H = wrap.offsetHeight;
-    camera.aspect = W / H;
-    camera.updateProjectionMatrix();
-    renderer.setSize(W, H);
+    camera.aspect = W / H; camera.updateProjectionMatrix(); renderer.setSize(W, H);
   });
 })();
 </script>

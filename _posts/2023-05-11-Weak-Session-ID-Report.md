@@ -1,3 +1,15 @@
+---
+title: "Weak Session ID"
+categories:
+  - web-appsec
+tags:
+  - session
+  - dvwa
+  - cookies
+  - md5
+excerpt: "Analyzing DVWA's predictable session IDs across low, medium and high levels and how to generate secure, random session identifiers."
+---
+
 # Session ID Vulnerability
 
 

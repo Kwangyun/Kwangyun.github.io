@@ -1,3 +1,15 @@
+---
+title: "LNK Weaponization & Windows Defender 11 Bypass PoC"
+categories:
+  - evasion
+tags:
+  - lnk
+  - windows-defender
+  - shellcode
+  - amsi-bypass
+excerpt: "Weaponizing a malicious LNK file to stage an AMSI bypass and shellcode injector that evades Windows 11 Defender for a Meterpreter shell."
+---
+
 ## Table of Contents
 
 - [**Outline**](#section-0)

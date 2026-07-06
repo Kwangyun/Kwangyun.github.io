@@ -1,3 +1,14 @@
+---
+title: "CVSS and Score Calculation"
+categories:
+  - web-appsec
+tags:
+  - cvss
+  - scoring
+  - nvd
+excerpt: "A breakdown of the CVSS base score metrics and how each exploitability and impact metric influences a vulnerability's severity rating."
+---
+
 ## CVSS
 ## Table of Contents
 - [**Definition**](#section-0)

@@ -1,3 +1,15 @@
+---
+title: "File Inclusion & Log Poisoning to RCE"
+categories:
+  - web-appsec
+tags:
+  - lfi
+  - log-poisoning
+  - rce
+  - dvwa
+excerpt: "Chaining Local File Inclusion with Apache log poisoning to achieve RCE on DVWA, and mitigations like file permissions and whitelisting."
+---
+
 # LFI Vulnerabiltiy Report
 
 ## Table of Contents
@@ -115,7 +127,6 @@ chmod -R 750 apache2
 ### Whitelist Approach:
 Maintain a whitelist of allowed files or directories that can be included by the application. Only include files that are explicitly defined in the whitelist. Only trusted and intended files are included.
 
-```
 ```php
 // Create a White list.
 $allowedFiles = array(
