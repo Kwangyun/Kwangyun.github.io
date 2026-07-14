@@ -96,19 +96,20 @@ a:hover{ color:var(--accent); }
   position:relative; text-align:center;
   margin-bottom:8px; overflow:hidden;
   background-size:cover; background-position:right center; background-repeat:no-repeat;
+  background-attachment:fixed;
 }
 .hero::before{
+  content:""; position:absolute; inset:0;
+  background:linear-gradient(to right, rgba(10,10,12,1) 0%, rgba(10,10,12,.9) 35%, rgba(10,10,12,.5) 100%);
+  pointer-events:none; z-index:1;
+}
+.hero::after{
   content:""; position:absolute; left:50%; top:8px; transform:translateX(-50%);
-  width:560px; height:420px; pointer-events:none; z-index:1;
+  width:560px; height:420px; pointer-events:none; z-index:2;
   background:radial-gradient(closest-side, var(--accent-glow), transparent 72%);
 }
-.hero__bg-fade{
-  position:absolute; top:0; right:0; bottom:0; left:50%;
-  background:linear-gradient(to right, rgba(10,10,12,1) 0%, rgba(10,10,12,.85) 40%, rgba(10,10,12,0) 100%);
-  pointer-events:none; z-index:0;
-}
 .hero__inner{
-  position:relative; z-index:2;
+  position:relative; z-index:3;
   display:flex; align-items:center; justify-content:center; gap:4rem;
   max-width:900px; margin:0 auto;
 }
