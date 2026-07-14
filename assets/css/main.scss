@@ -92,27 +92,17 @@ a:hover{ color:var(--accent); }
    ============================================================ */
 .hero{
   padding:56px 0 68px;
+  border-bottom:1px solid var(--border);
   position:relative; text-align:center;
-  margin-bottom:8px; overflow:hidden;
-}
-.hero__bg{
-  position:absolute; inset:0; z-index:1;
-  background:url('/assets/images/cyber-brain.png') no-repeat center center / 65% auto;
-  mask-image:radial-gradient(ellipse 80% 70% at center, black 0%, transparent 75%);
-  -webkit-mask-image:radial-gradient(ellipse 80% 70% at center, black 0%, transparent 75%);
+  margin-bottom:8px;
 }
 .hero::before{
-  content:""; position:absolute; inset:0; z-index:1;
-  background:linear-gradient(180deg, transparent 0%, rgba(10,10,12,0.3) 60%, rgba(10,10,12,1) 100%);
-  pointer-events:none;
-}
-.hero::after{
-  content:""; position:absolute; bottom:0; left:0; right:0; height:120px;
-  background:linear-gradient(to bottom, transparent 0%, var(--bg) 100%);
-  pointer-events:none; z-index:2;
+  content:""; position:absolute; left:50%; top:8px; transform:translateX(-50%);
+  width:560px; height:420px; pointer-events:none; z-index:1;
+  background:radial-gradient(closest-side, var(--accent-glow), transparent 72%);
 }
 .hero__inner{
-  position:relative; z-index:3;
+  position:relative; z-index:2;
   display:flex; align-items:center; justify-content:center; gap:4rem;
   max-width:900px; margin:0 auto;
 }
