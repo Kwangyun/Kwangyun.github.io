@@ -292,13 +292,15 @@ p > code, li > code, td > code{
   .hero__bg-fade{ left:0; }
 }
 @media (max-width:720px){
-  .hero{ padding:48px 0 56px; background-position:right 20% center; background-size:120%; }
+  .hero{ padding:48px 0 56px; }
+  .hero::before{ opacity:.15; }
   .hero__inner{ flex-direction:column; gap:2rem; }
   .hero__content{ text-align:center; max-width:100%; }
   .hero__cube{ width:clamp(120px,30vw,160px); animation:none; }
 }
 @media (max-width:480px){
-  .hero{ padding:36px 0 40px; background-size:140%; }
+  .hero{ padding:36px 0 40px; }
+  .hero::before{ opacity:.08; }
   .hero__cube{ width:clamp(100px,26vw,130px); }
   .hero__role{ font-size:clamp(1rem,2.2vw,1.1rem); }
   .hero__subtitle{ font-size:.9rem; }
