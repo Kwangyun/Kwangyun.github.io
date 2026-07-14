@@ -95,12 +95,11 @@ a:hover{ color:var(--accent); }
   border-bottom:1px solid var(--border);
   position:relative; text-align:center;
   margin-bottom:8px; overflow:hidden;
-  background-size:cover; background-position:right center; background-repeat:no-repeat;
-  background-attachment:fixed;
 }
 .hero::before{
   content:""; position:absolute; inset:0;
-  background:linear-gradient(to right, rgba(10,10,12,1) 0%, rgba(10,10,12,.9) 35%, rgba(10,10,12,.5) 100%);
+  background:url('/assets/images/cyber-brain.png') no-repeat right center / 45% auto,
+             linear-gradient(to right, rgba(10,10,12,1) 0%, rgba(10,10,12,.9) 40%, rgba(10,10,12,.4) 100%);
   pointer-events:none; z-index:1;
 }
 .hero::after{
