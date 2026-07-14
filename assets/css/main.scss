@@ -98,9 +98,9 @@ a:hover{ color:var(--accent); }
 }
 .hero::before{
   content:""; position:absolute; inset:0;
-  background:url('/assets/images/cyber-brain.png') no-repeat right center / 45% auto,
-             linear-gradient(to right, rgba(10,10,12,1) 0%, rgba(10,10,12,.9) 40%, rgba(10,10,12,.4) 100%);
-  pointer-events:none; z-index:1;
+  background:url('/assets/images/cyber-brain.png') no-repeat right 50% / 50% auto,
+             linear-gradient(to right, rgba(10,10,12,1) 0%, rgba(10,10,12,.95) 30%, transparent 70%);
+  pointer-events:none; z-index:1; background-attachment:fixed;
 }
 .hero::after{
   content:""; position:absolute; left:50%; top:8px; transform:translateX(-50%);
