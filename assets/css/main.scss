@@ -96,13 +96,19 @@ a:hover{ color:var(--accent); }
   position:relative; text-align:center;
   margin-bottom:8px; overflow:hidden;
 }
+.hero__bg{
+  position:absolute; inset:0; z-index:1;
+  background:url('/assets/images/cyber-brain.png') no-repeat right center / 40% auto;
+  mask-image:radial-gradient(circle at right center, black 0%, transparent 60%);
+  -webkit-mask-image:radial-gradient(circle at right center, black 0%, transparent 60%);
+}
 .hero::before{
   content:""; position:absolute; left:50%; top:8px; transform:translateX(-50%);
-  width:560px; height:420px; pointer-events:none; z-index:1;
+  width:560px; height:420px; pointer-events:none; z-index:2;
   background:radial-gradient(closest-side, var(--accent-glow), transparent 72%);
 }
 .hero__inner{
-  position:relative; z-index:2;
+  position:relative; z-index:3;
   display:flex; align-items:center; justify-content:center; gap:4rem;
   max-width:900px; margin:0 auto;
 }
@@ -194,24 +200,8 @@ a:hover{ color:var(--accent); }
   font-family:var(--sans); font-weight:800; letter-spacing:-.03em;
   color:#fff; line-height:1.1;
 }
-.page__hero--overlay{
-  background-color:#06060f;
-  background-image:url('/assets/images/cyber-brain.png');
-  background-size:60%;
-  background-position:right center;
-  background-repeat:no-repeat;
-  background-attachment:fixed;
-  position:relative;
-}
-.page__hero--overlay::before{
-  content:""; position:absolute; inset:0;
-  background:linear-gradient(to right, rgba(10,10,12,1) 0%, rgba(10,10,12,.9) 40%, rgba(10,10,12,.3) 100%);
-  pointer-events:none;
-}
-.page__hero--overlay .page__title{
-  text-shadow:0 0 20px var(--accent-glow);
-  position:relative; z-index:1;
-}
+.page__hero--overlay{ background-color:#06060f; }
+.page__hero--overlay .page__title{ text-shadow:0 0 20px var(--accent-glow); }
 
 .page__content{ font-size:1.02rem; line-height:1.72; color:var(--text); }
 .page__content p{ color:var(--text); }
@@ -301,16 +291,18 @@ p > code, li > code, td > code{
   .hero__inner{ gap:2.5rem; }
   .hero__bg-fade{ left:0; }
 }
+@media (max-width:900px){
+  .hero__inner{ gap:2.5rem; }
+}
 @media (max-width:720px){
   .hero{ padding:48px 0 56px; }
-  .hero::before{ opacity:.15; }
+  .hero__bg{ display:none; }
   .hero__inner{ flex-direction:column; gap:2rem; }
   .hero__content{ text-align:center; max-width:100%; }
   .hero__cube{ width:clamp(120px,30vw,160px); animation:none; }
 }
 @media (max-width:480px){
   .hero{ padding:36px 0 40px; }
-  .hero::before{ opacity:.08; }
   .hero__cube{ width:clamp(100px,26vw,130px); }
   .hero__role{ font-size:clamp(1rem,2.2vw,1.1rem); }
   .hero__subtitle{ font-size:.9rem; }
