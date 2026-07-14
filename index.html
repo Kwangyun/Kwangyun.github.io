@@ -5,7 +5,13 @@ author_profile: false
 
 <section class="hero">
   <div class="hero__inner">
-    <div class="hero__cube"><canvas id="rubik-canvas"></canvas></div>
+    <div class="hero__cube">
+      <canvas id="rubik-canvas"></canvas>
+      <picture>
+        <source srcset="{{ '/assets/images/breach-sigil.webp' | relative_url }}" type="image/webp">
+        <img class="hero__badge" src="{{ '/assets/images/breach-sigil.png' | relative_url }}" alt="Signature emblem" width="240" height="240" loading="eager" decoding="async">
+      </picture>
+    </div>
     <div class="hero__content">
       <p class="hero__eyebrow"><span class="blink"></span>whoami</p>
       <p class="hero__role" style="color:#ef4444 !important;">Red Team Operator <span class="sep" style="color:#f87171 !important;">/</span> Security Researcher</p>
