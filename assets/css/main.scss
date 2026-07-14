@@ -107,7 +107,7 @@ a:hover{ color:var(--accent); }
   max-width:900px; margin:0 auto;
 }
 .hero__cube{
-  width:clamp(160px,35vw,220px); aspect-ratio:1/1;
+  width:clamp(140px,32vw,180px); aspect-ratio:1/1;
   position:relative; flex-shrink:0;
   animation:kk-float 4.2s ease-in-out infinite;
 }
